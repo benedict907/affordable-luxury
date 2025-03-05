@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/affordable-luxury/static/css/main.6c75584d.css",
+    "main.js": "/affordable-luxury/static/js/main.4da35346.js",
+    "static/js/65.613d10d5.chunk.js": "/affordable-luxury/static/js/65.613d10d5.chunk.js",
+    "static/js/58.1aea5be2.chunk.js": "/affordable-luxury/static/js/58.1aea5be2.chunk.js",
+    "static/js/977.a8080062.chunk.js": "/affordable-luxury/static/js/977.a8080062.chunk.js",
+    "static/js/732.56341227.chunk.js": "/affordable-luxury/static/js/732.56341227.chunk.js",
+    "static/js/905.1bbfe5a9.chunk.js": "/affordable-luxury/static/js/905.1bbfe5a9.chunk.js",
+    "index.html": "/affordable-luxury/index.html",
+    "main.6c75584d.css.map": "/affordable-luxury/static/css/main.6c75584d.css.map",
+    "main.4da35346.js.map": "/affordable-luxury/static/js/main.4da35346.js.map",
+    "65.613d10d5.chunk.js.map": "/affordable-luxury/static/js/65.613d10d5.chunk.js.map",
+    "58.1aea5be2.chunk.js.map": "/affordable-luxury/static/js/58.1aea5be2.chunk.js.map",
+    "732.56341227.chunk.js.map": "/affordable-luxury/static/js/732.56341227.chunk.js.map",
+    "905.1bbfe5a9.chunk.js.map": "/affordable-luxury/static/js/905.1bbfe5a9.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.6c75584d.css",
+    "static/js/main.4da35346.js"
+  ]
+}
