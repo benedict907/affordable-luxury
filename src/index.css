@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+@layer components {
+   .button {
+    @apply bg-blue-500 rounded-lg p-5 text-white cursor-pointer active:opacity-50 my-1 ms-2
+   }
+    .text-input {
+     @apply w-96 border h-10 rounded-lg ps-2
+   }
+}
