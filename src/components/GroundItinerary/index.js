@@ -1,19 +1,27 @@
 import React, { useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
+import { setDays } from "../../redux/createPdfSlice";
+import RichTextEditor from "../RichTextEditor";
 
 const GroundItinerary = () => {
-  const [days, setDays] = useState([
-    {
-      dailyTasks: [{ time: "", task: "", description: "", bulletPoints: [] }],
-    },
-  ]);
-
+  // const [days, setDays] = useState([
+  //   {
+  //     dailyTasks: [{ time: "", task: "", description: "", bulletPoints: [] }],
+  //   },
+  // ]);
+  const days = useAppSelector((state) => state.createPdf.groundItinerary);
+  const dispatch = useAppDispatch();
   const handleAddDay = () => {
-    setDays([
-      ...days,
-      {
-        dailyTasks: [{ time: "", task: "", description: "", bulletPoints: [] }],
-      },
-    ]);
+    dispatch(
+      setDays([
+        ...days,
+        {
+          dailyTasks: [
+            { time: "", task: "", description: "", bulletPoints: [] },
+          ],
+        },
+      ])
+    );
   };
 
   const handleAddTask = (dayIndex) => {
@@ -29,7 +37,7 @@ const GroundItinerary = () => {
       }
       return day;
     });
-    setDays(updatedDays);
+    dispatch(setDays(updatedDays));
   };
 
   const handleInputChange = (dayIndex, taskIndex, field, value) => {
@@ -45,7 +53,7 @@ const GroundItinerary = () => {
       }
       return day;
     });
-    setDays(updatedDays);
+    dispatch(setDays(updatedDays));
   };
 
   const renderTasks = (tasks, dayIndex) => {
@@ -79,7 +87,7 @@ const GroundItinerary = () => {
             className="block text-sm font-medium mb-1"
             htmlFor={`task-${dayIndex}-${taskIndex}`}
           >
-            Task
+            Task (Optional)
           </label>
           <input
             type="text"
@@ -97,7 +105,7 @@ const GroundItinerary = () => {
             className="block text-sm font-medium mb-1"
             htmlFor={`description-${dayIndex}-${taskIndex}`}
           >
-            Description
+            Description (Optional)
           </label>
           <input
             type="text"
@@ -114,6 +122,30 @@ const GroundItinerary = () => {
             }
             className="w-full px-2 py-1 border rounded focus:outline-none focus:ring focus:ring-blue-300"
           />
+        </div>
+        <div className="mb-2">
+          <label
+            className="block text-sm font-medium mb-1"
+            htmlFor={`description-${dayIndex}-${taskIndex}`}
+          >
+            Bullet Points (Optional)
+          </label>
+          <RichTextEditor
+            text={task.bulletPoints}
+            onChangeText={(text) =>
+              handleInputChange(dayIndex, taskIndex, "bulletPoints", text)
+            }
+          />
+          {/* <input
+            type="text"
+            id={`bullet-${dayIndex}-${taskIndex}`}
+            name={`bullet-${dayIndex}-${taskIndex}`}
+            value={task.bulletPoints}
+            onChange={(e) =>
+              handleInputChange(dayIndex, taskIndex, "bullet", e.target.value)
+            }
+            className="w-full px-2 py-1 border rounded focus:outline-none focus:ring focus:ring-blue-300"
+          /> */}
         </div>
       </div>
     ));

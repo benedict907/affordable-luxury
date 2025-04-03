@@ -1,129 +1,112 @@
 import React, { useEffect, useState } from "react";
-import { formLists } from "../constants/constants";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import { formatDateToDDMMYYYY } from "../helper";
-import AddPassenger from "../components/AddPassenger";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../redux/store";
+import { deletePdf, getPdfs } from "../redux/clientSlice";
+import { MdEdit } from "react-icons/md";
+import { SlLogout } from "react-icons/sl";
+import { MdDelete } from "react-icons/md";
+import { logoutSuccess } from "../redux/authSlice";
+import ConfirmDelete from "../components/DeletePopup";
+
 function HomePage() {
-  const [selectedForm, setSelectedForm] = useState(null);
-  const [selectedStartDate, setSelectedStartDate] = useState(new Date());
-  const [selectedEndDate, setSelectedEndDate] = useState(new Date());
-  const [confirmationNumber, setConfirmationNumber] = useState("");
-  const [passengerList, setPassengerList] = useState([]);
-
+  const dispatch = useAppDispatch();
+  const { isLoggedIn } = useAppSelector((state) => state.auth);
+  const { pdfs, deleteSuccess } = useAppSelector((state) => state.client);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState();
   const navigate = useNavigate();
-  const handleAddDays = (date) => {
-    const updatedDate = new Date(date);
-    updatedDate.setDate(updatedDate.getDate() + selectedForm.days);
-    setSelectedEndDate(updatedDate);
-  };
-
-  const onSavePressed = () => {
-    if (confirmationNumber.trim() === "") {
-      alert("Please enter confirmation number");
-      return;
-    }
-    if (passengerList.length === 0) {
-      alert("Please enter passenger name");
-      return;
-    }
-    navigate("/pdf-view", {
-      state: {
-        confirmationNumber,
-        passengerList,
-        selectedForm,
-        selectedStartDate,
-        selectedEndDate,
-      },
-    });
-  };
 
   useEffect(() => {
-    if (selectedForm !== null) {
-      handleAddDays(selectedStartDate);
+    if (!isLoggedIn) {
+      navigate("/login");
     }
-  }, [selectedStartDate, selectedForm]);
+  }, [isLoggedIn]);
 
+  useEffect(() => {
+    if (isLoggedIn) {
+      dispatch(getPdfs());
+    }
+  }, [isLoggedIn]);
+
+  useEffect(() => {
+    if (deleteSuccess) {
+      dispatch(getPdfs());
+    }
+  }, [deleteSuccess]);
+
+  const onDeletePressed = () => {
+    dispatch(deletePdf(selectedItem));
+    setIsDialogOpen(false);
+  };
   return (
     <div className="flex justify-center items-center h-full">
-      {selectedForm === null ? (
-        <div className="flex flex-col p-5 border border-[#ccc] rounded-lg text-center shadow-lg mt-10">
-          <h2 className="text-center text-2xl text-black-2 font-bold">
-            Choose your file
-          </h2>
-          {formLists.map((formList) => (
+      <div className="flex items-center flex-col p-5 border w-1/2 pb-10 border-[#ccc] rounded-lg text-center shadow-lg mt-10">
+        <h2 className="text-center text-2xl text-black-2 mb-5 font-bold">
+          Choose your file
+        </h2>
+        {pdfs
+          ?.map((item) => item.main)
+          .map((formList, index) => (
             <div
-              onClick={() => setSelectedForm(formList)}
               key={formList.title}
-              className="p-5 border border-[#ccc] rounded-lg text-center shadow-lg mt-10 hover:bg-gray-100 active:bg-gray-200 cursor-pointer"
+              className="flex justify-between items-center w-3/4 mb-5"
             >
-              <h3>{formList.title}</h3>
+              <div
+                onClick={() =>
+                  navigate("/add-details", {
+                    state: {
+                      selectedForm: pdfs[index],
+                    },
+                  })
+                }
+                className="p-5 border w-full border-[#ccc] rounded-lg text-center shadow-lg hover:bg-gray-100 active:bg-gray-200 cursor-pointer"
+              >
+                <h3>{formList.title}</h3>
+              </div>
+
+              <button
+                onClick={() => {
+                  navigate("/create-pdf", {
+                    state: pdfs[index],
+                  });
+                }}
+                className="justify-center justify-self-center ms-10 active:bg-orange-500 bg-orange-400 p-2 rounded-lg flex items-center"
+              >
+                <MdEdit color="white" className="w-5 h-5 active:opacity-50" />
+              </button>
+              <button
+                onClick={() => {
+                  setSelectedItem(pdfs[index]._id);
+                  setIsDialogOpen(true);
+                }}
+                className="justify-center justify-self-center ms-5 active:bg-orange-500 bg-orange-400 p-2 rounded-lg flex items-center"
+              >
+                <MdDelete color="white" className="w-5 h-5 active:opacity-50" />
+              </button>
             </div>
           ))}
-        </div>
-      ) : (
-        <div className="flex flex-col p-5 border border-[#ccc] rounded-lg text-center shadow-lg mt-10 overflow-hidden">
-          <h2 className="text-center text-2xl text-black-2 font-bold">
-            {selectedForm.title}
-          </h2>
-          <div className="mt-10 flex flex-col">
-            <label className="text-left">Confirmation Number</label>
-            <input
-              className="text-input"
-              onChange={(e) => {
-                setConfirmationNumber(e.target.value);
-              }}
-              type="text"
-            />
-          </div>
-          <AddPassenger
-            passengerList={passengerList}
-            setPassengerList={setPassengerList}
-          />
-          <div className="mt-10 flex flex-col justify-start ">
-            <h1 className="text-left">Select Start Date</h1>
-            <div className="flex justify-start">
-              <DatePicker
-                selected={selectedStartDate}
-                onChange={(date) => {
-                  setSelectedStartDate(date);
-                  handleAddDays(date);
-                }}
-                dateFormat="dd/MM/yyyy"
-                className="border border-gray-300 p-2 w-96 rounded-lg"
-              />
-            </div>
-          </div>
-          <div className="mt-10 flex flex-col justify-start ">
-            <h1 className="text-left">
-              End Date ({selectedForm.days} days after start date)
-            </h1>
-            <input
-              value={formatDateToDDMMYYYY(selectedEndDate)}
-              className="text-input"
-              disabled
-              type="text"
-            />
-          </div>
-          <button
-            onClick={onSavePressed}
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg mt-10"
-          >
-            Proceed
-          </button>
-          <button
-            onClick={() => {
-              setSelectedForm(null);
-              setSelectedStartDate(new Date());
-              handleAddDays(new Date());
-            }}
-            className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 mt-5"
-          >
-            Go Back
-          </button>
-        </div>
-      )}
+        <button
+          onClick={() => {
+            navigate("/create-pdf");
+          }}
+          className="bg-blue-500 text-white p-2 rounded-lg"
+        >
+          Create PDF
+        </button>
+      </div>
+      <button
+        onClick={() => {
+          dispatch(logoutSuccess());
+        }}
+        className="absolute right-10 top-10 p-5  border-[#ccc] rounded-lg text-center shadow-lg  text-white"
+      >
+        <SlLogout className="w-10 h-10" color="black" />
+      </button>
+      <ConfirmDelete
+        isOpen={isDialogOpen}
+        onConfirm={onDeletePressed}
+        onCancel={() => setIsDialogOpen(false)}
+      />
     </div>
   );
 }

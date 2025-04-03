@@ -1,52 +1,65 @@
-import React, { useState } from "react";
+import React, { forwardRef } from "react";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
+import { deleteHotel, setHotels } from "../../redux/createPdfSlice";
+import { MdDelete } from "react-icons/md";
 
-export default function AddHotel() {
-  const [hotels, setHotels] = useState([
-    {
-      hotelName: "",
-      roomType: "",
-      checkIn: "",
-      duration: "",
-      rooms: "",
-      mealPlan: "",
-      status: "",
-    },
-  ]);
-
+const AddHotel = forwardRef((props, ref) => {
+  const hotels = useAppSelector((state) => state.createPdf.hotelItinerary);
+  const error = useAppSelector(
+    (state) => state.createPdf.errors.hotelItinerary
+  );
+  const dispatch = useAppDispatch();
   const handleAddHotel = () => {
-    setHotels([
-      ...hotels,
-      {
-        hotelName: "",
-        roomType: "",
-        checkIn: "",
-        duration: "",
-        rooms: "",
-        mealPlan: "",
-        status: "",
-      },
-    ]);
+    dispatch(
+      setHotels([
+        ...hotels,
+        {
+          hotelName: "",
+          roomType: "",
+          checkIn: "",
+          duration: "",
+          rooms: "1",
+          mealPlan: "",
+          status: "Confirmed",
+        },
+      ])
+    );
+  };
+
+  const handleDeleteHotel = (index) => {
+    dispatch(deleteHotel(index));
   };
 
   const handleInputChange = (index, field, value) => {
     const updatedHotels = hotels.map((hotel, i) =>
       i === index ? { ...hotel, [field]: value } : hotel
     );
-    setHotels(updatedHotels);
+    dispatch(setHotels(updatedHotels));
   };
 
   const renderHotelFields = () => {
     return hotels.map((hotel, index) => (
       <div key={index} className="mb-6 border-b pb-4">
-        <h2 className="text-lg font-medium mb-2">Hotel {index + 1}</h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-medium mb-2">Hotel {index + 1}</h2>
+          {index > 0 ? (
+            <MdDelete
+              onClick={() => {
+                handleDeleteHotel(index);
+              }}
+              className="w-10 h-10 active:opacity-50"
+            />
+          ) : null}
+        </div>
         <div className="mb-4">
           <label
             className="block text-lg font-medium mb-2"
             htmlFor={`hotelName-${index}`}
           >
-            Hotel Name
+            Hotel Name*
           </label>
           <input
+            ref={ref["hotel.hotelName"]}
             type="text"
             id={`hotelName-${index}`}
             name={`hotelName-${index}`}
@@ -56,15 +69,17 @@ export default function AddHotel() {
             }
             className="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
           />
+          <div className="text-red-500 mb-5">{error[index]?.hotelName}</div>
         </div>
         <div className="mb-4">
           <label
             className="block text-lg font-medium mb-2"
             htmlFor={`roomType-${index}`}
           >
-            Room Type
+            Room Type*
           </label>
           <input
+            ref={ref["hotel.roomType"]}
             type="text"
             id={`roomType-${index}`}
             name={`roomType-${index}`}
@@ -74,6 +89,7 @@ export default function AddHotel() {
             }
             className="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
           />
+          <div className="text-red-500 mb-5">{error[index]?.roomType}</div>
         </div>
 
         <div className="mb-4">
@@ -81,27 +97,30 @@ export default function AddHotel() {
             className="block text-lg font-medium mb-2"
             htmlFor={`duration-${index}`}
           >
-            Duration
+            Duration*
           </label>
           <input
-            type="text"
+            ref={ref["hotel.duration"]}
+            type="number"
             id={`duration-${index}`}
             name={`duration-${index}`}
             value={hotel.duration}
             onChange={(e) =>
-              handleInputChange(index, "duration", e.target.value)
+              handleInputChange(index, "duration", parseInt(e.target.value))
             }
             className="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
           />
+          <div className="text-red-500 mb-5">{error[index]?.duration}</div>
         </div>
         <div className="mb-4">
           <label
             className="block text-lg font-medium mb-2"
             htmlFor={`rooms-${index}`}
           >
-            Room(s)
+            Room(s)*
           </label>
           <input
+            ref={ref["hotel.rooms"]}
             type="number"
             id={`rooms-${index}`}
             name={`rooms-${index}`}
@@ -109,15 +128,17 @@ export default function AddHotel() {
             onChange={(e) => handleInputChange(index, "rooms", e.target.value)}
             className="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
           />
+          <div className="text-red-500 mb-5">{error[index]?.rooms}</div>
         </div>
         <div className="mb-4">
           <label
             className="block text-lg font-medium mb-2"
             htmlFor={`mealPlan-${index}`}
           >
-            Meal Plan
+            Meal Plan*
           </label>
           <input
+            ref={ref["hotel.mealPlan"]}
             type="text"
             id={`mealPlan-${index}`}
             name={`mealPlan-${index}`}
@@ -127,15 +148,17 @@ export default function AddHotel() {
             }
             className="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
           />
+          <div className="text-red-500 mb-5">{error[index]?.mealPlan}</div>
         </div>
         <div className="mb-4">
           <label
             className="block text-lg font-medium mb-2"
             htmlFor={`status-${index}`}
           >
-            Status
+            Status*
           </label>
           <input
+            ref={ref["hotel.status"]}
             type="text"
             id={`status-${index}`}
             name={`status-${index}`}
@@ -143,6 +166,7 @@ export default function AddHotel() {
             onChange={(e) => handleInputChange(index, "status", e.target.value)}
             className="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
           />
+          <div className="text-red-500 mb-5">{error[index]?.status}</div>
         </div>
       </div>
     ));
@@ -163,4 +187,5 @@ export default function AddHotel() {
       </form>
     </div>
   );
-}
+});
+export default AddHotel;

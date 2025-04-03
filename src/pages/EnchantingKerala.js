@@ -6,16 +6,13 @@ import Row from "../components/Row";
 import Column from "../components/Column";
 import moment from "moment";
 import BulletPoint from "../components/BulletPoint";
-import {
-  generateCheckInDates,
-  generateDateArray,
-  getConstantData,
-  getEmergencyContacts,
-} from "../helper";
-
+import { saveAs } from "file-saver";
+import { render, Document, Text, LineBreak } from "redocx";
+import { generateCheckInDates, generateDateArray } from "../helper";
+// import { Document, Packer, Paragraph } from "docx";
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
-import ImageUploader from "../components/ImageUploader";
+import { EMPTY_BULLETS } from "../constants/constants";
 
 function EnchantingKerala() {
   const location = useLocation();
@@ -26,7 +23,7 @@ function EnchantingKerala() {
     selectedForm,
     confirmationNumber,
   } = location.state || {};
-  console.log("selectedForm", selectedForm);
+
   let currentDate = selectedStartDate;
   const [image, setImage] = useState(null);
 
@@ -83,11 +80,36 @@ function EnchantingKerala() {
   const {
     groundItinerary,
     hotelItinerary,
-    transportationDocument,
     importantPoints,
     travelTips,
     transferFromMarariToAirport,
-  } = selectedForm.data;
+    flights,
+    transportation,
+    emergencyContacts,
+    customBulletPoint,
+  } = selectedForm;
+  const { emergencyNumberUK } = emergencyContacts || "";
+
+  const handleExportWord = () => {
+    if (!contentRef.current) return;
+
+    const content = contentRef.current.innerText || ""; // Extract plain text
+
+    // Create a new Word document
+    const doc = (
+      <Document>
+        {content.split("\n").map((line, index) => (
+          <Text key={index}>
+            {line.trim()}
+            <LineBreak />
+          </Text>
+        ))}
+      </Document>
+    );
+
+    // Render the Word document and download it
+    render(doc, "exported.docx");
+  };
 
   const handleExportPDF = async () => {
     if (!contentRef.current) return;
@@ -152,12 +174,12 @@ function EnchantingKerala() {
     <div>
       <div ref={contentRef} className="overflow-auto m-5">
         {/* Header Section */}
-
-        <ImageUploader />
-
+        {/* <ImageUploader /> */}
         <div className="mb-6 text-center border border-gray-300 p-4">
           <h1 className="text-3xl font-bold underline">Service Voucher</h1>
-          <h1 className="text-3xl font-bold underline">{selectedForm.title}</h1>
+          <h1 className="text-3xl font-bold underline">
+            {selectedForm.main.title}
+          </h1>
         </div>
         {/* Hotel Details */}
         <div className="mb-8">
@@ -201,22 +223,20 @@ function EnchantingKerala() {
             {/* Data Rows */}
             {hotelItinerary.map((hotel, index) => (
               <Column>
-                <Row>{hotel.name}</Row>
+                <Row>{hotel.hotelName}</Row>
                 <Row>{hotel.roomType}</Row>
                 <Row>
                   {generateCheckInDates(currentDate, hotelItinerary, index)}
                 </Row>
-                <Row>{hotel?.durationNights} Nights</Row>
-                <Row>1</Row>
-                <Row>
-                  {hotel?.mealPlan ? hotel.mealPlan : "Breakfast & Dinner"}
-                </Row>
-                <Row>Confirmed</Row>
+                <Row>{hotel?.duration} Nights</Row>
+                <Row>{hotel?.rooms}</Row>
+                <Row>{hotel?.mealPlan}</Row>
+                <Row>{hotel?.status}</Row>
               </Column>
             ))}
             <Column>
               <Row>Emergency Contact</Row>
-              <Row>Mr Pratheesh Thomas</Row>
+              <Row>{selectedForm.main.emergencyContact}</Row>
               <Row>&nbsp;</Row>
               <Row>&nbsp;</Row>
               <Row>&nbsp;</Row>
@@ -225,7 +245,7 @@ function EnchantingKerala() {
             </Column>
             <Column>
               <Row>Number</Row>
-              <Row>WhatsApp+91-9645379919, +91-99625 79919 +91 90617 68888</Row>
+              <Row>{selectedForm.main.emergencyNumber}</Row>
               <Row>&nbsp;</Row>
               <Row>&nbsp;</Row>
               <Row>&nbsp;</Row>
@@ -239,7 +259,7 @@ function EnchantingKerala() {
             <h1 className="text-xl font-bold">TRANSPORTATION DOCUMENT</h1>
           </div>
           <Column>
-            <Row>Arrival Kochi</Row>
+            <Row>Arrival {flights?.arrivalCity}</Row>
             <Row>Flight No</Row>
             <Row>Date</Row>
             <Row>Time</Row>
@@ -248,9 +268,9 @@ function EnchantingKerala() {
           </Column>
           <Column>
             <Row>&nbsp;</Row>
-            <Row>AI 2517</Row>
+            <Row>{flights?.arrivalFlightNumber}</Row>
             <Row>{moment(selectedStartDate).format("DD MMMM")}</Row>
-            <Row>15:10</Row>
+            <Row>{flights?.arrivalTime}</Row>
             <Row>&nbsp;</Row>
             <Row>&nbsp;</Row>
           </Column>
@@ -262,20 +282,20 @@ function EnchantingKerala() {
             <Row>Status</Row>
           </Column>
 
-          {transportationDocument.map((transport, index) => (
+          {transportation.map((transport, index) => (
             <Column>
-              <Row>{transport.transfer}</Row>
-              <Row>Private Car - English Speaking Driver</Row>
+              <Row>{transport.transfers}</Row>
+              <Row>{transport.service}</Row>
               <Row>
                 {generateCheckInDates(currentDate, hotelItinerary, index)}
               </Row>
-              <Row>OK</Row>
+              <Row>{transport.status}</Row>
             </Column>
           ))}
           <Column>
-            <Row style="text-start">
-              {getEmergencyContacts(selectedForm.title)}
-            </Row>
+            <Row style="text-start">{`Emergency Contact UK: ${
+              emergencyNumberUK ? emergencyNumberUK : ""
+            }`}</Row>
             <Row>&nbsp;</Row>
             <Row>&nbsp;</Row>
             <Row>&nbsp;</Row>
@@ -305,9 +325,9 @@ function EnchantingKerala() {
           </Column>
           <Column>
             <Row style="text-start">Departure Kochi</Row>
-            <Row>EY 331</Row>
-            <Row>12 Mar</Row>
-            <Row>09:55</Row>
+            <Row>{flights.departureFlightNumber}</Row>
+            <Row>{moment(selectedEndDate).format("DD MMMM")}</Row>
+            <Row>{flights.departureTime}</Row>
             <Row>&nbsp;</Row>
             <Row>&nbsp;</Row>
           </Column>
@@ -316,9 +336,12 @@ function EnchantingKerala() {
           <div className="text-center border border-gray-300 p-4">
             <h1 className="text-xl font-bold">Ground Itinerary Summary</h1>
           </div>
-          {generateDateArray(selectedStartDate, 16)?.map(
-            ({ dayKey, day, date }) =>
-              groundItinerary[dayKey]?.map((dayObj, index) => (
+          {generateDateArray(
+            selectedStartDate,
+            selectedForm.main.numberOfDays + 1
+          )?.map(({ day, date }) => {
+            return groundItinerary[day - 1]?.dailyTasks?.map(
+              (dayObj, index) => (
                 <Column key={index}>
                   <Row
                     style={"flex justify-center items-center"}
@@ -330,28 +353,40 @@ function EnchantingKerala() {
                   <Row style={"flex justify-center items-center"}>
                     {index === 0 ? `Day ${day}` : dayObj.time}
                   </Row>
-                  {dayObj.bulletPoints ? (
+                  {dayObj?.bulletPoints !== EMPTY_BULLETS ? (
                     <BulletPoint
                       title={dayObj.task}
                       bulletPoints={dayObj.bulletPoints}
                     />
-                  ) : (
-                    <Row description={dayObj.description} style="text-start">
+                  ) : dayObj.task ? (
+                    <Row description={dayObj?.description} style="text-start">
                       {dayObj.task}
                     </Row>
-                  )}
+                  ) : null}
                 </Column>
-              ))
-          )}
+              )
+            );
+          })}
         </div>
         <div className="mb-8">
           <h1 className="text-xl font-bold">Important Points</h1>
           <BulletPoint title={""} bulletPoints={importantPoints} />
         </div>
-        <div className="mb-8">
-          <h1 className="text-xl font-bold">Few Travel Tips</h1>
-          <BulletPoint title={""} bulletPoints={travelTips} />
-        </div>
+        {travelTips !== EMPTY_BULLETS ? (
+          <div className="mb-8">
+            <h1 className="text-xl font-bold">Few Travel Tips</h1>
+            <BulletPoint title={""} bulletPoints={travelTips} />
+          </div>
+        ) : null}
+        {customBulletPoint.title ? (
+          <div className="mb-8">
+            <h1 className="text-xl font-bold">{customBulletPoint.title}</h1>
+            <BulletPoint
+              title={""}
+              bulletPoints={customBulletPoint.bulletPoints}
+            />
+          </div>
+        ) : null}
         {transferFromMarariToAirport ? (
           <div className="mb-8">
             <h1 className="text-xl font-bold">
@@ -360,15 +395,23 @@ function EnchantingKerala() {
             <BulletPoint title={""} bulletPoints={travelTips} />
           </div>
         ) : null}
-
         <div className="font-bold">Wishing you all happy and safe holiday!</div>
       </div>
-      <button
-        onClick={handleExportPDF}
-        className="mt-4 bg-blue-500 text-white px-4 py-2 rounded active:opacity-50"
-      >
-        Export to PDF
-      </button>
+      <div className="flex">
+        <button
+          onClick={handleExportPDF}
+          className="bg-blue-500 text-white px-4 py-2 mx-auto  my-2 rounded active:opacity-50"
+        >
+          Export to PDF
+        </button>
+        <button
+          onClick={handleExportWord}
+          className="bg-blue-500 text-white px-4 py-2 mx-auto my-2 rounded active:opacity-50"
+        >
+          Export to Word
+        </button>
+        ;
+      </div>
     </div>
   );
 }

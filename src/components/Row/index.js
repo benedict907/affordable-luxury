@@ -8,9 +8,11 @@ const Row = ({
   style,
 }) => {
   return (
-    <div className={`flex-1 border border-black-2 p-2 ${style}`}>
+    <div className={`flex-1 border font-roboto border-black-2 p-2 ${style}`}>
       {children}
-      <p>{description}</p>
+      {description !== "" ? (
+        <p className="text-black font-medium">{description}</p>
+      ) : null}
     </div>
   );
 };
