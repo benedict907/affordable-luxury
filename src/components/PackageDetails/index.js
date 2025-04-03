@@ -1,91 +1,86 @@
-import React, { useState } from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import { formatDateToDDMMYYYY } from "../../helper";
+import React, { forwardRef } from "react";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
+import { setPackageData } from "../../redux/createPdfSlice";
 
-export default function PackageDetails() {
-  const [heading, setHeading] = useState();
-  const [emergencyContact, setEmergencyContact] = useState();
-  const [emergencyNumber, setEmergencyNumber] = useState();
-  const [numberOfDays, setNumberOfDays] = useState(0);
-  const [selectedStartDate, setSelectedStartDate] = useState(new Date());
-  const [selectedEndDate, setSelectedEndDate] = useState(new Date());
+const PackageDetails = forwardRef((props, ref) => {
+  const dispatch = useAppDispatch();
+  const packageData = useAppSelector((state) => state.createPdf.main);
+  const error = useAppSelector((state) => state.createPdf.errors.main);
 
-  const handleAddDays = (date) => {
-    const updatedDate = new Date(date);
-    updatedDate.setDate(updatedDate.getDate() + numberOfDays);
-    setSelectedEndDate(updatedDate);
-  };
+  const { title, numberOfDays, emergencyContact, emergencyNumber } =
+    packageData;
 
   return (
     <div className="w-full max-w-4xl bg-white p-6 rounded-lg shadow-lg my-10">
       <h1 className="text-2xl font-bold mb-6">Package Details</h1>
-      <h1 className="mb-2">Enter PDF Heading</h1>
+      <h1 className="mb-2">Enter PDF Heading *</h1>
       <input
+        ref={ref["main.title"]}
         type="text"
-        id={`heading`}
+        id={`title`}
         placeholder="Eg : Enchanting Kerala 15 nights & 16 Days"
         name={`Heading`}
-        value={heading}
-        onChange={(e) => setHeading(e.target.value)}
-        className="w-full px-3 py-2 mb-10 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+        value={title}
+        onChange={(e) =>
+          dispatch(setPackageData({ ...packageData, title: e.target.value }))
+        }
+        className="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
       />
-      <h1 className="mb-2">Emergency Contact Name</h1>
+      <div className="text-red-500 mt-2">{error.title}</div>
+      <h1 className="mb-2 mt-5">Number of days *</h1>
+      <input
+        ref={ref["main.numberOfDays"]}
+        type="number"
+        id={`numberOfDays`}
+        name={`EmergencyContact`}
+        value={numberOfDays}
+        onChange={(e) => {
+          dispatch(
+            setPackageData({
+              ...packageData,
+              numberOfDays: parseInt(e.target.value),
+            })
+          );
+          // handleAddDays(selectedStartDate, e.target.value);
+        }}
+        className="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none  focus:ring-blue-300"
+      />
+      <div className="text-red-500 mt-2">{error.numberOfDays}</div>
+      <h1 className="mb-2 my-5">Emergency Contact Name</h1>
       <input
         type="text"
         id={`emergency-contact`}
         name={`EmergencyContact`}
         value={emergencyContact}
-        onChange={(e) => setEmergencyContact(e.target.value)}
-        className="w-full px-3 py-2 mb-10 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+        onChange={(e) =>
+          dispatch(
+            setPackageData({ ...packageData, emergencyContact: e.target.value })
+          )
+        }
+        className="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
       />
-      <h1 className="mb-2">Emergency Contact Number</h1>
+      <h1 className="mb-2 my-5">Emergency Contact Number</h1>
       <input
         type="text"
         id={`emergency-contact-number`}
         placeholder=""
         name={`Number`}
         value={emergencyNumber}
-        onChange={(e) => setEmergencyNumber(e.target.value)}
-        className="w-full px-3 py-2 mb-10 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+        onChange={(e) => {
+          dispatch(
+            setPackageData({ ...packageData, emergencyNumber: e.target.value })
+          );
+        }}
+        className="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
       />
-      <div className="mt-10 flex flex-col justify-start ">
-        <h1 className="text-left">Select Start Date</h1>
-        <div className="flex justify-start">
-          <DatePicker
-            selected={selectedStartDate}
-            onChange={(date) => {
-              setSelectedStartDate(date);
-              handleAddDays(date);
-            }}
-            dateFormat="dd/MM/yyyy"
-            className="border border-gray-300 p-2 w-96 rounded-lg"
-          />
-        </div>
-      </div>
-      <h1 className="mb-2">Number of days</h1>
-      <input
-        type="number"
-        id={`days`}
-        placeholder=""
-        name={`numberOfDays`}
-        value={numberOfDays}
-        onChange={(e) => setNumberOfDays(e.target.value)}
-        className="w-full px-3 py-2 mb-10 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
-      />
-      {numberOfDays > 0 ? (
-        <div className="mt-10 flex flex-col justify-start ">
-          <h1 className="text-left">
-            End Date ({numberOfDays} days after start date)
-          </h1>
-          <input
-            value={formatDateToDDMMYYYY(selectedEndDate)}
-            className="text-input"
-            disabled
-            type="text"
-          />
-        </div>
-      ) : null}
+      {/* <button
+        type="button"
+        onClick={() => saveMain(packageData)}
+        className="w-full bg-blue-500 mt-5 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
+      >
+        Save Package Details
+      </button> */}
     </div>
   );
-}
+});
+export default PackageDetails;

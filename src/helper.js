@@ -35,9 +35,9 @@ export const generateDateArray = (startDate, days) => {
     const date = currentDate.getDate();
     const month = currentDate.toLocaleString("default", { month: "short" });
 
-    result.push({ dayKey: `day${day}`, day, date: `${date}-${month}` });
+    result.push({ day, date: `${date}-${month}` });
   }
-
+  console.log("result", { startDate, days });
   return result;
 };
 
@@ -45,7 +45,7 @@ export const generateCheckInDates = (startDate, hotel, index) => {
   const currentDate = new Date(startDate);
   let totalNights = 0;
   for (let i = 0; i <= index; i++) {
-    totalNights = i === 0 ? 0 : totalNights + hotel[i - 1].durationNights;
+    totalNights = i === 0 ? 0 : totalNights + hotel[i - 1]?.duration;
   }
 
   currentDate.setDate(currentDate.getDate() + totalNights);
@@ -63,17 +63,6 @@ export const formatDateToDDMMYYYY = (date) => {
   const year = date.getFullYear();
   return `${day}/${month}/${year}`;
 };
-
-export const formLists = [
-  { title: "Enchanting Kerala 15 nights & 16 Days", days: 15 },
-  { title: "Kerala Retreat 9 nights & 10 days", days: 9 },
-  { title: "Classic Kerala & Backwaters 10 Nights & 11 days", days: 10 },
-  {
-    title: "Enchanting Kerala 13 nights & 14 - Days Fragrant Nature",
-    days: 13,
-  },
-  { title: "Enchanting Kerala 13 nights & 14 Days", days: 13 },
-];
 
 export const getConstantData = (title) => {
   console.log("title", title);
@@ -121,4 +110,47 @@ export const getEmergencyContacts = (title) => {
     case "Classic Kerala & Backwaters 10 Nights & 11 days":
       return emergencyContacts;
   }
+};
+
+export const getDailyTasks = (itinerary) => {
+  const days = Object.keys(itinerary);
+  const mappedTasks = {};
+
+  days.forEach((day) => {
+    mappedTasks[day] = itinerary[day].map((task, index) => {
+      const { time, task: taskDescription, bulletPoints } = task;
+      return {
+        index: index + 1,
+        time: time || "",
+        description: taskDescription,
+        details: bulletPoints || [],
+      };
+    });
+  });
+
+  return mappedTasks;
+};
+
+export const setValueByKeyPath = (obj, keyPath, value) => {
+  // Split by dot, but keep array indices intact (e.g., "hotelItinerary[0]" remains together)
+  const keys = keyPath.match(/[^.[\]]+/g); // Regex to extract keys and indices
+  let current = obj;
+
+  keys.forEach((key, index) => {
+    console.log("rrrrs", { key, index });
+    // Check if the key is the last one
+    if (index === keys.length - 1) {
+      current[key] = value; // Assign the value at the last key
+    } else {
+      // If key is an array index
+      if (!isNaN(key)) {
+        key = parseInt(key, 10); // Convert index to number
+      }
+      // If the key doesn't exist, create an object or array
+      if (!current[key]) {
+        current[key] = isNaN(keys[index + 1]) ? {} : [];
+      }
+      current = current[key]; // Move deeper into the object or array
+    }
+  });
 };

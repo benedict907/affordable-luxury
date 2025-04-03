@@ -7,7 +7,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        mono: ["GT America Mono", "monospace"],
+        ariel: ["Arial, sans-serif;"],
+        roboto: ["Roboto, sans-serif;"],
       },
       animation: {
         "slide-in": "slide-in 1s ease-out forwards",

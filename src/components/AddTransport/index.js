@@ -1,63 +1,84 @@
-import React, { useState } from "react";
+import React, { forwardRef } from "react";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
+import { deleteTransport, setTransport } from "../../redux/createPdfSlice";
+import { MdDelete } from "react-icons/md";
 
-export default function AddTransport() {
-  const [transport, setTransport] = useState([
-    {
-      transfers: "",
-      service: "Private Car - English Speaking Driver",
-      status: "OK",
-    },
-  ]);
+const AddTransport = forwardRef((props, ref) => {
+  const transport = useAppSelector((state) => state.createPdf.transportation);
+  const error = useAppSelector(
+    (state) => state.createPdf.errors.transportation
+  );
 
+  const dispatch = useAppDispatch();
   const handleAddTransport = () => {
-    setTransport([
-      ...transport,
-      {
-        transfers: "",
-        service: "",
-        status: "OK",
-      },
-    ]);
+    dispatch(
+      setTransport([
+        ...transport,
+        {
+          transfers: "",
+          service: "Private Car - English Speaking Driver",
+          status: "OK",
+        },
+      ])
+    );
+  };
+  const handleDeleteTransport = (index) => {
+    dispatch(deleteTransport(index));
   };
 
   const handleTransportInputChange = (index, field, value) => {
     const updatedTransport = transport.map((transport, i) =>
       i === index ? { ...transport, [field]: value } : transport
     );
-    setTransport(updatedTransport);
+    dispatch(setTransport(updatedTransport));
   };
 
   const renderTransportationFields = () => {
     return transport.map((transportation, index) => (
       <div key={index} className="mb-6 border-b pb-4">
-        <h2 className="text-lg font-medium mb-2">Transportation {index + 1}</h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-medium mb-2">
+            Transportation {index + 1}
+          </h2>
+          {index > 0 ? (
+            <MdDelete
+              onClick={() => {
+                handleDeleteTransport(index);
+              }}
+              className="w-10 h-10 active:opacity-50"
+            />
+          ) : null}
+        </div>
         <div className="mb-4">
           <label
             className="block text-lg font-medium mb-2"
             htmlFor={`transfer-${index}`}
           >
-            Transfer
+            Transfer*
           </label>
           <input
+            ref={ref["transportation.transfers"]}
             type="text"
             id={`transfer-${index}`}
             placeholder="Eg : Kochi Airport – Hotel in Kochi "
             name={`transfer-${index}`}
             value={transportation.transfers}
             onChange={(e) =>
-              handleTransportInputChange(index, "transfer", e.target.value)
+              handleTransportInputChange(index, "transfers", e.target.value)
             }
             className="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
           />
+          <div className="text-red-500 mb-5">{error[index]?.transfers}</div>
         </div>
         <div className="mb-4">
           <label
             className="block text-lg font-medium mb-2"
             htmlFor={`service-${index}`}
           >
-            Service
+            Service*
           </label>
           <input
+            ref={ref["transportation.service"]}
             type="text"
             id={`service-${index}`}
             name={`service-${index}`}
@@ -67,15 +88,17 @@ export default function AddTransport() {
             }
             className="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
           />
+          <div className="text-red-500 mb-5">{error[index]?.service}</div>
         </div>
         <div className="mb-4">
           <label
             className="block text-lg font-medium mb-2"
             htmlFor={`status-${index}`}
           >
-            Status
+            Status*
           </label>
           <input
+            ref={ref["transportation.status"]}
             type="text"
             id={`status-${index}`}
             name={`status-${index}`}
@@ -85,6 +108,7 @@ export default function AddTransport() {
             }
             className="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
           />
+          <div className="text-red-500 mb-5">{error[index]?.status}</div>
         </div>
       </div>
     ));
@@ -105,4 +129,5 @@ export default function AddTransport() {
       </form>
     </div>
   );
-}
+});
+export default AddTransport;

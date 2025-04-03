@@ -1,53 +1,112 @@
+export const EMPTY_BULLETS = "<ul><li><br></li></ul>";
+
 export const formLists = [
   {
     title: "Enchanting Kerala 15 nights & 16 Days",
     days: 15,
-    data: {
-      hotelItinerary: [
-        {
-          name: "Fragrant Nature , Kochi",
-          roomType: "Dukes Chamber-Double",
-          durationNights: 2,
-        },
-        {
-          name: "Fragrant Nature, Munnar",
-          roomType: "Tropic Green- Double",
-          durationNights: 2,
-        },
-        {
-          name: "Cardamom County , Thekkady",
-          roomType: "Periyar cottage- Double",
-          durationNights: 2,
-        },
-        {
-          name: "Evergreen, Alleppey",
-          roomType: "Lake view – Double",
-          durationNights: 1,
-        },
-        {
-          name: "Fragrant Nature, Kollam",
-          roomType: "Atrium- Double",
-          durationNights: 2,
-        },
-        {
-          name: "Uday Samudra Leisure Beach Hotel, Kovalam",
-          roomType: "Dukes Chamber-Double",
-          durationNights: 6,
-        },
-      ],
-      transportationDocument: [
-        { transfer: "Kochi  Airport - Hotel in Kochi" },
-        { transfer: "Kochi Hotel - Hotel in Munnar" },
-        { transfer: "Hotel in Munnar - Hotel in Thekkady" },
-        { transfer: "Hotel in Thekkady - Houseboat in Alleppey" },
-        { transfer: "Houseboat in Alleppey-Hotel in Marari" },
-        { transfer: "Hotel in Marari - Kochi Airport" },
-      ],
-      groundItinerary: {
-        day1: [
+    emergencyContact: "Mr Pratheesh Thomas",
+    emergencyNumber: "WhatsApp+91-9645379919, +91-99625 79919 +91 90617 68888",
+
+    flights: {
+      arrivalCity: "Kochi",
+      arrivalFlightNumber: "AI 2517",
+      arrivalTime: "15:10",
+      departureCity: "Kochi",
+      departureFlightNumber: "EY 331",
+      departureTime: "09:55",
+    },
+    emergencyContacts: [{ emergencyContactKerala: "", emergencyNumberUK: "" }],
+    transportation: [
+      {
+        service: "Private Car - English Speaking Driver",
+        status: "OK",
+        transfers: "Kochi Airport - Hotel in Kochi",
+      },
+
+      {
+        transfers: "Kochi Hotel - Hotel in Munnar",
+        service: "Private Car - English Speaking Driver",
+        status: "OK",
+      },
+      {
+        transfers: "Hotel in Munnar - Hotel in Thekkady",
+        service: "Private Car - English Speaking Driver",
+        status: "OK",
+      },
+      {
+        transfers: "Hotel in Thekkady - Houseboat in Alleppey",
+        service: "Private Car - English Speaking Driver",
+        status: "OK",
+      },
+      {
+        transfers: "Houseboat in Alleppey - Hotel in Marari",
+        service: "Private Car - English Speaking Driver",
+        status: "OK",
+      },
+      {
+        transfers: "Hotel in Marari - Kochi Airport",
+        service: "Private Car - English Speaking Driver",
+        status: "OK",
+      },
+    ],
+    hotelItinerary: [
+      {
+        duration: 2,
+        hotelName: "Fragrant Nature, Munnar",
+        mealPlan: "Breakfast & Dinner",
+        roomType: "Tropic Green- Double",
+        rooms: "1",
+        status: "Confirmed",
+      },
+      {
+        duration: 2,
+        hotelName: "Fragrant Nature , Kochi",
+        mealPlan: "Breakfast & Dinner",
+        roomType: "Dukes Chamber-Double",
+        rooms: "1",
+        status: "Confirmed",
+      },
+      {
+        duration: 2,
+        hotelName: "Cardamom County, Thekkady",
+        mealPlan: "Breakfast & Dinner",
+        roomType: "Periyar cottage- Double",
+        rooms: "1",
+        status: "Confirmed",
+      },
+      {
+        duration: 1,
+        hotelName: "Evergreen, Alleppey",
+        mealPlan: "Breakfast & Dinner",
+        roomType: "Atrium - Double",
+        rooms: "1",
+        status: "Confirmed",
+      },
+      {
+        duration: 2,
+        hotelName: "Fragrant Nature, Kollam",
+        mealPlan: "Breakfast & Dinner",
+        roomType: "Lake view – Double",
+        rooms: "1",
+        status: "Confirmed",
+      },
+
+      {
+        duration: 6,
+        hotelName: "Uday Samudra Leisure Beach Hotel, Kovalam",
+        roomType: "Dukes Chamber-Double",
+        mealPlan: "Breakfast & Dinner",
+        rooms: "1",
+        status: "Confirmed",
+      },
+    ],
+
+    groundItinerary: [
+      {
+        dailyTasks: [
           {
             time: "",
-            task: "Meet & Greet at Kochi International  Airport, transfer to the hotel",
+            task: "Meet & Greet at Kochi International Airport, transfer to the hotel",
           },
           {
             time: "",
@@ -55,14 +114,16 @@ export const formLists = [
           },
           {
             time: "",
-            task: "Emergency phone number   +91 96453 79919 +91 99625 79919",
+            task: "Emergency phone number +91 96453 79919 +91 99625 79919",
           },
           {
             time: "19:30",
-            task: "Dinner at the hotel between  from 19:30 till 22:00 Hours",
+            task: "Dinner at the hotel between from 19:30 till 22:00 Hours",
           },
         ],
-        day2: [
+      },
+      {
+        dailyTasks: [
           {
             time: "",
             task: "Kochi Sightseeing with Guide",
@@ -97,7 +158,9 @@ export const formLists = [
             task: "Dinner at the hotel between  from 19:30 till 22:00 Hours",
           },
         ],
-        day3: [
+      },
+      {
+        dailyTasks: [
           {
             time: "",
             task: "Kochi to Munnar",
@@ -132,7 +195,10 @@ export const formLists = [
             task: "Dinner at the hotel between  from 19:30 till 22:00 Hours",
           },
         ],
-        day4: [
+      },
+
+      {
+        dailyTasks: [
           {
             time: "",
             task: "Munnar Sightseeing",
@@ -167,7 +233,9 @@ export const formLists = [
             task: "Dinner at the hotel between  19:30 till 21:30 hours",
           },
         ],
-        day5: [
+      },
+      {
+        dailyTasks: [
           {
             time: "",
             task: "Munnar to Thekkady",
@@ -193,7 +261,9 @@ export const formLists = [
             task: "Dinner at the hotel between  19:30 till 21:30 hours",
           },
         ],
-        day6: [
+      },
+      {
+        dailyTasks: [
           {
             time: "",
             task: "Thekkady Sightseeing",
@@ -204,7 +274,7 @@ export const formLists = [
           },
           {
             time: "10:00",
-            task: "Spice plantation tour in Thekkady with Guide Spice plantation tour – Thekkady  is the heaven of spices and this spice tour will leave your senses tingling with joy. Wander in the captivating farms and witness the plantation of spices like black pepper, cardamom, ginger, curcuma, cinnamon, etc.",
+            task: "Spice plantation tour in Thekkady with Guide Spice plantation tour – Thekkady is the heaven of spices and this spice tour will leave your senses tingling with joy. Wander in the captivating farms and witness the plantation of spices like black pepper, cardamom, ginger, curcuma, cinnamon, etc.",
           },
           {
             time: "13:00",
@@ -229,7 +299,9 @@ export const formLists = [
             task: "19:30 till 21:30 Hours Dinner at the Hotel",
           },
         ],
-        day7: [
+      },
+      {
+        dailyTasks: [
           {
             time: "",
             task: "Depart From Thekkady to Alleppey Houseboat at 08 30 hours",
@@ -263,7 +335,9 @@ export const formLists = [
             task: "Dinner between 19:00 till 21:00 hours",
           },
         ],
-        day8: [
+      },
+      {
+        dailyTasks: [
           {
             time: "",
             task: "Depart to Kollam",
@@ -282,7 +356,7 @@ export const formLists = [
           },
           {
             time: "12:00",
-            task: "Visit Munroe Island, a hidden pearl in the backwaters composed of a cluster of 8 beautiful islands. Each of these islands is divided by small water channels and lakes. The place is known for its pristine Backwaters and lively rural life. The island boasts of diverse flora and fauna that attract several Migratory birds. You can explore Munroe Island by country boat ride. It is a phenomenal 2 hour boat ride experience That you will cherish for a lifetime. Munroe Island is named in honour of Resident Colonel John Munro of the former Princely State of Travancore. In 1795, the British established their supremacy in South India and the princely state Of Travancore came under their governance. During his tenure, Munro oversaw the land reclamation Efforts in the delta where Kallada River joins Ashamed Lake and the reclaimed island was named after him as Munroe Island.",
+            task: "Visit Munroe Island, a hidden pearl in the backwaters composed of a cluster of 8 beautiful islands. Each of these islands is divided by small water channels and lakes. The place is known for its pristine Backwaters and lively rural life. The island boasts of diverse flora and fauna that attract several Migratory birds. You can explore Munroe Island by country boat ride. It is a phenomenal 2 hour boat ride experience That you will cherish for a lifetime. Munroe Island is named in honour of Resident Colonel John Munro of the former Princely State of Travancore. In 1795, the British established their supremacy in South India and the princely state Of Travancore came under their governance. During his tenure, Munro oversaw the land reclamation Efforts in the delta where Kallada River joins Ashamed Lake and the reclaimed island was named after him as Munroe Island.",
           },
           {
             time: "14:30",
@@ -290,12 +364,14 @@ export const formLists = [
           },
           {
             time: "19:30",
-            task: "Dinner at the hotel between  19:30 till 21:30 hours.",
+            task: "Dinner at the hotel between 19:30 till 21:30 hours.",
             description:
               "Lake side or Pool side dinner in Fragrant Nature resort on day 8 Subject to weather Conditions",
           },
         ],
-        day9: [
+      },
+      {
+        dailyTasks: [
           {
             time: "",
             task: "Kollam",
@@ -326,7 +402,9 @@ export const formLists = [
             task: "Dinner at the hotel between 19:30 till 21:30 hours",
           },
         ],
-        day10: [
+      },
+      {
+        dailyTasks: [
           {
             time: "",
             task: "Kollam to Kovalam",
@@ -347,7 +425,7 @@ export const formLists = [
             time: "",
             task: "",
             bulletPoints: [
-              "15:00 to 17 00  Hours,  you may take some rest and enjoy the in-house resort facilities or  head to the famous beaches of Kerala, Kappil Beach (8 km. from the resort) and Varkala Beach (15 km. from the resort).Kappil Beach is a beautiful beach-backwater destination known for its tranquillity, natural beauty and soothing atmosphere. The glittering waters of Arabian Sea, golden sand and thick groves of casuarinas trees make this place a must visit.",
+              "15:00 to 17 00 Hours, you may take some rest and enjoy the in-house resort facilities or head to the famous beaches of Kerala, Kappil Beach (8 km. from the resort) and Varkala Beach (15 km. from the resort).Kappil Beach is a beautiful beach-backwater destination known for its tranquillity, natural beauty and soothing atmosphere. The glittering waters of Arabian Sea, golden sand and thick groves of casuarinas trees make this place a must visit.",
               "Papanasam Beach, Varkala Beach is a beautiful stretch of sand renowned for its solitude and impeccable beauty. The water of the beach is known to have medicinal and curative properties. It is believed that taking a dip in the holy waters can cleanse your body of impurities and all sins. In addition to this, it offers a pleasing view with crystal blue waters and cliffs in the backdrop.",
             ],
           },
@@ -360,10 +438,12 @@ export const formLists = [
           },
           {
             time: "14:30",
-            task: "Check in at the beach resort in Kovalam ,Rest of the day is at Leisure",
+            task: "Check in at the beach resort in Kovalam, Rest of the day is at Leisure",
           },
         ],
-        day11: [
+      },
+      {
+        dailyTasks: [
           {
             time: "",
             task: "Kovalam",
@@ -376,7 +456,7 @@ export const formLists = [
             time: "09:00",
             bulletPoints: [
               "Full day is at Leisure at the beach Resort",
-              "Please note that the Chowara beach can be reached within 10 minutes’ walk However, it is not a place for swimming.",
+              "Please note that the Chowara beach can be reached within 10 minutes walk However, it is not a place for swimming.",
             ],
             task: "",
           },
@@ -385,7 +465,9 @@ export const formLists = [
             task: "Dinner at the hotel between 19:30 till 22:00 hours",
           },
         ],
-        day12: [
+      },
+      {
+        dailyTasks: [
           {
             time: "",
             task: "Kovalam",
@@ -403,7 +485,9 @@ export const formLists = [
             task: "Dinner at the hotel Between 19:30 till 22:00 Hours",
           },
         ],
-        day13: [
+      },
+      {
+        dailyTasks: [
           {
             time: "",
             task: "Kovalam",
@@ -421,7 +505,9 @@ export const formLists = [
             task: "Dinner at the hotel Between 19:30 till 22:00 Hours",
           },
         ],
-        day14: [
+      },
+      {
+        dailyTasks: [
           {
             time: "",
             task: "Kovalam",
@@ -439,7 +525,9 @@ export const formLists = [
             task: "Dinner at the hotel Between 19:30 till 22:00 Hours",
           },
         ],
-        day15: [
+      },
+      {
+        dailyTasks: [
           {
             time: "",
             task: "Kovalam",
@@ -457,10 +545,12 @@ export const formLists = [
             task: "Dinner at the hotel Between 19:30 till 22:00 Hours",
           },
         ],
-        day16: [
+      },
+      {
+        dailyTasks: [
           {
             time: "",
-            task: "Depart Kovalam  Trivandrum Airport to UK",
+            task: "Depart Kovalam Trivandrum Airport to UK",
           },
           {
             time: "",
@@ -472,75 +562,85 @@ export const formLists = [
           },
         ],
       },
-      importantPoints: [
-        "Standard Check in time at Kochi hotel is 14 00 Hours, Early Check in is Subject to availability",
-        "On Day 3 : Departure time to Munnar is at 09:55 hours",
-        "Rajamalai national park remains closed from Mid of January till 5th of April every year, Instead of Rajamalai travellers can visit Thettekad Bird Sanctuary without any additional cost",
-        "Houseboat check in time is at 12 00 noon",
-        "Breakfast & Dinner Timings at the hotels & Houseboat",
-        "Breakfast 07 30 till 10:00 Hours",
-        "Dinner 19:30 till 22:00 Hours & Houseboat Dinner from 19:00 hours till 21:00 Hours",
-      ],
-      travelTips: [
-        "All travellers arriving at Kochi International airport on Terminal 3 will be greeted at Pillar No. A 3 & Travellers arriving domestic Airport will be greeted at Terminal 1 Exit Point with traveller’s Name and Company placard",
+    ],
+    importantPoints: [
+      "Standard Check in time at Kochi hotel is 14 00 Hours, Early Check in is Subject to availability",
+      "On Day 3 : Departure time to Munnar is at 09:55 hours",
+      "Rajamalai national park remains closed from Mid of January till 5th of April every year, Instead of Rajamalai travellers can visit Thettekad Bird Sanctuary without any additional cost",
+      "Houseboat check in time is at 12 00 noon",
+      "Breakfast & Dinner Timings at the hotels & Houseboat",
+      "Breakfast 07 30 till 10:00 Hours",
+      "Dinner 19:30 till 22:00 Hours & Houseboat Dinner from 19:00 hours till 21:00 Hours",
+    ],
+    travelTips: [
+      "All travellers arriving at Kochi International airport on Terminal 3 will be greeted at Pillar No. A 3 & Travellers arriving domestic Airport will be greeted at Terminal 1 Exit Point with traveller’s Name and Company placard",
 
-        "Please ensure that your name can be seen on the placard at the exit point prior to exiting the airport. If you are unable to see your name on the placard, The following emergency numbers are of the airport representatives at Cochin International Airport: WhatsApp & Mobile No  +91 94471 56577 +91 94951 57663",
+      "Please ensure that your name can be seen on the placard at the exit point prior to exiting the airport. If you are unable to see your name on the placard, The following emergency numbers are of the airport representatives at Cochin International Airport: WhatsApp & Mobile No  +91 94471 56577 +91 94951 57663",
 
-        "As per the Enchanting Kerala  13 Nights and 14 Days itinerary, we are not giving any programme on day 1 due to long flight duration and Jet lag from UK. We request all travellers to take rest on day 1 and spend the day at leisure using the in-house facilities at the hotel in Kochi. (Swimming pool, Spa and Bar facilities)",
-        "On day 2, our driver will report at the Kochi hotel at 09 55 hours, for the Kochi Sightseeing, Evening Kathakali Show at Fort Kochi",
-        "On Friday and Saturday, Dutch palace and Jewish Synagogue remains closed so travellers arriving on Thursday will have to go for Kochi sightseeing on day 1 itself.",
-        "Travel time from Kovalam to Trivandrum airport is 22 Kms. Hence, we request all travellers to checkout from the resort 3 hours& 35 minutes before the flight departure timings.",
-        "Travellers are requested to take care of their belongings and make sure that the travel documents are carried at the time of check out from each hotel (Passports, Cash, Valets and mobile phones, If any valuables are missed at the hotel, it will not be an easy procedure to send a courier to a foreign country as per the laws. The courier companies will not accept mobile phones, Tabs, cash, TC's or any other valuables for delivery in a foreign country",
-        "Travellers using online check-in facilities with Emirates, Etihad and other Gulf carriers are requested to inform the driver and hotel front office manager in advance at time of check in, Transfers can be organised as per the traveller’s request.",
-      ],
-    },
+      "As per the Enchanting Kerala  13 Nights and 14 Days itinerary, we are not giving any programme on day 1 due to long flight duration and Jet lag from UK. We request all travellers to take rest on day 1 and spend the day at leisure using the in-house facilities at the hotel in Kochi. (Swimming pool, Spa and Bar facilities)",
+      "On day 2, our driver will report at the Kochi hotel at 09 55 hours, for the Kochi Sightseeing, Evening Kathakali Show at Fort Kochi",
+      "On Friday and Saturday, Dutch palace and Jewish Synagogue remains closed so travellers arriving on Thursday will have to go for Kochi sightseeing on day 1 itself.",
+      "Travel time from Kovalam to Trivandrum airport is 22 Kms. Hence, we request all travellers to checkout from the resort 3 hours& 35 minutes before the flight departure timings.",
+      "Travellers are requested to take care of their belongings and make sure that the travel documents are carried at the time of check out from each hotel (Passports, Cash, Valets and mobile phones, If any valuables are missed at the hotel, it will not be an easy procedure to send a courier to a foreign country as per the laws. The courier companies will not accept mobile phones, Tabs, cash, TC's or any other valuables for delivery in a foreign country",
+      "Travellers using online check-in facilities with Emirates, Etihad and other Gulf carriers are requested to inform the driver and hotel front office manager in advance at time of check in, Transfers can be organised as per the traveller’s request.",
+    ],
   },
   {
     title: "Kerala Retreat 9 nights & 10 days",
     days: 9,
+    emergencyContact: "Mr Pratheesh Thomas",
+    emergencyNumber: "WhatsApp+91-9645379919, +91-99625 79919 +91 90617 68888",
     data: {
+      flightDetails: {
+        arrivalCity: "Kochi",
+        arrivalFlightNumber: "EY 332",
+        arrivalTime: "14:45",
+        departureCity: "Kochi",
+        departureFlightNumber: "EY 331",
+        departureTime: "09:55",
+      },
       hotelItinerary: [
         {
-          name: "Monsoon Empress, Kochi",
+          hotelName: "Monsoon Empress, Kochi",
           roomType: "Monsoon Premium room -  Double",
-          durationNights: 2,
+          duration: 2,
           mealPlan: "Breakfast only",
         },
         {
-          name: "Mistletoe, Munnar",
+          hotelName: "Mistletoe, Munnar",
           roomType: "Hill  View- Double",
-          durationNights: 2,
+          duration: 2,
           mealPlan: "Breakfast only",
         },
         {
-          name: "Wilder nest  -Thekkady",
+          hotelName: "Wilder nest  -Thekkady",
           roomType: "Superior - Double",
-          durationNights: 2,
+          duration: 2,
           mealPlan: "Breakfast only",
         },
         {
-          name: "Evergreen Houseboat, Alleppey",
+          hotelName: "Evergreen Houseboat, Alleppey",
           roomType: "A/C Deluxe - Double",
-          durationNights: 1,
+          duration: 1,
           mealPlan: "Breakfast, Lunch & dinner",
         },
         {
-          name: "Ragas beach villas, Marari",
+          hotelName: "Ragas beach villas, Marari",
           roomType: "Beach view room -Double",
-          durationNights: 2,
+          duration: 2,
           mealPlan: "Breakfast only",
         },
       ],
-      transportationDocument: [
-        { transfer: "Kochi  Airport - Hotel in Kochi" },
-        { transfer: "Kochi Hotel - Hotel in Munnar" },
-        { transfer: "Hotel in Munnar - Hotel in Thekkady" },
-        { transfer: "Hotel in Thekkady - Houseboat in Alleppey" },
-        { transfer: "Houseboat in Alleppey-Hotel in Marari" },
-        { transfer: "Hotel in Marari - Kochi Airport" },
+      transportation: [
+        { transfers: "Kochi  Airport - Hotel in Kochi" },
+        { transfers: "Kochi Hotel - Hotel in Munnar" },
+        { transfers: "Hotel in Munnar - Hotel in Thekkady" },
+        { transfers: "Hotel in Thekkady - Houseboat in Alleppey" },
+        { transfers: "Houseboat in Alleppey-Hotel in Marari" },
+        { transfers: "Hotel in Marari - Kochi Airport" },
       ],
       groundItinerary: {
-        day1: [
+        dailyTasks: [
           {
             time: "",
             task: "Meet & Greet at Kochi International  Airport at Pillar No A 6, transfer to the hotel",
@@ -550,7 +650,7 @@ export const formLists = [
             task: "Check in at the hotel at after 11 00 hours, rest of the day at leisure",
           },
         ],
-        day2: [
+        dailyTasks: [
           {
             time: "",
             task: "Breakfast at the hotel from 07:30 till 10:00 Clock",
@@ -581,7 +681,7 @@ export const formLists = [
             task: "Afternoon is at leisure",
           },
         ],
-        day3: [
+        dailyTasks: [
           {
             time: "",
             task: "Breakfast from 07:30 till 10:00 clock",
@@ -606,7 +706,7 @@ export const formLists = [
             task: "Check in at the hotel at after 14 00 hours, rest of the day at leisure",
           },
         ],
-        day4: [
+        dailyTasks: [
           {
             time: "",
             task: "Munnar Sightseeing",
@@ -643,7 +743,7 @@ export const formLists = [
             task: "Return to the hotel in Munnar",
           },
         ],
-        day5: [
+        dailyTasks: [
           {
             time: "",
             task: "Munnar to Thekkady",
@@ -673,7 +773,7 @@ export const formLists = [
             task: "19:30 till 21:30 Hours Dinner at the Hotel",
           },
         ],
-        day6: [
+        dailyTasks: [
           {
             time: "",
             task: "Depart to Thekkady for Boating",
@@ -718,7 +818,7 @@ export const formLists = [
             task: "19:30 till 21:30 Hours Dinner at the Hotel",
           },
         ],
-        day7: [
+        dailyTasks: [
           {
             time: "",
             task: "Depart to Alleppey Houseboat at 08 30 hours via Kuttikanam Hills",
@@ -752,7 +852,7 @@ export const formLists = [
             task: "Dinner between 19:00 till 21:00 hours",
           },
         ],
-        day8: [
+        dailyTasks: [
           {
             time: "",
             task: "Depart to Marari",
@@ -774,7 +874,7 @@ export const formLists = [
             task: "After lunch check in at the resort in Marari",
           },
         ],
-        day9: [
+        dailyTasks: [
           {
             time: "",
             task: "Marari",
@@ -792,7 +892,7 @@ export const formLists = [
             task: "Dinner between 19:30 till 21:00 hours",
           },
         ],
-        day10: [
+        dailyTasks: [
           {
             time: "",
             task: "Depart Marari to Kochi Airport ( 2 hours Drive)",
@@ -826,332 +926,389 @@ export const formLists = [
       ],
     },
   },
+
   {
-    title: "Classic Kerala & Backwaters 10 Nights & 11 days",
-    days: 10,
+    main: {
+      title: "Classic Kerala & Backwaters 10 Nights & 11 days",
+      numberOfDays: 10,
+      emergencyContact: "Mr. Pratheesh Thomas",
+      emergencyNumber: "91-9645379919, 91-99625 79919",
+    },
+
     data: {
       hotelItinerary: [
         {
-          name: "Fragrant Nature , Kochi",
+          hotelName: "Fragrant Nature , Kochi",
           roomType: "Dukes Chamber -Double",
-          durationNights: 2,
+          duration: 2,
+          rooms: "1",
           mealPlan: "CP",
+          status: "Confirmed",
         },
         {
-          name: "Indian Summer House, Muvattupuzha",
+          hotelName: "Indian Summer House, Muvattupuzha",
           roomType: "Sita room- Double",
-          durationNights: 2,
+          duration: 2,
           mealPlan: "All Meals",
+          rooms: "1",
+          status: "Confirmed",
         },
         {
-          name: "Tall Trees ,Munnar",
+          hotelName: "Tall Trees ,Munnar",
           roomType: "Cinnamon l Cottage -Double",
-          durationNights: 1,
+          duration: 1,
           mealPlan: "CP",
+          rooms: "1",
+          status: "Confirmed",
         },
         {
-          name: "Spice village  , Thekkady",
+          hotelName: "Spice village  , Thekkady",
           roomType: "Spice garden cottage -Double",
-          durationNights: 2,
+          duration: 2,
           mealPlan: "CP",
+          rooms: "1",
+          status: "Confirmed",
         },
         {
-          name: "Evergreen Houseboat, Alleppey",
+          hotelName: "Evergreen Houseboat, Alleppey",
           roomType: "Deluxe Houseboat- Double",
-          durationNights: 1,
+          duration: 1,
           mealPlan: "All Meals",
+          rooms: "1",
+          status: "Confirmed",
         },
         {
-          name: "Marari beach resort , Marari Beach",
+          hotelName: "Marari beach resort , Marari Beach",
           roomType: "Garden Villa-Double",
-          durationNights: 2,
+          duration: 2,
           mealPlan: "CP",
+          rooms: "1",
+          status: "Confirmed",
         },
       ],
-      transportationDocument: [
+      transportation: [
         {
-          transfer: "Kochi  Airport - Hotel in Kochi",
+          transfers: "Kochi  Airport - Hotel in Kochi",
+          status: "OK",
           service: "Private Car - English Speaking Driver",
         },
         {
-          transfer: "Hotel in Kochi  - Indian Summer house Muvattupuzha",
+          transfers: "Hotel in Kochi  - Indian Summer house Muvattupuzha",
+          status: "OK",
           service: "Private Car - English Speaking Driver",
         },
         {
-          transfer: " Indian Summer house Muvattupuzha - Hotel in Munnar",
+          transfers: " Indian Summer house Muvattupuzha - Hotel in Munnar",
+          status: "OK",
           service: "Private Car - English Speaking Driver",
         },
         {
-          transfer: "Hotel in Munnar - Hotel in Thekkady",
+          transfers: "Hotel in Munnar - Hotel in Thekkady",
+          status: "OK",
           service: "Private Car - English Speaking Driver",
         },
         {
-          transfer: "Hotel in Thekkady - Alleppey Houseboat",
+          transfers: "Hotel in Thekkady - Alleppey Houseboat",
+          status: "OK",
           service: "Private Car - English Speaking Driver",
         },
         {
-          transfer: "Alleppey Houseboat - Marari Beach",
+          transfers: "Alleppey Houseboat - Marari Beach",
+          status: "OK",
           service: "Private Car - English Speaking Driver",
         },
         {
-          transfer: "Marari Beach-Kochi International Airport",
+          transfers: "Marari Beach-Kochi International Airport",
+          status: "OK",
           service: "Private Car - English Speaking Driver",
         },
       ],
-      groundItinerary: {
-        day1: [
-          {
-            time: "",
-            task: "Meet & Greet at Kochi International  Airport at Pillar No A 3, transfer to the hotel in Kochi",
-          },
-          {
-            time: "",
-            task: "Emergency phone number  +91 99625 79919 /+91 96453 79919/+91 9061776888",
-          },
-          {
-            time: "",
-            task: "Check in at the hotel in Kochi is at  14 00 hours, Early check in is  Subject to availability Rest of the  day at leisure at the hotel in Kochi",
-          },
-          {
-            time: "",
-            task: "Full Day is at leisure",
-          },
-        ],
-        day2: [
-          {
-            time: "",
-            task: "Kochi Sightseeing",
-          },
-          {
-            time: "12:15",
-            task: "Depart for Sightseeing from the hotel",
-          },
-          {
-            time: "13:45",
-            task: "Sightseeing of Kochi, Chinese fishing nets, St Francis Church, Dhobi khana.",
-            bulletPoints: [
-              "Chinese fishing nets – Enjoy spellbinding experience at 500 years old Chinese Fishing Nets or Cheenvala and witness these majestic nets being suspended in mid-air, row upon row by the fishermen.",
-              "St Francis Church – Constructed in 1503, it is the oldest European church in India and has great historical significance. It has beautiful structural design and ambience with deep Dutch and Portuguese influences.",
-              "Dhobi khana–You can tour through the ancient shades of Kochi at dhobi khana. Witness array of men and women carrying on laundry work and ironing clothes",
-              "Santa Cruz Basilica Kochi-  The Santa Cruz Cathedral Basillica at Fort Kochi is one of  the Heritage edifices of Kerala and visited by tourists the whole year in Kochi.",
-            ],
-          },
-          {
-            time: "15:30",
-            task: "",
-            bulletPoints: [
-              "Jewish Synagogue - Built in 1568 AD, it is the oldest and only operational synagogue in Kochi and holds great historical significance. Marvel the architecture wrapped in distinct painted Chinese tiles, Belgian chandeliers and grand lightings. You will find attractive ancient collections and souvenirs inside.",
-              "Jewish Synagogue",
-              "Dutch Palace Mattanchery–It is a popular Portuguese palace which features Kerala murals depicting portraits and exhibits of the kings of Kochi.",
-            ],
-          },
-          {
-            time: "17:00",
-            task: "Return the hotel in Kochi, Evening at Leisure",
-          },
-        ],
-        day3: [
-          {
-            time: "",
-            task: "Kochi to Indian Summer House Muvattupuzha 1 hour 45 minutes",
-          },
-          {
-            time: "08:30",
-            task: "Breakfast between 07:30 to 09:30 Hour",
-          },
-          {
-            time: "10:30",
-            task: "Check out from Hotel in Kochi & Depart to Indian Sumer House",
-          },
+      groundItinerary: [
+        {
+          dailyTasks: [
+            {
+              time: "",
+              task: "Meet & Greet at Kochi International  Airport at Pillar No A 3, transfer to the hotel in Kochi",
+              description: "",
+              bulletPoints: "<ul><li><br></li></ul>",
+            },
+            {
+              time: "",
+              task: "Emergency phone number  +91 99625 79919 /+91 96453 79919/+91 9061776888",
+              description: "",
+              bulletPoints: "<ul><li><br></li></ul>",
+            },
+            {
+              time: "",
+              task: "Check in at the hotel in Kochi is at  14 00 hours, Early check in is  Subject to availability Rest of the  day at leisure at the hotel in Kochi",
+              description: "",
+              bulletPoints: "<ul><li><br></li></ul>",
+            },
+            {
+              time: "",
+              task: "Full Day is at leisure",
+              description: "",
+              bulletPoints: "<ul><li><br></li></ul>",
+            },
+          ],
+        },
+        {
+          dailyTasks: [
+            {
+              time: "",
+              task: "Kochi Sightseeing",
+              description: "",
+              bulletPoints: "<ul><li><br></li></ul>",
+            },
+            {
+              time: "12:15",
+              task: "Depart for Sightseeing from the hotel",
+              description: "",
+              bulletPoints: "<ul><li><br></li></ul>",
+            },
+            {
+              time: "13:45",
+              task: "Sightseeing of Kochi, Chinese fishing nets, St Francis Church, Dhobi khana.",
+              description: "",
+              bulletPoints: [
+                "Chinese fishing nets – Enjoy spellbinding experience at 500 years old Chinese Fishing Nets or Cheenvala and witness these majestic nets being suspended in mid-air, row upon row by the fishermen.",
+                "St Francis Church – Constructed in 1503, it is the oldest European church in India and has great historical significance. It has beautiful structural design and ambience with deep Dutch and Portuguese influences.",
+                "Dhobi khana–You can tour through the ancient shades of Kochi at dhobi khana. Witness array of men and women carrying on laundry work and ironing clothes",
+                "Santa Cruz Basilica Kochi-  The Santa Cruz Cathedral Basillica at Fort Kochi is one of  the Heritage edifices of Kerala and visited by tourists the whole year in Kochi.",
+              ],
+            },
+            {
+              time: "15:30",
+              task: "",
+              description: "",
+              bulletPoints: [
+                "Jewish Synagogue - Built in 1568 AD, it is the oldest and only operational synagogue in Kochi and holds great historical significance. Marvel the architecture wrapped in distinct painted Chinese tiles, Belgian chandeliers and grand lightings. You will find attractive ancient collections and souvenirs inside.",
+                "Jewish Synagogue",
+                "Dutch Palace Mattanchery–It is a popular Portuguese palace which features Kerala murals depicting portraits and exhibits of the kings of Kochi.",
+              ],
+            },
+            {
+              time: "17:00",
+              task: "Return the hotel in Kochi, Evening at Leisure",
+              description: "",
+              bulletPoints: "<ul><li><br></li></ul>",
+            },
+          ],
+        },
+        {
+          dailyTasks: [
+            {
+              time: "",
+              task: "Kochi to Indian Summer House Muvattupuzha 1 hour 45 minutes",
+              description: "",
+              bulletPoints: "<ul><li><br></li></ul>",
+            },
+            {
+              time: "08:30",
+              task: "Breakfast between 07:30 to 09:30 Hour",
+              description: "",
+              bulletPoints: "<ul><li><br></li></ul>",
+            },
+            {
+              time: "10:30",
+              task: "Check out from Hotel in Kochi & Depart to Indian Sumer House",
+              description: "",
+              bulletPoints: "<ul><li><br></li></ul>",
+            },
 
-          {
-            time: "11:00",
-            task: "Visit the Folklore museum in Kochi",
-            description:
-              "Folklore Museum provide art education to the students and helping to provide visual and academic knowledge to the art lovers, researchers and travelers from all over the world. Folklore museum is the only architectural museum in Kerala and the treasure trove of stone, wood and bronze sculptures, ancient terracotta, stone Age objects, jewelry, paintings, oil lamps, musical instruments, tribal and folk art.",
-          },
-          {
-            time: "11:30",
-            task: "Depart to Indian Summer House",
-          },
-          {
-            time: "12:45",
-            task: "After Lunch Check in  at Indian Summer House at 14:00 Hours",
-          },
-          {
-            time: "16:00",
-            task: "Canoe river crossing & afternoon tea at Mohanan's Tea Shop in the evening relax by pool and freshen up for dinner",
-          },
-          {
-            time: "18:30",
-            task: "Cooking class with Chef to prepare evening meal Dinner",
-          },
-          {
-            time: "20:00",
-            task: "Dinner Time",
-          },
-        ],
-        day4: [
-          {
-            time: "",
-            task: "Full day is at Leisure at  Indian Summer House",
-          },
-        ],
-        day5: [
-          {
-            time: "",
-            task: "Indian Summer House to Munnar ( 2 hours 45 Minutes)",
-          },
-          {
-            time: "09:45",
-            task: "Check out & depart to Munnar",
-          },
-          {
-            time: "10:45",
-            task: "Visit the Cheeyapara Water falls enroute to Munnar",
-          },
-          {
-            time: "12:00",
-            task: "Visit to Tea Museum & Tea Factory",
-            description:
-              "Tea Museum – The museum depicts the history of tea plantation and processing since the ancient times. You can witness the entire process of tea making right from plantation to tasting the different kinds of teas that are displayed.",
-          },
-          {
-            time: "13:00",
-            task: "Lunch Break",
-          },
-          {
-            time: "16:00",
-            task: "Check in at the hotel in Munnar",
-          },
-          {
-            time: "18:30",
-            task: "Return to the hotel in Munnar",
-          },
-        ],
-        day6: [
-          {
-            time: "",
-            task: "Munnar to Thekkady (3 hours Drive)",
-          },
-          {
-            time: "07:30",
-            task: "Breakfast from 07:30 till 08:30 Hours",
-          },
-          {
-            time: "09:00",
-            task: "Depart  to Periyar Wildlife Sanctuary in Thekkady",
-          },
-          {
-            time: "11:30",
-            task: "Spice Plantation Visit",
-            description:
-              "Spice plantation tour – Thekkady  is the heaven of spices and this spice tour will leave your senses tingling with joy. Wander in the captivating farms and witness the plantation of spices like black pepper, cardamom, ginger, curcuma, cinnamon, etc.",
-          },
-          {
-            time: "14:00",
-            task: "Check in at the Jungle resort in Thekkady",
-          },
-        ],
-        day7: [
-          {
-            time: "",
-            task: "Thekkady",
-          },
-          {
-            time: "07:00",
-            task: "Breakfast from 07:30 till 08:30 Hours",
-          },
-          {
-            time: "08:45",
-            task: "Boating at Thekkady",
-            description:
-              "Boating in the Periyar Lake – Enjoy boating while witnessing elephants playing with their babies and other wild animals bathing, drinking and resting along the banks of the lake.",
-          },
-          {
-            time: "17:00",
-            task: "Kathakali",
-            description:
-              "Kathakali-Catch glimpse of the traditional dance form of Kerala performed by skilled artists and soak in the traditional essence.",
-          },
-          {
-            time: "19:15",
-            task: "Return to the hotel",
-          },
-        ],
-        day8: [
-          {
-            time: "",
-            task: "Depart to Alleppey Houseboat at 08 30 hours",
-          },
-          {
-            time: "07:30",
-            task: "Breakfast at the hotel from 07:30 till 08:30 Hours",
-          },
-          {
-            time: "08:30",
-            task: "Check out & Depart to Alleppey Houseboat",
-          },
-          {
-            time: "10:30",
-            task: "Tea Break at Kanjirapally for 30 minutes",
-          },
-          {
-            time: "12:00",
-            task: "Check in at Houseboat proceed for backwater cruise, Overnight stay at the houseboat, Lunch around 13 00 Clock at the houseboat",
-          },
-          {
-            time: "14:30",
-            task: "13:30 hours till 17:30 Cruise",
-          },
-          {
-            time: "17:30",
-            task: "17:30 till 18:30 Village Walk",
-          },
-          {
-            time: "19:30",
-            task: "Dinner between 19:30 till 21:00 hours",
-          },
-        ],
-        day9: [
-          {
-            time: "",
-            task: "Depart from Alleppey Houseboat  to Marari Beach Last Destination",
-          },
-          {
-            time: "08:00",
-            task: "Breakfast at the houseboat",
-          },
-          {
-            time: "09:30",
-            task: "08:30 till 09:30 Cruise through the backwaters",
-          },
-          {
-            time: "14:00",
-            task: "",
-            bulletPoints: [
-              "Check in at the beach resort in Marari Beach",
-              "Marari Beach is one of the most beautiful beaches in the world. Marari name has been derived from a local village on the coast of the Arabian Sea “Mararikulum”.  Marari beach in Kerala is titled among the top five Hammock Beaches by National Geographic survey. Marari beach is an ideal location for holidaying with friends and family or for a relaxed getaway. The golden sand and coconut trees along the coastline add to the already existing charm of the place. Marari Beach is known for its white sands and enthralling sunsets.",
-            ],
-          },
-        ],
-        day10: [
-          {
-            time: "",
-            task: "Full day is at Leisure at the beach resort",
-          },
-        ],
-        day11: [
-          {
-            time: "",
-            task: "Depart Marari to Kochi Airport",
-          },
-          {
-            time: "",
-            task: "Distance from Marari beach to Kochi Airport is 95  Kms and takes 2 hours  to Reach during the day time,  For international flights, Travellers must depart  5 hours before the Flight departure time from the resort and for domestic flights, travellers must  depart 4 hours  before the departure time from the Resort",
-          },
-        ],
-      },
+            {
+              time: "11:00",
+              task: "Visit the Folklore museum in Kochi",
+              description:
+                "Folklore Museum provide art education to the students and helping to provide visual and academic knowledge to the art lovers, researchers and travelers from all over the world. Folklore museum is the only architectural museum in Kerala and the treasure trove of stone, wood and bronze sculptures, ancient terracotta, stone Age objects, jewelry, paintings, oil lamps, musical instruments, tribal and folk art.",
+            },
+            {
+              time: "11:30",
+              task: "Depart to Indian Summer House",
+            },
+            {
+              time: "12:45",
+              task: "After Lunch Check in  at Indian Summer House at 14:00 Hours",
+            },
+            {
+              time: "16:00",
+              task: "Canoe river crossing & afternoon tea at Mohanan's Tea Shop in the evening relax by pool and freshen up for dinner",
+            },
+            {
+              time: "18:30",
+              task: "Cooking class with Chef to prepare evening meal Dinner",
+            },
+            {
+              time: "20:00",
+              task: "Dinner Time",
+            },
+          ],
+        },
+        {
+          dailyTasks: [
+            {
+              time: "",
+              task: "Full day is at Leisure at  Indian Summer House",
+            },
+          ],
+        },
+        {
+          dailyTasks: [
+            {
+              time: "",
+              task: "Indian Summer House to Munnar ( 2 hours 45 Minutes)",
+            },
+            {
+              time: "09:45",
+              task: "Check out & depart to Munnar",
+            },
+            {
+              time: "10:45",
+              task: "Visit the Cheeyapara Water falls enroute to Munnar",
+            },
+            {
+              time: "12:00",
+              task: "Visit to Tea Museum & Tea Factory",
+              description:
+                "Tea Museum – The museum depicts the history of tea plantation and processing since the ancient times. You can witness the entire process of tea making right from plantation to tasting the different kinds of teas that are displayed.",
+            },
+            {
+              time: "13:00",
+              task: "Lunch Break",
+            },
+            {
+              time: "16:00",
+              task: "Check in at the hotel in Munnar",
+            },
+            {
+              time: "18:30",
+              task: "Return to the hotel in Munnar",
+            },
+          ],
+          dailyTasks: [
+            {
+              time: "",
+              task: "Munnar to Thekkady (3 hours Drive)",
+            },
+            {
+              time: "07:30",
+              task: "Breakfast from 07:30 till 08:30 Hours",
+            },
+            {
+              time: "09:00",
+              task: "Depart  to Periyar Wildlife Sanctuary in Thekkady",
+            },
+            {
+              time: "11:30",
+              task: "Spice Plantation Visit",
+              description:
+                "Spice plantation tour – Thekkady  is the heaven of spices and this spice tour will leave your senses tingling with joy. Wander in the captivating farms and witness the plantation of spices like black pepper, cardamom, ginger, curcuma, cinnamon, etc.",
+            },
+            {
+              time: "14:00",
+              task: "Check in at the Jungle resort in Thekkady",
+            },
+          ],
+          dailyTasks: [
+            {
+              time: "",
+              task: "Thekkady",
+            },
+            {
+              time: "07:00",
+              task: "Breakfast from 07:30 till 08:30 Hours",
+            },
+            {
+              time: "08:45",
+              task: "Boating at Thekkady",
+              description:
+                "Boating in the Periyar Lake – Enjoy boating while witnessing elephants playing with their babies and other wild animals bathing, drinking and resting along the banks of the lake.",
+            },
+            {
+              time: "17:00",
+              task: "Kathakali",
+              description:
+                "Kathakali-Catch glimpse of the traditional dance form of Kerala performed by skilled artists and soak in the traditional essence.",
+            },
+            {
+              time: "19:15",
+              task: "Return to the hotel",
+            },
+          ],
+          dailyTasks: [
+            {
+              time: "",
+              task: "Depart to Alleppey Houseboat at 08 30 hours",
+            },
+            {
+              time: "07:30",
+              task: "Breakfast at the hotel from 07:30 till 08:30 Hours",
+            },
+            {
+              time: "08:30",
+              task: "Check out & Depart to Alleppey Houseboat",
+            },
+            {
+              time: "10:30",
+              task: "Tea Break at Kanjirapally for 30 minutes",
+            },
+            {
+              time: "12:00",
+              task: "Check in at Houseboat proceed for backwater cruise, Overnight stay at the houseboat, Lunch around 13 00 Clock at the houseboat",
+            },
+            {
+              time: "14:30",
+              task: "13:30 hours till 17:30 Cruise",
+            },
+            {
+              time: "17:30",
+              task: "17:30 till 18:30 Village Walk",
+            },
+            {
+              time: "19:30",
+              task: "Dinner between 19:30 till 21:00 hours",
+            },
+          ],
+          dailyTasks: [
+            {
+              time: "",
+              task: "Depart from Alleppey Houseboat  to Marari Beach Last Destination",
+            },
+            {
+              time: "08:00",
+              task: "Breakfast at the houseboat",
+            },
+            {
+              time: "09:30",
+              task: "08:30 till 09:30 Cruise through the backwaters",
+            },
+            {
+              time: "14:00",
+              task: "",
+              bulletPoints: [
+                "Check in at the beach resort in Marari Beach",
+                "Marari Beach is one of the most beautiful beaches in the world. Marari name has been derived from a local village on the coast of the Arabian Sea “Mararikulum”.  Marari beach in Kerala is titled among the top five Hammock Beaches by National Geographic survey. Marari beach is an ideal location for holidaying with friends and family or for a relaxed getaway. The golden sand and coconut trees along the coastline add to the already existing charm of the place. Marari Beach is known for its white sands and enthralling sunsets.",
+              ],
+            },
+          ],
+          dailyTasks: [
+            {
+              time: "",
+              task: "Full day is at Leisure at the beach resort",
+            },
+          ],
+          dailyTasks: [
+            {
+              time: "",
+              task: "Depart Marari to Kochi Airport",
+            },
+            {
+              time: "",
+              task: "Distance from Marari beach to Kochi Airport is 95  Kms and takes 2 hours  to Reach during the day time,  For international flights, Travellers must depart  5 hours before the Flight departure time from the resort and for domestic flights, travellers must  depart 4 hours  before the departure time from the Resort",
+            },
+          ],
+        },
+      ],
       importantPoints: [
         "Check in time at Kochi hotel is 14 00 hours.",
         "On Day 3: Departure from hotel Kochi is at 10:30  hours.",
@@ -1169,63 +1326,56 @@ export const formLists = [
         "On day 2, our driver will report at the Kochi hotel at 10 00 hours.",
         "On Friday and Saturday, Dutch palace and Jewish Synagogue remain closed so travellers arriving on Thursday will have to go for Kochi sightseeing on day itself.",
       ],
-      transferFromMarariToAirport: [
-        "Check-in time at the beach resort in Marari beach is at 14:00 hours & check-out time is 12:00 noon. The visitors can even opt for early check-in and late check-out (subject to availability).",
-        "Check out time at the beach resort in Marari Beach is at 12:00 Noon. If rooms are not available for late check-out, travelers can keep the luggage in the lobby or clock room and use the in-house facilities at the resort like swimming pool. The access to beach, sunbeds etc. are available without any additional cost.",
-        "It takes 2 hours drive from Marari Beach to reach Cochin International airport. The travellers must depart from Marari 5 hours prior for International departures & 4 hours for domestic departures.",
-        "Travellers using online check-in facilities with Emirates, Qatar, Etihad & Air India are requested to inform the driver and hotel front office manager in advance at time of check-in. Transfers can be organised as per the traveller’s request.",
-        "We will be providing the car at disposal for the 8 days. Also, separate private transfer from Marari beach to Kochi International airport on day 11.",
-        "There will not be any refund for early check-out, unutilized services, or no-shows.",
-        "Travellers are requested to take care of their belongings and make sure that the travel documents are carried at the time of check-out from each hotel (Passports, Cash, Valets, and mobile phones). If any valuables are missed at the hotel, it will not be an easy procedure to send a courier to a foreign country as per the laws. The courier companies will not accept mobile phones, tabs, cash, TC's, or any other valuables for delivery in a foreign country.",
-      ],
+      transferFromMarariToAirport: [],
     },
   },
+  ////////////////////////////////////
   {
     title: "Enchanting Kerala 13 nights & 14 - Days Fragrant Nature",
     days: 13,
     data: {
       hotelItinerary: [
         {
-          name: "Fragrant Nature , Kochi",
+          hotelName: "Fragrant Nature , Kochi",
           roomType: "Dukes Chamber-Double",
-          durationNights: 2,
+          duration: 2,
         },
         {
-          name: "Fragrant Nature, Munnar",
+          hotelName: "Fragrant Nature, Munnar",
           roomType: "Tropic Green- Double",
-          durationNights: 2,
+          duration: 2,
         },
         {
-          name: "Greenwoods, Thekkady",
+          hotelName: "Greenwoods, Thekkady",
           roomType: "Aranya – Double",
-          durationNights: 2,
+          duration: 2,
         },
         {
-          name: "Evergreen, Alleppey",
+          hotelName: "Evergreen, Alleppey",
           roomType: "Deluxe  Houseboat- Double",
-          durationNights: 1,
+          duration: 1,
         },
         {
-          name: "Fragrant Nature, Kollam",
+          hotelName: "Fragrant Nature, Kollam",
           roomType: "Atrium- Double",
-          durationNights: 2,
+          duration: 2,
         },
         {
-          name: "Travancore Heritage, Kovalam",
+          hotelName: "Travancore Heritage, Kovalam",
           roomType: "Beach Grove - Double",
-          durationNights: 4,
+          duration: 4,
         },
       ],
-      transportationDocument: [
-        { transfer: "Kochi  Airport - Hotel in Kochi" },
-        { transfer: "Kochi in Hotel - Hotel in Munnar" },
-        { transfer: "Hotel in Munnar - Hotel in Thekkady" },
-        { transfer: "Hotel in Thekkady - Houseboat in Alleppey" },
-        { transfer: "Houseboat in Alleppey - Hotel in Kovalam" },
-        { transfer: "Hotel in Kovalam - Trivandrum Airport" },
+      transportation: [
+        { transfers: "Kochi  Airport - Hotel in Kochi" },
+        { transfers: "Kochi in Hotel - Hotel in Munnar" },
+        { transfers: "Hotel in Munnar - Hotel in Thekkady" },
+        { transfers: "Hotel in Thekkady - Houseboat in Alleppey" },
+        { transfers: "Houseboat in Alleppey - Hotel in Kovalam" },
+        { transfers: "Hotel in Kovalam - Trivandrum Airport" },
       ],
       groundItinerary: {
-        day1: [
+        dailyTasks: [
           {
             time: "",
             task: "Meet & Greet at Kochi International  Airport, transfer to the hotel",
@@ -1243,7 +1393,7 @@ export const formLists = [
             task: "Dinner at the hotel between from 19:30 till 22:00 Hours",
           },
         ],
-        day2: [
+        dailyTasks: [
           {
             time: "",
             task: "Kochi Sightseeing with Guide",
@@ -1278,7 +1428,7 @@ export const formLists = [
             task: "Dinner at the hotel between from 19:30 till 22:00 Hours",
           },
         ],
-        day3: [
+        dailyTasks: [
           {
             time: "",
             task: "Kochi to Munnar",
@@ -1313,7 +1463,7 @@ export const formLists = [
             task: "Dinner at the hotel between from 19:30 till 22:00 Hours",
           },
         ],
-        day4: [
+        dailyTasks: [
           {
             time: "",
             task: "Munnar Sightseeing",
@@ -1352,7 +1502,7 @@ export const formLists = [
             task: "Dinner at the hotel between 19:30 till 21:30 hours",
           },
         ],
-        day5: [
+        dailyTasks: [
           {
             time: "",
             task: "Munnar to Thekkady",
@@ -1378,7 +1528,7 @@ export const formLists = [
             task: "Dinner at the hotel between 19:30 till 21:30 hours",
           },
         ],
-        day6: [
+        dailyTasks: [
           {
             time: "",
             task: "Thekkady Sightseeing",
@@ -1416,7 +1566,7 @@ export const formLists = [
             task: "19:30 till 21:30 Hours Dinner at the Hotel",
           },
         ],
-        day7: [
+        dailyTasks: [
           {
             time: "",
             task: "Depart From Thekkady to Alleppey Houseboat at 08 30 hours",
@@ -1450,7 +1600,7 @@ export const formLists = [
             task: "Dinner between 19:00 till 21:00 hours",
           },
         ],
-        day8: [
+        dailyTasks: [
           {
             time: "",
             task: "Depart to Kollam",
@@ -1482,7 +1632,7 @@ export const formLists = [
               "Lake side or Pool side dinner in Fragrant Nature resort on day 8 Subject to weather Conditions",
           },
         ],
-        day9: [
+        dailyTasks: [
           {
             time: "",
             task: "Kollam",
@@ -1513,7 +1663,7 @@ export const formLists = [
             task: "Dinner at the hotel between 19:30 till 21:30 hours",
           },
         ],
-        day10: [
+        dailyTasks: [
           {
             time: "",
             task: "Kollam to Kovalam",
@@ -1554,7 +1704,7 @@ export const formLists = [
             task: "Dinner at the hotel Between 19:30 till 22:00 Hours",
           },
         ],
-        day11: [
+        dailyTasks: [
           {
             time: "",
             task: "Kovalam",
@@ -1576,7 +1726,7 @@ export const formLists = [
             task: "Dinner at the hotel between 19:30 till 22:00 hours",
           },
         ],
-        day12: [
+        dailyTasks: [
           {
             time: "",
             task: "Kovalam",
@@ -1594,7 +1744,7 @@ export const formLists = [
             task: "Dinner at the hotel Between 19:30 till 22:00 Hours",
           },
         ],
-        day13: [
+        dailyTasks: [
           {
             time: "",
             task: "Kovalam",
@@ -1612,7 +1762,7 @@ export const formLists = [
             task: "Dinner at the hotel Between 19:30 till 22:00 Hours",
           },
         ],
-        day14: [
+        dailyTasks: [
           {
             time: "",
             task: "Depart Kovalam  Trivandrum Airport to UK",
@@ -1650,47 +1800,47 @@ export const formLists = [
     data: {
       hotelItinerary: [
         {
-          name: "Brunton Boatyard, Kochi",
+          hotelName: "Brunton Boatyard, Kochi",
           roomType: "Sea Facing  -Double",
-          durationNights: 2,
+          duration: 2,
         },
         {
-          name: "Windermere estate , Munnar",
+          hotelName: "Windermere estate , Munnar",
           roomType: "Garden room  – Double",
-          durationNights: 2,
+          duration: 2,
         },
         {
-          name: "Spice village ,Thekkady",
+          hotelName: "Spice village ,Thekkady",
           roomType: "Spice garden cottage  – Double",
-          durationNights: 2,
+          duration: 2,
         },
         {
-          name: "Blue Jelly Cruises, Alleppey",
+          hotelName: "Blue Jelly Cruises, Alleppey",
           roomType: "Luxury Boat– Double",
-          durationNights: 1,
+          duration: 1,
           mealPlan: "Breakfast, Lunch & Dinner",
         },
         {
-          name: "The Leela Ashtamudi ,A Raviz Hotel",
+          hotelName: "The Leela Ashtamudi ,A Raviz Hotel",
           roomType: " Grand Heritage Lake view Room- Double",
-          durationNights: 2,
+          duration: 2,
         },
         {
-          name: "The Leela Kovalam A Raviz Hotel , Kovalam",
+          hotelName: "The Leela Kovalam A Raviz Hotel , Kovalam",
           roomType: "Sea View Villa - Double",
-          durationNights: 4,
+          duration: 4,
         },
       ],
-      transportationDocument: [
-        { transfer: "Kochi  Airport - Hotel in Kochi" },
-        { transfer: "Hotel in Kochi - Hotel in Munnar" },
-        { transfer: "Hotel in Munnar - Hotel in Thekkady" },
-        { transfer: "Hotel in Thekkady - Houseboat in Alleppey" },
-        { transfer: "Houseboat in Alleppey - Hotel in Kovalam" },
-        { transfer: "Hotel in Kovalam - Trivandrum Airport" },
+      transportation: [
+        { transfers: "Kochi  Airport - Hotel in Kochi" },
+        { transfers: "Hotel in Kochi - Hotel in Munnar" },
+        { transfers: "Hotel in Munnar - Hotel in Thekkady" },
+        { transfers: "Hotel in Thekkady - Houseboat in Alleppey" },
+        { transfers: "Houseboat in Alleppey - Hotel in Kovalam" },
+        { transfers: "Hotel in Kovalam - Trivandrum Airport" },
       ],
       groundItinerary: {
-        day1: [
+        dailyTasks: [
           {
             time: "",
             task: "Meet & Greet at Kochi International  Airport at Pillar No A 3, transfer to the hotel in Cochin, rest of the day is at Leisure",
@@ -1708,7 +1858,7 @@ export const formLists = [
             task: "Sunset cruise in a motor boat for all in house guests 17:30 PM",
           },
         ],
-        day2: [
+        dailyTasks: [
           {
             time: "",
             task: "Kochi Sightseeing, Breakfast at the hotel from 07:30 till 10:00 Clock",
@@ -1755,7 +1905,7 @@ export const formLists = [
             task: "Dinner at the Fragrant Nature Kochi",
           },
         ],
-        day3: [
+        dailyTasks: [
           {
             time: "",
             task: "Kochi to Munnar",
@@ -1785,7 +1935,7 @@ export const formLists = [
             task: "Check in at Munnar hotel, evening at Leisure",
           },
         ],
-        day4: [
+        dailyTasks: [
           {
             time: "",
             task: "Munnar Sightseeing",
@@ -1824,7 +1974,7 @@ export const formLists = [
             task: "Return to the hotel in Munnar",
           },
         ],
-        day5: [
+        dailyTasks: [
           {
             time: "",
             task: "Munnar to Thekkady",
@@ -1854,7 +2004,7 @@ export const formLists = [
             task: "17:30  till 19:30  Leisure at hotel",
           },
         ],
-        day6: [
+        dailyTasks: [
           {
             time: "",
             task: "Depart to Thekkady for Boating",
@@ -1896,7 +2046,7 @@ export const formLists = [
               "Kathakali & Martial Arts Show – Catch glimpse of the traditional dance form of Kerala performed by skilled artists and soak in the traditional essence. Watch the martial arts and stunts performed by artists showcasing of body control, flexibility and various form of exercises.",
           },
         ],
-        day7: [
+        dailyTasks: [
           {
             time: "",
             task: "Depart to Alleppey Houseboat at 08 30 hours via Kuttikanam Hills",
@@ -1930,7 +2080,7 @@ export const formLists = [
             task: "Dinner between 19:00 till 21:00 hours",
           },
         ],
-        day8: [
+        dailyTasks: [
           {
             time: "",
             task: "Depart to Kollam",
@@ -1968,7 +2118,7 @@ export const formLists = [
             task: "Dinner at the hotel between 19:30 till 21:30 hours.",
           },
         ],
-        day9: [
+        dailyTasks: [
           {
             time: "",
             task: "Kollam",
@@ -1986,7 +2136,7 @@ export const formLists = [
             task: "Dinner between 19:30 till 21:00 hours",
           },
         ],
-        day10: [
+        dailyTasks: [
           {
             time: "",
             task: "Kollam to Kovalam",
@@ -2025,25 +2175,25 @@ export const formLists = [
             task: "Dinner at the hotel Between 19:30 till 22:00 Hours",
           },
         ],
-        day11: [
+        dailyTasks: [
           {
             time: "",
             task: "Full day is at Leisure at the beach resort in Kovalam",
           },
         ],
-        day12: [
+        dailyTasks: [
           {
             time: "",
             task: "Full day is at Leisure at the beach resort in Kovalam",
           },
         ],
-        day13: [
+        dailyTasks: [
           {
             time: "",
             task: "Full day is at Leisure at the beach resort in Kovalam",
           },
         ],
-        day14: [
+        dailyTasks: [
           {
             time: "",
             task: "Depart Kovalam to Trivandrum Airport",
