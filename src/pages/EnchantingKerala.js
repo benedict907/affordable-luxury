@@ -6,8 +6,7 @@ import Row from "../components/Row";
 import Column from "../components/Column";
 import moment from "moment";
 import BulletPoint from "../components/BulletPoint";
-import { saveAs } from "file-saver";
-import { render, Document, Text, LineBreak } from "redocx";
+
 import { generateCheckInDates, generateDateArray } from "../helper";
 // import { Document, Packer, Paragraph } from "docx";
 import { useLocation } from "react-router-dom";
@@ -89,27 +88,6 @@ function EnchantingKerala() {
     customBulletPoint,
   } = selectedForm;
   const { emergencyNumberUK } = emergencyContacts || "";
-
-  const handleExportWord = () => {
-    if (!contentRef.current) return;
-
-    const content = contentRef.current.innerText || ""; // Extract plain text
-
-    // Create a new Word document
-    const doc = (
-      <Document>
-        {content.split("\n").map((line, index) => (
-          <Text key={index}>
-            {line.trim()}
-            <LineBreak />
-          </Text>
-        ))}
-      </Document>
-    );
-
-    // Render the Word document and download it
-    render(doc, "exported.docx");
-  };
 
   const handleExportPDF = async () => {
     if (!contentRef.current) return;
@@ -404,13 +382,12 @@ function EnchantingKerala() {
         >
           Export to PDF
         </button>
-        <button
+        {/* <button
           onClick={handleExportWord}
           className="bg-blue-500 text-white px-4 py-2 mx-auto my-2 rounded active:opacity-50"
         >
           Export to Word
-        </button>
-        ;
+        </button> */}
       </div>
     </div>
   );
