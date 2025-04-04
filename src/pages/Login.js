@@ -9,7 +9,7 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { isLoggedIn, error } = useAppSelector((state) => state.auth);
-  console.log("sdfsf", error);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle login logic here
@@ -20,7 +20,7 @@ const Login = () => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      navigate("/affordable-luxury");
+      navigate("/");
     }
   }, [isLoggedIn]);
 

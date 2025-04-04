@@ -15,7 +15,7 @@ const routes = [
   },
   {
     name: "Home",
-    path: "/affordable-luxury",
+    path: "/",
     element: <Home />,
   },
   {
