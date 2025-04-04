@@ -15,7 +15,8 @@
 
 # Mono auto generated files
 mono_crash.*
-
+build/
+yarn.lock
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
