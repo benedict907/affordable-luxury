@@ -3,7 +3,6 @@ import Row from "../Row";
 import { EMPTY_BULLETS } from "../../constants/constants";
 
 export default function BulletPoint({ title, bulletPoints }) {
-  console.log("ddd", bulletPoints);
   return (
     <Row style={"text-start"}>
       <div className="p-4">

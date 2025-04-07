@@ -9,7 +9,7 @@ export default function EmergencyContacts() {
   // });
   const { emergencyContacts } = useAppSelector((state) => state.createPdf);
   const dispatch = useAppDispatch();
-  const { emergencyContactKerala, emergencyNumberUK } = emergencyContacts;
+  const { emergencyContactKerala, emergencyNumberUK } = emergencyContacts || {};
 
   return (
     <div className="w-full max-w-4xl bg-white p-6 rounded-lg shadow-lg">

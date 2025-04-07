@@ -1,17 +1,19 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
+import { setImage } from "../../redux/createPdfSlice";
+import { IMAGE_PATH } from "../../constants/constants";
 
 const ImageUploader = () => {
-  const [image, setImage] = useState(null);
+  const { imageName } = useAppSelector((state) => state.createPdf);
+
+  const dispatch = useAppDispatch();
   const fileInputRef = useRef(null);
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
+
     if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setImage(e.target.result);
-      };
-      reader.readAsDataURL(file);
+      dispatch(setImage(file));
     }
   };
 
@@ -27,9 +29,13 @@ const ImageUploader = () => {
         onChange={handleImageUpload}
         className="hidden" // Hide the file input
       />
-      {image ? (
+      {imageName ? (
         <img
-          src={image}
+          src={
+            typeof imageName === "string"
+              ? `${IMAGE_PATH}/${imageName}`
+              : URL.createObjectURL(imageName)
+          }
           alt="Uploaded"
           className="m-10 w-44 h-44 cursor-pointer"
           onClick={handleImageClick}

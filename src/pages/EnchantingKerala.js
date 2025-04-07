@@ -7,11 +7,17 @@ import Column from "../components/Column";
 import moment from "moment";
 import BulletPoint from "../components/BulletPoint";
 
-import { generateCheckInDates, generateDateArray } from "../helper";
+import {
+  checkIfExists,
+  generateCheckInDates,
+  generateDateArray,
+} from "../helper";
 // import { Document, Packer, Paragraph } from "docx";
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
-import { EMPTY_BULLETS } from "../constants/constants";
+import { EMPTY_BULLETS, IMAGE_PATH } from "../constants/constants";
+import { useAppDispatch, useAppSelector } from "../redux/store";
+import { savePdf } from "../redux/createPdfSlice";
 
 function EnchantingKerala() {
   const location = useLocation();
@@ -24,20 +30,9 @@ function EnchantingKerala() {
   } = location.state || {};
 
   let currentDate = selectedStartDate;
-  const [image, setImage] = useState(null);
+  const { pdfs } = useAppSelector((state) => state.client);
+  const dispatch = useAppDispatch();
 
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      setImage(reader.result);
-    };
-
-    if (file) {
-      reader.readAsDataURL(file);
-    }
-  };
   const contentRef = useRef(null);
 
   // const handleExportPDF = async () => {
@@ -77,6 +72,8 @@ function EnchantingKerala() {
   // };
 
   const {
+    imageName,
+    main,
     groundItinerary,
     hotelItinerary,
     importantPoints,
@@ -87,6 +84,7 @@ function EnchantingKerala() {
     emergencyContacts,
     customBulletPoint,
   } = selectedForm;
+
   const { emergencyNumberUK } = emergencyContacts || "";
 
   const handleExportPDF = async () => {
@@ -147,17 +145,59 @@ function EnchantingKerala() {
     content.style.overflow = originalOverflow;
 
     pdf.save("exported.pdf");
+
+    checkIfExists(pdfs, confirmationNumber, (exists) => {
+      if (!exists) {
+        onSavePressed();
+      }
+    });
   };
+
+  const onSavePressed = async () => {
+    const formData = new FormData();
+
+    formData.append("main", JSON.stringify(main));
+    formData.append(
+      "confirmationDetails",
+      JSON.stringify({
+        confirmationNumber,
+        passengerList,
+        selectedStartDate,
+        selectedEndDate,
+      })
+    );
+    formData.append("flights", JSON.stringify(flights));
+    formData.append("importantPoints", JSON.stringify(importantPoints));
+    formData.append("travelTips", JSON.stringify(travelTips));
+    formData.append("customBulletPoint", JSON.stringify(customBulletPoint));
+
+    formData.append("image", imageName);
+
+    // Append arrays: each element as separate entry
+    hotelItinerary.forEach((hotelItinerary, index) =>
+      formData.append(`hotelItinerary`, JSON.stringify(hotelItinerary))
+    );
+    groundItinerary.forEach((groundItinerary, index) =>
+      formData.append(`groundItinerary`, JSON.stringify(groundItinerary))
+    );
+    transportation.forEach((transportation, index) =>
+      formData.append(`transportation`, JSON.stringify(transportation))
+    );
+
+    dispatch(savePdf(formData));
+  };
+
   return (
     <div>
       <div ref={contentRef} className="overflow-auto m-5">
         {/* Header Section */}
-        {/* <ImageUploader /> */}
+        <img
+          className="m-10 w-44 h-44 cursor-pointer"
+          src={`${IMAGE_PATH}/${imageName}`}
+        />
         <div className="mb-6 text-center border border-gray-300 p-4">
           <h1 className="text-3xl font-bold underline">Service Voucher</h1>
-          <h1 className="text-3xl font-bold underline">
-            {selectedForm.main.title}
-          </h1>
+          <h1 className="text-3xl font-bold underline">{main.title}</h1>
         </div>
         {/* Hotel Details */}
         <div className="mb-8">
@@ -199,10 +239,10 @@ function EnchantingKerala() {
               <Row>Status</Row>
             </Column>
             {/* Data Rows */}
-            {hotelItinerary.map((hotel, index) => (
+            {hotelItinerary?.map((hotel, index) => (
               <Column>
-                <Row>{hotel.hotelName}</Row>
-                <Row>{hotel.roomType}</Row>
+                <Row>{hotel?.hotelName}</Row>
+                <Row>{hotel?.roomType}</Row>
                 <Row>
                   {generateCheckInDates(currentDate, hotelItinerary, index)}
                 </Row>
@@ -214,7 +254,7 @@ function EnchantingKerala() {
             ))}
             <Column>
               <Row>Emergency Contact</Row>
-              <Row>{selectedForm.main.emergencyContact}</Row>
+              <Row>{main.emergencyContact}</Row>
               <Row>&nbsp;</Row>
               <Row>&nbsp;</Row>
               <Row>&nbsp;</Row>
@@ -223,7 +263,7 @@ function EnchantingKerala() {
             </Column>
             <Column>
               <Row>Number</Row>
-              <Row>{selectedForm.main.emergencyNumber}</Row>
+              <Row>{main.emergencyNumber}</Row>
               <Row>&nbsp;</Row>
               <Row>&nbsp;</Row>
               <Row>&nbsp;</Row>
@@ -262,12 +302,12 @@ function EnchantingKerala() {
 
           {transportation.map((transport, index) => (
             <Column>
-              <Row>{transport.transfers}</Row>
-              <Row>{transport.service}</Row>
+              <Row>{transport?.transfers}</Row>
+              <Row>{transport?.service}</Row>
               <Row>
                 {generateCheckInDates(currentDate, hotelItinerary, index)}
               </Row>
-              <Row>{transport.status}</Row>
+              <Row>{transport?.status}</Row>
             </Column>
           ))}
           <Column>
@@ -314,37 +354,36 @@ function EnchantingKerala() {
           <div className="text-center border border-gray-300 p-4">
             <h1 className="text-xl font-bold">Ground Itinerary Summary</h1>
           </div>
-          {generateDateArray(
-            selectedStartDate,
-            selectedForm.main.numberOfDays + 1
-          )?.map(({ day, date }) => {
-            return groundItinerary[day - 1]?.dailyTasks?.map(
-              (dayObj, index) => (
-                <Column key={index}>
-                  <Row
-                    style={"flex justify-center items-center"}
-                    isDate={true}
-                    showBorder={index === 0}
-                  >
-                    {index === 0 ? date : ""}
-                  </Row>
-                  <Row style={"flex justify-center items-center"}>
-                    {index === 0 ? `Day ${day}` : dayObj.time}
-                  </Row>
-                  {dayObj?.bulletPoints !== EMPTY_BULLETS ? (
-                    <BulletPoint
-                      title={dayObj.task}
-                      bulletPoints={dayObj.bulletPoints}
-                    />
-                  ) : dayObj.task ? (
-                    <Row description={dayObj?.description} style="text-start">
-                      {dayObj.task}
+          {generateDateArray(selectedStartDate, main.numberOfDays + 1)?.map(
+            ({ day, date }) => {
+              return groundItinerary[day - 1]?.dailyTasks?.map(
+                (dayObj, index) => (
+                  <Column key={index}>
+                    <Row
+                      style={"flex justify-center items-center"}
+                      isDate={true}
+                      showBorder={index === 0}
+                    >
+                      {index === 0 ? date : ""}
                     </Row>
-                  ) : null}
-                </Column>
-              )
-            );
-          })}
+                    <Row style={"flex justify-center items-center"}>
+                      {index === 0 ? `Day ${day}` : dayObj.time}
+                    </Row>
+                    {dayObj?.bulletPoints !== EMPTY_BULLETS ? (
+                      <BulletPoint
+                        title={dayObj.task}
+                        bulletPoints={dayObj.bulletPoints}
+                      />
+                    ) : dayObj.task ? (
+                      <Row description={dayObj?.description} style="text-start">
+                        {dayObj.task}
+                      </Row>
+                    ) : null}
+                  </Column>
+                )
+              );
+            }
+          )}
         </div>
         <div className="mb-8">
           <h1 className="text-xl font-bold">Important Points</h1>

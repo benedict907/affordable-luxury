@@ -55,12 +55,12 @@ const initialState = {
     importantPoints: "",
     travelTips: "",
   },
-
+  imageName: null,
   main: {
     title: "",
     emergencyContact: "",
     emergencyNumber: "",
-    numberOfDays: 0,
+    numberOfDays: "",
   },
   flights: {
     arrivalCity: "",
@@ -104,9 +104,9 @@ const initialState = {
 // API call using createAsyncThunk
 export const savePdf = createAsyncThunk(
   "savePdf",
-  async (data, { rejectWithValue }) => {
+  async (formData, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post("/api/itinerary", data);
+      const response = await axiosInstance.post("/api/itinerary", formData);
 
       return response.data;
     } catch (error) {
@@ -114,13 +114,14 @@ export const savePdf = createAsyncThunk(
     }
   }
 );
+
 export const editPdf = createAsyncThunk(
   "editPdf",
   async (data, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.put(
         `/api/itinerary/${data.pdfId}`,
-        data.response
+        data.formData
       );
 
       return response.data;
@@ -143,50 +144,6 @@ const createPdfSlice = createSlice({
         ...initialState,
         success: false,
       };
-      //   title: "",
-      //   emergencyContact: "",
-      //   emergencyNumber: "",
-      //   numberOfDays: 0,
-      // };
-      // state.flights = {
-      //   arrivalCity: "",
-      //   arrivalFlightNumber: "",
-      //   arrivalTime: "",
-      //   departureCity: "",
-      //   departureFlightNumber: "",
-      //   departureTime: "",
-      // };
-      // state.emergencyContacts = {
-      //   emergencyContactKerala: "",
-      //   emergencyNumberUK: "",
-      // };
-      // state.transportation = [
-      //   {
-      //     transfers: "",
-      //     service: "Private Car - English Speaking Driver",
-      //     status: "OK",
-      //   },
-      // ];
-      // state.hotelItinerary = [
-      //   {
-      //     hotelName: "",
-      //     roomType: "",
-      //     duration: "",
-      //     rooms: "1",
-      //     mealPlan: "",
-      //     status: "Confirmed",
-      //   },
-      // ];
-      // state.groundItinerary = [
-      //   {
-      //     dailyTasks: [
-      //       { time: "", task: "", description: "", bulletPoints: "" },
-      //     ],
-      //   },
-      // ];
-      // state.importantPoints = "";
-      // state.travelTips = "";
-      // state.customBulletPoint = [{ title: "", bulletPoints: "" }];
     },
 
     deleteHotel: (state, action) => {
@@ -199,6 +156,7 @@ const createPdfSlice = createSlice({
     },
     setEditData: (state, action) => {
       const {
+        imageName,
         main,
         flights,
         emergencyContacts,
@@ -209,6 +167,8 @@ const createPdfSlice = createSlice({
         travelTips,
         customBulletPoint,
       } = action.payload;
+
+      state.imageName = imageName;
       state.main = main;
       state.flights = flights;
       state.emergencyContacts = emergencyContacts;
@@ -266,6 +226,10 @@ const createPdfSlice = createSlice({
       const { payload } = action;
       state.travelTips = payload;
     },
+    setImage: (state, action) => {
+      const { payload } = action;
+      state.imageName = payload;
+    },
     setErrors: (state, action) => {
       const { key, error } = action.payload;
       setValueByKeyPath(state.errors, key, error);
@@ -273,7 +237,6 @@ const createPdfSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(savePdf.fulfilled, (state, action) => {
-      console.log("savePdf.fulfilled", action);
       state.loading = false;
       state.success = true;
       state.pdfs = action.payload.data;
@@ -315,6 +278,7 @@ export const {
   setErrors,
   setEditData,
   deleteHotel,
+  setImage,
   deleteTransport,
 } = createPdfSlice.actions;
 export default createPdfSlice.reducer;
