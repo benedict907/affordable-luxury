@@ -13,8 +13,6 @@ const ChangePassword = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle login logic here
-    console.log("newPassword:", confirmPassword);
-    console.log("Password:", newPassword);
     if (newPassword === confirmPassword) {
       dispatch(login({ newPassword }));
     }

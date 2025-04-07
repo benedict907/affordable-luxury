@@ -37,7 +37,6 @@ export const generateDateArray = (startDate, days) => {
 
     result.push({ day, date: `${date}-${month}` });
   }
-  console.log("result", { startDate, days });
   return result;
 };
 
@@ -65,7 +64,6 @@ export const formatDateToDDMMYYYY = (date) => {
 };
 
 export const getConstantData = (title) => {
-  console.log("title", title);
   switch (title) {
     case "Enchanting Kerala 15 nights & 16 Days":
       return {
@@ -137,7 +135,6 @@ export const setValueByKeyPath = (obj, keyPath, value) => {
   let current = obj;
 
   keys.forEach((key, index) => {
-    console.log("rrrrs", { key, index });
     // Check if the key is the last one
     if (index === keys.length - 1) {
       current[key] = value; // Assign the value at the last key
@@ -153,4 +150,14 @@ export const setValueByKeyPath = (obj, keyPath, value) => {
       current = current[key]; // Move deeper into the object or array
     }
   });
+};
+
+export const checkIfExists = (pdfs, confirmationNumber, callback) => {
+  const isExist =
+    pdfs.filter(
+      (item) =>
+        item?.confirmationDetails?.confirmationNumber === confirmationNumber
+    ).length > 0;
+
+  callback(isExist);
 };

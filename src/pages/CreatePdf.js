@@ -19,6 +19,7 @@ import {
 } from "../redux/createPdfSlice";
 import CustomBulletPoint from "../components/CustomBulletPoint";
 import { useLocation, useNavigate } from "react-router-dom";
+import ImageUploader from "../components/ImageUploader";
 
 const App = () => {
   const location = useLocation();
@@ -40,6 +41,7 @@ const App = () => {
 
   useEffect(() => {
     const {
+      imageName,
       main,
       hotelItinerary,
       flights,
@@ -56,6 +58,7 @@ const App = () => {
       setEdit(true);
       dispatch(
         setEditData({
+          imageName,
           main,
           hotelItinerary,
           flights,
@@ -71,6 +74,7 @@ const App = () => {
   }, [location]);
 
   const {
+    imageName,
     main,
     hotelItinerary,
     flights,
@@ -110,13 +114,35 @@ const App = () => {
       travelTips,
       customBulletPoint,
     };
+    const formData = new FormData();
+
+    formData.append("main", JSON.stringify(main));
+
+    formData.append("flights", JSON.stringify(flights));
+    formData.append("importantPoints", JSON.stringify(importantPoints));
+    formData.append("travelTips", JSON.stringify(travelTips));
+    formData.append("customBulletPoint", JSON.stringify(customBulletPoint));
+    formData.append("emergencyContacts", JSON.stringify(emergencyContacts));
+
+    formData.append("image", imageName);
+
+    // Append arrays: each element as separate entry
+    hotelItinerary.forEach((hotelItinerary, index) =>
+      formData.append(`hotelItinerary`, JSON.stringify(hotelItinerary))
+    );
+    groundItinerary.forEach((groundItinerary, index) =>
+      formData.append(`groundItinerary`, JSON.stringify(groundItinerary))
+    );
+    transportation.forEach((transportation, index) =>
+      formData.append(`transportation`, JSON.stringify(transportation))
+    );
 
     try {
       await validationSchema.validate(response, { abortEarly: false });
       if (isEdit) {
-        dispatch(editPdf({ response, pdfId }));
+        dispatch(editPdf({ formData, pdfId }));
       } else {
-        dispatch(savePdf(response));
+        dispatch(savePdf(formData));
       }
     } catch (err) {
       if (err.inner && err.inner.length > 0) {
@@ -181,6 +207,7 @@ const App = () => {
 
   return (
     <div className="min-h-screen flex-col bg-gray-100 flex justify-center items-center">
+      <ImageUploader />
       <PackageDetails ref={refs} />
       <AddHotel ref={refs} />
       <FlightDetails ref={refs} />

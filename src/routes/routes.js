@@ -1,5 +1,6 @@
 import { lazy } from "react";
 import ChangePassword from "../pages/ChangePassword";
+import SavedPdfs from "../pages/SavedPdfs";
 
 // Unprotected routes
 const Home = lazy(() => import("../pages/HomePage"));
@@ -23,6 +24,12 @@ const routes = [
     path: "/add-details",
     element: <AddDetails />,
   },
+  {
+    name: "SavedPdfs",
+    path: "/view-saved",
+    element: <SavedPdfs />,
+  },
+
   {
     name: "PDFView",
     path: "/pdf-view",
