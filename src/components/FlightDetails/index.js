@@ -13,7 +13,7 @@ const FlightDetails = forwardRef((props, ref) => {
     departureCity,
     departureFlightNumber,
     departureTime,
-  } = flightDetails;
+  } = flightDetails || {};
   return (
     <div className="w-full max-w-4xl bg-white p-6 rounded-lg shadow-lg mb-10 flex-col">
       <h1 className="text-2xl font-bold mb-6">Flight Details</h1>

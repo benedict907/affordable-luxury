@@ -56,6 +56,7 @@ const initialState = {
     travelTips: "",
   },
   imageName: null,
+  rooms: 1,
   main: {
     title: "",
     emergencyContact: "",
@@ -190,7 +191,10 @@ const createPdfSlice = createSlice({
       const { payload } = action;
       state.hotelItinerary = payload;
     },
-
+    setRooms: (state, action) => {
+      const { payload } = action;
+      state.rooms = payload;
+    },
     setFlightDetails: (state, action) => {
       const { payload } = action;
       state.flights = payload;
@@ -280,5 +284,6 @@ export const {
   deleteHotel,
   setImage,
   deleteTransport,
+  setRooms,
 } = createPdfSlice.actions;
 export default createPdfSlice.reducer;

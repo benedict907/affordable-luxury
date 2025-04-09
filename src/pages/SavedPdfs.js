@@ -50,6 +50,7 @@ function SavedPdfs() {
                       selectedForm: formList,
                       selectedStartDate:
                         formList.confirmationDetails.selectedStartDate,
+                      flights: formList.flights,
                       selectedEndDate:
                         formList.confirmationDetails.selectedEndDate,
                     },

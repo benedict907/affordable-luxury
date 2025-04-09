@@ -26,15 +26,16 @@ function EnchantingKerala() {
     selectedStartDate,
     selectedEndDate,
     selectedForm,
+    flights,
     confirmationNumber,
   } = location.state || {};
 
   let currentDate = selectedStartDate;
   const { pdfs } = useAppSelector((state) => state.client);
   const dispatch = useAppDispatch();
-
+  const rooms = useAppSelector((state) => state.createPdf.rooms);
   const contentRef = useRef(null);
-
+  console.log("sdfsdfsdf", rooms);
   // const handleExportPDF = async () => {
   //   if (!contentRef.current) return;
 
@@ -79,13 +80,18 @@ function EnchantingKerala() {
     importantPoints,
     travelTips,
     transferFromMarariToAirport,
-    flights,
+    // flights,
     transportation,
     emergencyContacts,
     customBulletPoint,
   } = selectedForm;
 
   const { emergencyNumberUK } = emergencyContacts || "";
+
+  const updatedHotelItinerary = hotelItinerary.map((item) => ({
+    ...item,
+    rooms: rooms,
+  }));
 
   const handleExportPDF = async () => {
     if (!contentRef.current) return;
@@ -174,7 +180,7 @@ function EnchantingKerala() {
     formData.append("image", imageName);
 
     // Append arrays: each element as separate entry
-    hotelItinerary.forEach((hotelItinerary, index) =>
+    updatedHotelItinerary.forEach((hotelItinerary, index) =>
       formData.append(`hotelItinerary`, JSON.stringify(hotelItinerary))
     );
     groundItinerary.forEach((groundItinerary, index) =>
@@ -239,12 +245,16 @@ function EnchantingKerala() {
               <Row>Status</Row>
             </Column>
             {/* Data Rows */}
-            {hotelItinerary?.map((hotel, index) => (
+            {updatedHotelItinerary?.map((hotel, index) => (
               <Column>
                 <Row>{hotel?.hotelName}</Row>
                 <Row>{hotel?.roomType}</Row>
                 <Row>
-                  {generateCheckInDates(currentDate, hotelItinerary, index)}
+                  {generateCheckInDates(
+                    currentDate,
+                    updatedHotelItinerary,
+                    index
+                  )}
                 </Row>
                 <Row>{hotel?.duration} Nights</Row>
                 <Row>{hotel?.rooms}</Row>
@@ -305,7 +315,11 @@ function EnchantingKerala() {
               <Row>{transport?.transfers}</Row>
               <Row>{transport?.service}</Row>
               <Row>
-                {generateCheckInDates(currentDate, hotelItinerary, index)}
+                {generateCheckInDates(
+                  currentDate,
+                  updatedHotelItinerary,
+                  index
+                )}
               </Row>
               <Row>{transport?.status}</Row>
             </Column>
@@ -342,7 +356,7 @@ function EnchantingKerala() {
             <Row>&nbsp;</Row>
           </Column>
           <Column>
-            <Row style="text-start">Departure Kochi</Row>
+            <Row style="text-start">Departure {flights.departureCity}</Row>
             <Row>{flights.departureFlightNumber}</Row>
             <Row>{moment(selectedEndDate).format("DD MMMM")}</Row>
             <Row>{flights.departureTime}</Row>
