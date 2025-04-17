@@ -30,7 +30,6 @@ const PackageDetails = forwardRef((props, ref) => {
       <h1 className="mb-2 mt-5">Number of days *</h1>
       <input
         ref={ref["main.numberOfDays"]}
-        type="number"
         id={`numberOfDays`}
         name={`EmergencyContact`}
         value={numberOfDays}
@@ -38,7 +37,7 @@ const PackageDetails = forwardRef((props, ref) => {
           dispatch(
             setPackageData({
               ...packageData,
-              numberOfDays: parseInt(e.target.value),
+              numberOfDays: e.target.value,
             })
           );
           // handleAddDays(selectedStartDate, e.target.value);

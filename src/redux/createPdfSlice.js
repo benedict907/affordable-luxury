@@ -155,6 +155,20 @@ const createPdfSlice = createSlice({
       const index = action.payload;
       state.transportation = state.transportation.filter((_, i) => i !== index);
     },
+    deleteTask: (state, action) => {
+      const index = action.payload.taskIndex;
+      const dayIndex = action.payload.dayIndex;
+
+      state.groundItinerary[dayIndex].dailyTasks = state.groundItinerary[
+        dayIndex
+      ].dailyTasks?.filter((_, i) => i !== index);
+    },
+    deleteDay: (state, action) => {
+      const index = action.payload;
+      state.groundItinerary = state.groundItinerary.filter(
+        (_, i) => i !== index
+      );
+    },
     setEditData: (state, action) => {
       const {
         imageName,
@@ -282,6 +296,8 @@ export const {
   setErrors,
   setEditData,
   deleteHotel,
+  deleteTask,
+  deleteDay,
   setImage,
   deleteTransport,
   setRooms,

@@ -35,7 +35,7 @@ function EnchantingKerala() {
   const dispatch = useAppDispatch();
   const rooms = useAppSelector((state) => state.createPdf.rooms);
   const contentRef = useRef(null);
-  console.log("sdfsdfsdf", rooms);
+
   // const handleExportPDF = async () => {
   //   if (!contentRef.current) return;
 

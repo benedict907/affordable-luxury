@@ -16,6 +16,7 @@ import {
   savePdf,
   setEditData,
   setErrors,
+  setFlightDetails,
 } from "../redux/createPdfSlice";
 import CustomBulletPoint from "../components/CustomBulletPoint";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -180,22 +181,22 @@ const App = () => {
     }),
     hotelItinerary: Yup.array().of(
       Yup.object({
-        duration: Yup.string().required("Duration is required"),
+        duration: Yup.number().required("Duration is required"),
         hotelName: Yup.string().required("Hotel name is required"),
         mealPlan: Yup.string().required("Meal plan is required"),
         roomType: Yup.string().required("Room type is required"),
-        rooms: Yup.string().required("Number of rooms is required"),
+        rooms: Yup.number().required("Number of rooms is required"),
         status: Yup.string().required("Status is required"),
       })
     ),
-    flights: Yup.object({
-      arrivalCity: Yup.string().required("Arrival city is required"),
-      arrivalFlightNumber: Yup.string().required("Flight number is required"),
-      arrivalTime: Yup.string().required("Arrival time is required"),
-      departureCity: Yup.string().required("Departure city is required"),
-      departureFlightNumber: Yup.string().required("Flight number is required"),
-      departureTime: Yup.string().required("Departure time is required"),
-    }),
+    // flights: Yup.object({
+    //   arrivalCity: Yup.string().required("Arrival city is required"),
+    //   arrivalFlightNumber: Yup.string().required("Flight number is required"),
+    //   arrivalTime: Yup.string().required("Arrival time is required"),
+    //   departureCity: Yup.string().required("Departure city is required"),
+    //   departureFlightNumber: Yup.string().required("Flight number is required"),
+    //   departureTime: Yup.string().required("Departure time is required"),
+    // }),
     transportation: Yup.array().of(
       Yup.object({
         transfers: Yup.string().required("Transfer is required"),
@@ -204,13 +205,27 @@ const App = () => {
       })
     ),
   });
+  //adding this to add the flight details when the component mounts so that validation does not fail in the backend
+  //not clearing the DB because deploying the backend is complicated.
+  // useEffect(() => {
+  //   dispatch(
+  //     setFlightDetails({
+  //       arrivalCity: "_",
+  //       arrivalFlightNumber: "a",
+  //       arrivalTime: "a",
+  //       departureCity: "a",
+  //       departureFlightNumber: "a",
+  //       departureTime: "a",
+  //     })
+  //   );
+  // }, []);
 
   return (
     <div className="min-h-screen flex-col bg-gray-100 flex justify-center items-center">
       <ImageUploader />
       <PackageDetails ref={refs} />
       <AddHotel ref={refs} />
-      <FlightDetails ref={refs} />
+      {/* <FlightDetails ref={refs} /> */}
       <AddTransport ref={refs} />
       <EmergencyContacts ref={refs} />
       <GroundItinerary ref={refs} />
