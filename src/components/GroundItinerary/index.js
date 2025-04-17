@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
-import { setDays } from "../../redux/createPdfSlice";
+import { deleteDay, deleteTask, setDays } from "../../redux/createPdfSlice";
 import RichTextEditor from "../RichTextEditor";
-
+import { MdDelete } from "react-icons/md";
 const GroundItinerary = () => {
   // const [days, setDays] = useState([
   //   {
@@ -57,9 +57,20 @@ const GroundItinerary = () => {
   };
 
   const renderTasks = (tasks, dayIndex) => {
-    return tasks.map((task, taskIndex) => (
+    return tasks?.map((task, taskIndex) => (
       <div key={taskIndex} className="mb-4 border-b pb-4">
-        <h3 className="text-md font-medium mb-2">Task {taskIndex + 1}</h3>
+        <div className="flex items-center justify-between">
+          <h3 className="text-md font-medium mb-2">Task {taskIndex + 1}</h3>
+          {taskIndex > 0 ? (
+            <MdDelete
+              onClick={() => {
+                dispatch(deleteTask({ taskIndex, dayIndex }));
+              }}
+              className="w-10 h-10 active:opacity-50"
+            />
+          ) : null}
+        </div>
+
         <div className="mb-2">
           <label
             className="block text-sm font-medium mb-1"
@@ -154,7 +165,17 @@ const GroundItinerary = () => {
   const renderDays = () => {
     return days.map((day, dayIndex) => (
       <div key={dayIndex} className="mb-6 border p-4 rounded-lg bg-gray-50">
-        <h2 className="text-lg font-bold mb-4">Day {dayIndex + 1}</h2>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-bold mb-4">Day {dayIndex + 1}</h2>
+          {dayIndex > 0 ? (
+            <MdDelete
+              onClick={() => {
+                dispatch(deleteDay(dayIndex));
+              }}
+              className="w-10 h-10 active:opacity-50"
+            />
+          ) : null}
+        </div>
         {renderTasks(day.dailyTasks, dayIndex)}
         <button
           type="button"

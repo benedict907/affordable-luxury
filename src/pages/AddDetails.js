@@ -34,7 +34,20 @@ function AddDetails() {
     updatedDate.setDate(updatedDate.getDate() + selectedForm.main.numberOfDays);
     setSelectedEndDate(updatedDate);
   };
-
+  //adding this to clear the flight details when the component mounts so that user can see empty text input
+  //not clearing the DB because deploying the backend is complicated.
+  // useEffect(() => {
+  //   dispatch(
+  //     setFlightDetails({
+  //       arrivalCity: "",
+  //       arrivalFlightNumber: "",
+  //       arrivalTime: "",
+  //       departureCity: "",
+  //       departureFlightNumber: "",
+  //       departureTime: "",
+  //     })
+  //   );
+  // }, []);
   const onSavePressed = () => {
     if (confirmationNumber.trim() === "") {
       alert("Please enter confirmation number");
@@ -111,7 +124,6 @@ function AddDetails() {
         <div className="my-4">
           <h1 className="mb-2 text-start">Rooms</h1>
           <input
-            type="number"
             id={`rooms}`}
             name={`rooms}`}
             value={rooms}

@@ -101,12 +101,11 @@ const AddHotel = forwardRef((props, ref) => {
           </label>
           <input
             ref={ref["hotel.duration"]}
-            type="number"
             id={`duration-${index}`}
             name={`duration-${index}`}
             value={hotel.duration}
             onChange={(e) =>
-              handleInputChange(index, "duration", parseInt(e.target.value))
+              handleInputChange(index, "duration", e.target.value)
             }
             className="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
           />
@@ -121,7 +120,6 @@ const AddHotel = forwardRef((props, ref) => {
           </label>
           <input
             ref={ref["hotel.rooms"]}
-            type="number"
             id={`rooms-${index}`}
             name={`rooms-${index}`}
             value={hotel.rooms}
