@@ -96,10 +96,9 @@ function EnchantingKerala() {
   const handleExportPDF = async () => {
     if (!contentRef.current) return;
 
-    const pdf = new jsPDF("p", "mm", "a4");
+    const pdf = new jsPDF("p", "mm", "a4", { compressPdf: false });
     const content = contentRef.current;
 
-    // Temporarily remove scrollbars to capture full content
     const originalOverflow = content.style.overflow;
     content.style.overflow = "visible";
 
@@ -107,49 +106,67 @@ function EnchantingKerala() {
       scale: 2,
       scrollX: 0,
       scrollY: 0,
-      useCORS: true, // Ensures cross-origin images are captured
+      useCORS: true,
     });
 
-    const imgData = canvas.toDataURL("image/png");
+    const resizedCanvas = document.createElement("canvas");
+    resizedCanvas.width = canvas.width / 2;
+    resizedCanvas.height = canvas.height / 2;
+    const resizedCtx = resizedCanvas.getContext("2d");
+    resizedCtx.drawImage(
+      canvas,
+      0,
+      0,
+      resizedCanvas.width,
+      resizedCanvas.height
+    );
+
+    const imgData = resizedCanvas.toDataURL("image/jpeg", 0.8);
     const pdfWidth = pdf.internal.pageSize.getWidth();
     const pdfHeight = pdf.internal.pageSize.getHeight();
 
-    const imgWidth = canvas.width;
-    const imgHeight = canvas.height;
+    const imgWidth = resizedCanvas.width;
+    const imgHeight = resizedCanvas.height;
+    const pageHeightInPx = (pdfHeight * imgWidth) / pdfWidth;
 
-    const pageHeightInPx = (pdfHeight * imgWidth) / pdfWidth; // Calculate equivalent height in pixels
     let yOffset = 0;
 
     while (yOffset < imgHeight) {
       const canvasHeight = Math.min(imgHeight - yOffset, pageHeightInPx);
-      const canvasSection = canvas
-        .getContext("2d")
-        .getImageData(0, yOffset, imgWidth, canvasHeight);
-
       const tempCanvas = document.createElement("canvas");
       tempCanvas.width = imgWidth;
       tempCanvas.height = canvasHeight;
+
       const tempCtx = tempCanvas.getContext("2d");
-      tempCtx.putImageData(canvasSection, 0, 0);
+      tempCtx.drawImage(
+        resizedCanvas,
+        0,
+        yOffset,
+        imgWidth,
+        canvasHeight,
+        0,
+        0,
+        imgWidth,
+        canvasHeight
+      );
 
-      const imgSection = tempCanvas.toDataURL("image/png");
-
+      const imgSection = tempCanvas.toDataURL("image/jpeg", 0.8);
       pdf.addImage(
         imgSection,
-        "PNG",
+        "JPEG",
         0,
         0,
         pdfWidth,
-        (canvasHeight * pdfWidth) / imgWidth
+        (canvasHeight * pdfWidth) / imgWidth,
+        undefined,
+        "FAST"
       );
 
       yOffset += pageHeightInPx;
       if (yOffset < imgHeight) pdf.addPage();
     }
 
-    // Restore scrollbars
     content.style.overflow = originalOverflow;
-
     pdf.save("exported.pdf");
 
     checkIfExists(pdfs, confirmationNumber, (exists) => {

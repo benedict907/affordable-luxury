@@ -154,7 +154,7 @@ export const setValueByKeyPath = (obj, keyPath, value) => {
 
 export const checkIfExists = (pdfs, confirmationNumber, callback) => {
   const isExist =
-    pdfs.filter(
+    pdfs?.filter(
       (item) =>
         item?.confirmationDetails?.confirmationNumber === confirmationNumber
     ).length > 0;
