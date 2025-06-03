@@ -12,9 +12,7 @@ import {
   generateCheckInDates,
   generateDateArray,
 } from "../helper";
-// import { Document, Packer, Paragraph } from "docx";
 import { useLocation } from "react-router-dom";
-import { useState } from "react";
 import { EMPTY_BULLETS, IMAGE_PATH } from "../constants/constants";
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import { savePdf } from "../redux/createPdfSlice";
@@ -35,42 +33,6 @@ function EnchantingKerala() {
   const dispatch = useAppDispatch();
   const rooms = useAppSelector((state) => state.createPdf.rooms);
   const contentRef = useRef(null);
-
-  // const handleExportPDF = async () => {
-  //   if (!contentRef.current) return;
-
-  //   const content = contentRef.current;
-  //   const canvas = await html2canvas(content, {
-  //     scale: 2, // Higher resolution
-  //     scrollX: 0,
-  //     scrollY: 0,
-  //     useCORS: true, // Ensures cross-origin images are captured
-  //   });
-
-  //   const imgData = canvas.toDataURL("image/png");
-  //   const pdf = new jsPDF("p", "mm", "a4");
-
-  //   const pdfWidth = pdf.internal.pageSize.getWidth();
-  //   const pdfHeight = pdf.internal.pageSize.getHeight();
-
-  //   const imgWidth = canvas.width;
-  //   const imgHeight = canvas.height;
-
-  //   const ratio = imgWidth / imgHeight;
-
-  //   let width = pdfWidth;
-  //   let height = pdfWidth / ratio;
-
-  //   // Adjust to fit within PDF dimensions
-  //   if (height > pdfHeight) {
-  //     height = pdfHeight;
-  //     width = pdfHeight * ratio;
-  //   }
-
-  //   pdf.addImage(imgData, "PNG", (pdfWidth - width) / 2, 0, width, height);
-
-  //   pdf.save("exported.pdf");
-  // };
 
   const {
     imageName,
@@ -216,7 +178,7 @@ function EnchantingKerala() {
         {/* Header Section */}
         <img
           className="m-10 w-44 h-44 cursor-pointer"
-          src={`${IMAGE_PATH}/${imageName}`}
+          src={`${IMAGE_PATH}/${encodeURI(imageName)}`}
         />
         <div className="mb-6 text-center border border-gray-300 p-4">
           <h1 className="text-3xl font-bold underline">Service Voucher</h1>
@@ -452,12 +414,6 @@ function EnchantingKerala() {
         >
           Export to PDF
         </button>
-        {/* <button
-          onClick={handleExportWord}
-          className="bg-blue-500 text-white px-4 py-2 mx-auto my-2 rounded active:opacity-50"
-        >
-          Export to Word
-        </button> */}
       </div>
     </div>
   );
