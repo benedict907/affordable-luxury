@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
@@ -6,7 +6,6 @@ import Row from "../components/Row";
 import Column from "../components/Column";
 import moment from "moment";
 import BulletPoint from "../components/BulletPoint";
-
 import {
   checkIfExists,
   generateCheckInDates,
@@ -16,6 +15,7 @@ import { useLocation } from "react-router-dom";
 import { EMPTY_BULLETS, IMAGE_PATH } from "../constants/constants";
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import { savePdf } from "../redux/createPdfSlice";
+import { createBase64 } from "../redux/clientSlice";
 
 function EnchantingKerala() {
   const location = useLocation();
@@ -29,11 +29,11 @@ function EnchantingKerala() {
   } = location.state || {};
 
   let currentDate = selectedStartDate;
-  const { pdfs } = useAppSelector((state) => state.client);
+  const { pdfs, base64Img } = useAppSelector((state) => state.client);
   const dispatch = useAppDispatch();
   const rooms = useAppSelector((state) => state.createPdf.rooms);
-  const contentRef = useRef(null);
 
+  const contentRef = useRef(null);
   const {
     imageName,
     main,
@@ -172,14 +172,18 @@ function EnchantingKerala() {
     dispatch(savePdf(formData));
   };
 
+  useEffect(() => {
+    if (!imageName) return;
+    dispatch(createBase64(imageName));
+  }, [imageName]);
+
   return (
     <div>
       <div ref={contentRef} className="overflow-auto m-5">
         {/* Header Section */}
-        <img
-          className="m-10 w-44 h-44 cursor-pointer"
-          src={`${IMAGE_PATH}/${encodeURI(imageName)}`}
-        />
+        {base64Img ? (
+          <img className="m-10 w-44 h-44 cursor-pointer" src={base64Img} />
+        ) : null}
         <div className="mb-6 text-center border border-gray-300 p-4">
           <h1 className="text-3xl font-bold underline">Service Voucher</h1>
           <h1 className="text-3xl font-bold underline">{main.title}</h1>

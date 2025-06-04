@@ -16,6 +16,7 @@ const initialState = {
   pdfs: null,
   deleteId: null,
   updateSuccess: false,
+  base64Img: null,
 };
 
 // API call using createAsyncThunk
@@ -44,8 +45,26 @@ export const deletePdf = createAsyncThunk(
   }
 );
 
-const isAPendingAction = isPending(getPdfs, deletePdf);
-const isARejectedAction = isRejected(getPdfs, deletePdf);
+export const createBase64 = createAsyncThunk(
+  "createBase64",
+  async (filename, { rejectWithValue }) => {
+    console.log("createBase64", filename);
+    try {
+      const response = await axiosInstance.get("/api/itinerary/base64-image", {
+        params: {
+          filename, // Pass the filename as a parameter
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+const isAPendingAction = isPending(getPdfs, deletePdf, createBase64);
+const isARejectedAction = isRejected(getPdfs, deletePdf, createBase64);
 // const isUpdatedAction = isFulfilled
 
 const clientSlice = createSlice({
@@ -77,6 +96,12 @@ const clientSlice = createSlice({
       state.deleteSuccess = true;
 
       alert(action.payload.message);
+    });
+
+    builder.addCase(createBase64.fulfilled, (state, action) => {
+      console.log("createBase64.fulfilled", action);
+      state.loading = false;
+      state.base64Img = action.payload.base64;
     });
     builder.addMatcher(isAPendingAction, (state) => {
       state.loading = true;
