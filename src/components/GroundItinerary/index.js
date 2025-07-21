@@ -4,11 +4,6 @@ import { deleteDay, deleteTask, setDays } from "../../redux/createPdfSlice";
 import RichTextEditor from "../RichTextEditor";
 import { MdDelete } from "react-icons/md";
 const GroundItinerary = () => {
-  // const [days, setDays] = useState([
-  //   {
-  //     dailyTasks: [{ time: "", task: "", description: "", bulletPoints: [] }],
-  //   },
-  // ]);
   const days = useAppSelector((state) => state.createPdf.groundItinerary);
   const dispatch = useAppDispatch();
   const handleAddDay = () => {
@@ -163,7 +158,7 @@ const GroundItinerary = () => {
   };
 
   const renderDays = () => {
-    return days.map((day, dayIndex) => (
+    return days?.map((day, dayIndex) => (
       <div key={dayIndex} className="mb-6 border p-4 rounded-lg bg-gray-50">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-bold mb-4">Day {dayIndex + 1}</h2>

@@ -1,7 +1,6 @@
 import { lazy } from "react";
 import ChangePassword from "../pages/ChangePassword";
 import SavedPdfs from "../pages/SavedPdfs";
-
 // Unprotected routes
 const Home = lazy(() => import("../pages/HomePage"));
 const EnchantingKerala = lazy(() => import("../pages/EnchantingKerala"));
