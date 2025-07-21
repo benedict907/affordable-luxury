@@ -3,6 +3,7 @@ import {
   createAsyncThunk,
   isPending,
   isRejected,
+  createSelector,
 } from "@reduxjs/toolkit";
 
 import axiosInstance from "../utils/axiosInstance";
@@ -45,6 +46,8 @@ const initialState = {
         rooms: "",
         mealPlan: "",
         status: "",
+        isHouseBoat: false,
+        hasExtraBed: false,
       },
     ],
     groundItinerary: [
@@ -90,6 +93,8 @@ const initialState = {
       rooms: "1",
       mealPlan: "",
       status: "Confirmed",
+      isHouseBoat: "false",
+      hasExtraBed: "false",
     },
   ],
   groundItinerary: [
@@ -181,7 +186,7 @@ const createPdfSlice = createSlice({
         importantPoints,
         travelTips,
         customBulletPoint,
-      } = action.payload;
+      } = action.payload || {};
 
       state.imageName = imageName;
       state.main = main;
@@ -282,6 +287,13 @@ const createPdfSlice = createSlice({
     });
   },
 });
+const selectCreatePdf = (state) => state.createPdf;
+
+export const selectPdf = createSelector(
+  [selectCreatePdf],
+  (createPdf) => createPdf
+);
+
 export const {
   resetPage,
   setPackageData,

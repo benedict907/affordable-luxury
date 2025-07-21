@@ -38,10 +38,45 @@ const AddHotel = forwardRef((props, ref) => {
   };
 
   const renderHotelFields = () => {
-    return hotels.map((hotel, index) => (
+    return hotels?.map((hotel, index) => (
       <div key={index} className="mb-6 border-b pb-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-medium mb-2">Hotel {index + 1}</h2>
+          {/* <div className="flex flex-row items-center"> */}
+          <h2 className="text-lg font-medium mr-10">Hotel {index + 1}</h2>
+          <>
+            <div className="flex flex-row">
+              <h2 className="text-lg font-ariel ms-4 mr-2">is House Boat?</h2>
+              <input
+                type="checkbox"
+                value={hotel.isHouseBoat}
+                checked={hotel.isHouseBoat === "true"}
+                onChange={(e) => {
+                  console.log("isHouseBoat", typeof e.target.value);
+                  handleInputChange(
+                    index,
+                    "isHouseBoat",
+                    e.target.value === "true" ? "false" : "true"
+                  );
+                }}
+              ></input>
+            </div>
+            <div className="flex flex-row">
+              <h2 className="text-lg font-ariel ms-4 mr-2">Has Extra Bed?</h2>
+              <input
+                type="checkbox"
+                value={hotel.hasExtraBed}
+                onChange={(e) =>
+                  handleInputChange(
+                    index,
+                    "hasExtraBed",
+                    e.target.value === "true" ? "false" : "true"
+                  )
+                }
+                checked={hotel.hasExtraBed === "true"}
+              ></input>
+            </div>
+          </>
+          {/* </div> */}
           {index > 0 ? (
             <MdDelete
               onClick={() => {

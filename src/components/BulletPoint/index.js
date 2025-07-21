@@ -13,7 +13,12 @@ export default function BulletPoint({ title, bulletPoints }) {
           <div
             className="bullet list-disc marker:text-black-2"
             dangerouslySetInnerHTML={{
-              __html: bulletPoints?.replace(/<ul>/g, '<ul class="list-disc">'),
+              __html: bulletPoints
+                ?.replace(
+                  /<ul>/g,
+                  '<ul class="list-disc ml-6 space-y-2 text-base leading-relaxed">'
+                )
+                .replace(/<li>/g, '<li class="pl-1">'),
             }}
           />
         ) : null}
