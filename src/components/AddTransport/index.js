@@ -34,7 +34,7 @@ const AddTransport = forwardRef((props, ref) => {
   };
 
   const renderTransportationFields = () => {
-    return transport.map((transportation, index) => (
+    return transport?.map((transportation, index) => (
       <div key={index} className="mb-6 border-b pb-4">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-medium mb-2">

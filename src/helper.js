@@ -1,28 +1,3 @@
-import {
-  groundItinerary as enchantingKeralaGroundItinerary,
-  hotelItinerary as enchantingKeralaHotelItinerary,
-  transportationDocument as enchantingKeralaTransportation,
-  importantPoints as enchantingKeralaImportantPoints,
-  travelTips as enchantingKeralaTravelTips,
-} from "./constants/enchantingKeralaConstants";
-import {
-  groundItinerary as keralaRetreatGroundItinerary,
-  hotelItinerary as keralaRetreatHotelItinerary,
-  transportationDocument as keralaRetreatTransportationDocument,
-  importantPoints as keralaRetreatImportantPoints,
-  travelTips as keralaRetreatTravelTips,
-} from "./constants/keralaRetreatConstants";
-
-import {
-  groundItinerary as classicKeralaGroundItinerary,
-  hotelItinerary as classicKeralaHotelItinerary,
-  transportationDocument as classicKeralaTransportationDocument,
-  importantPoints as classicKeralaImportantPoints,
-  travelTips as classicKeralaTravelTips,
-  transferFromMarariToAirport,
-  emergencyContacts,
-} from "./constants/classicKeralaBackwaters";
-
 export const generateDateArray = (startDate, days) => {
   const result = [];
   const start = new Date(startDate);
@@ -61,53 +36,6 @@ export const formatDateToDDMMYYYY = (date) => {
   const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based
   const year = date.getFullYear();
   return `${day}/${month}/${year}`;
-};
-
-export const getConstantData = (title) => {
-  switch (title) {
-    case "Enchanting Kerala 15 nights & 16 Days":
-      return {
-        groundItinerary: enchantingKeralaGroundItinerary,
-        hotelItinerary: enchantingKeralaHotelItinerary,
-        importantPoints: enchantingKeralaImportantPoints,
-        travelTips: enchantingKeralaTravelTips,
-        transportationDocument: enchantingKeralaTransportation,
-      };
-    case "Kerala Retreat 9 nights & 10 days":
-      return {
-        groundItinerary: keralaRetreatGroundItinerary,
-        hotelItinerary: keralaRetreatHotelItinerary,
-        importantPoints: keralaRetreatImportantPoints,
-        travelTips: keralaRetreatTravelTips,
-        transportationDocument: keralaRetreatTransportationDocument,
-      };
-    case "Classic Kerala & Backwaters 10 Nights & 11 days":
-      return {
-        groundItinerary: classicKeralaGroundItinerary,
-        hotelItinerary: classicKeralaHotelItinerary,
-        importantPoints: classicKeralaImportantPoints,
-        travelTips: classicKeralaTravelTips,
-        transportationDocument: classicKeralaTransportationDocument,
-        transferFromMarariToAirport,
-      };
-    case "Enchanting Kerala 13 nights & 14 - Days Fragrant Nature":
-      return "";
-    case "Enchanting Kerala 13 nights & 14 Days":
-      return "";
-    default:
-      return "asdasdas";
-  }
-};
-
-export const getEmergencyContacts = (title) => {
-  switch (title) {
-    case "Enchanting Kerala 15 nights & 16 Days":
-      return "Emergency Contact UK:";
-    case "Kerala Retreat 9 nights & 10 days":
-      return "Emergency Contact UK:";
-    case "Classic Kerala & Backwaters 10 Nights & 11 days":
-      return emergencyContacts;
-  }
 };
 
 export const getDailyTasks = (itinerary) => {

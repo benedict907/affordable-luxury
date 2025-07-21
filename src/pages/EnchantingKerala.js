@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
@@ -58,9 +58,7 @@ function EnchantingKerala() {
   const handleExportPDF = async () => {
     if (!contentRef.current) return;
 
-    const pdf = new jsPDF("p", "mm", "a4", { compressPdf: false });
     const content = contentRef.current;
-
     const originalOverflow = content.style.overflow;
     content.style.overflow = "visible";
 
@@ -71,64 +69,31 @@ function EnchantingKerala() {
       useCORS: true,
     });
 
-    const resizedCanvas = document.createElement("canvas");
-    resizedCanvas.width = canvas.width / 2;
-    resizedCanvas.height = canvas.height / 2;
-    const resizedCtx = resizedCanvas.getContext("2d");
-    resizedCtx.drawImage(
-      canvas,
-      0,
-      0,
-      resizedCanvas.width,
-      resizedCanvas.height
-    );
+    const imgData = canvas.toDataURL("image/jpeg", 1.0);
 
-    const imgData = resizedCanvas.toDataURL("image/jpeg", 0.8);
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = pdf.internal.pageSize.getHeight();
+    // Get pixel dimensions
+    const imgWidthPx = canvas.width;
+    const imgHeightPx = canvas.height;
 
-    const imgWidth = resizedCanvas.width;
-    const imgHeight = resizedCanvas.height;
-    const pageHeightInPx = (pdfHeight * imgWidth) / pdfWidth;
+    // Set DPI to 96 (browser default), and convert to mm
+    const pxToMm = (px) => px * 0.264583;
 
-    let yOffset = 0;
+    const pdfWidthMm = pxToMm(imgWidthPx);
+    const bufferPx = 50; // ~13mm buffer
+    const imgHeightPxBuffered = canvas.height + bufferPx;
 
-    while (yOffset < imgHeight) {
-      const canvasHeight = Math.min(imgHeight - yOffset, pageHeightInPx);
-      const tempCanvas = document.createElement("canvas");
-      tempCanvas.width = imgWidth;
-      tempCanvas.height = canvasHeight;
+    const pdfHeightMm = pxToMm(imgHeightPxBuffered);
 
-      const tempCtx = tempCanvas.getContext("2d");
-      tempCtx.drawImage(
-        resizedCanvas,
-        0,
-        yOffset,
-        imgWidth,
-        canvasHeight,
-        0,
-        0,
-        imgWidth,
-        canvasHeight
-      );
+    const pdf = new jsPDF({
+      orientation: "p",
+      unit: "mm",
+      format: [pdfWidthMm, pdfHeightMm],
+    });
 
-      const imgSection = tempCanvas.toDataURL("image/jpeg", 0.8);
-      pdf.addImage(
-        imgSection,
-        "JPEG",
-        0,
-        0,
-        pdfWidth,
-        (canvasHeight * pdfWidth) / imgWidth,
-        undefined,
-        "FAST"
-      );
-
-      yOffset += pageHeightInPx;
-      if (yOffset < imgHeight) pdf.addPage();
-    }
+    pdf.addImage(imgData, "JPEG", 0, 0, pdfWidthMm, pdfHeightMm);
 
     content.style.overflow = originalOverflow;
+
     pdf.save("exported.pdf");
 
     checkIfExists(pdfs, confirmationNumber, (exists) => {
@@ -383,17 +348,17 @@ function EnchantingKerala() {
           )}
         </div>
         <div className="mb-8">
-          <h1 className="text-xl font-bold">Important Points</h1>
+          <h1 className="text-xl font-bold pb-3">Important Points</h1>
           <BulletPoint title={""} bulletPoints={importantPoints} />
         </div>
         {travelTips !== EMPTY_BULLETS ? (
           <div className="mb-8">
-            <h1 className="text-xl font-bold">Few Travel Tips</h1>
+            <h1 className="text-xl font-bold pb-3">Few Travel Tips</h1>
             <BulletPoint title={""} bulletPoints={travelTips} />
           </div>
         ) : null}
         {customBulletPoint.title ? (
-          <div className="mb-8">
+          <div className="mb-2">
             <h1 className="text-xl font-bold">{customBulletPoint.title}</h1>
             <BulletPoint
               title={""}
@@ -402,7 +367,7 @@ function EnchantingKerala() {
           </div>
         ) : null}
         {transferFromMarariToAirport ? (
-          <div className="mb-8">
+          <div className="mb-2">
             <h1 className="text-xl font-bold">
               Transfer from Marari Beach to Kochi Airport
             </h1>

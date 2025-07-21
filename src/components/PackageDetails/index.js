@@ -8,7 +8,7 @@ const PackageDetails = forwardRef((props, ref) => {
   const error = useAppSelector((state) => state.createPdf.errors.main);
 
   const { title, numberOfDays, emergencyContact, emergencyNumber } =
-    packageData;
+    packageData || {};
 
   return (
     <div className="w-full max-w-4xl bg-white p-6 rounded-lg shadow-lg my-10">

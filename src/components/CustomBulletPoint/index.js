@@ -19,7 +19,7 @@ export default function CustomBulletPoint() {
           // ref={ref["customBulletPoint.transfers"]}
           type="text"
           placeholder="Enter a title"
-          value={customBulletPoint.title}
+          value={customBulletPoint?.title}
           onChange={(e) =>
             dispatch(
               setCustomBulletPoints({
@@ -33,7 +33,7 @@ export default function CustomBulletPoint() {
 
         <form>
           <RichTextEditor
-            text={customBulletPoint.bulletPoints}
+            text={customBulletPoint?.bulletPoints}
             onChangeText={(text) =>
               dispatch(
                 setCustomBulletPoints({
