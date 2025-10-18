@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
 
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
@@ -28,7 +28,7 @@ function EnchantingKerala() {
     confirmationNumber,
   } = location.state || {};
 
-  let currentDate = selectedStartDate;
+
   const { pdfs, base64Img } = useAppSelector((state) => state.client);
   const dispatch = useAppDispatch();
   const rooms = useAppSelector((state) => state.createPdf.rooms);
@@ -50,10 +50,117 @@ function EnchantingKerala() {
 
   const { emergencyNumberUK } = emergencyContacts || "";
 
-  const updatedHotelItinerary = hotelItinerary.map((item) => ({
-    ...item,
-    rooms: rooms,
-  }));
+  const updatedHotelItinerary = useMemo(() => 
+    hotelItinerary.map((item) => ({
+      ...item,
+      rooms: rooms,
+    })), [hotelItinerary, rooms]
+  );
+  // Local editable state for tables and dates
+  const [localStartDate, setLocalStartDate] = useState(selectedStartDate);
+  const [localEndDate, setLocalEndDate] = useState(selectedEndDate);
+    let currentDate = localStartDate;
+  const [hotelRows, setHotelRows] = useState(() => 
+    hotelItinerary.map((item) => ({
+      ...item,
+      rooms: rooms,
+    }))
+  );
+  const [transportRows, setTransportRows] = useState(transportation);
+  const [editingCell, setEditingCell] = useState(null); // { section: 'hotel'|'transport', rowIndex: number, field: string }
+
+  useEffect(() => {
+    setHotelRows(updatedHotelItinerary);
+  }, [updatedHotelItinerary]);
+
+  useEffect(() => {
+    setTransportRows(transportation);
+  }, [transportation]);
+
+  // Dropdown options
+  const statusOptions = ["CONFIRMED", "PENDING", "CANCELLED"];
+  const mealPlanOptions = ["EP", "CP", "MAP", "AP", "BB", "HB"];
+  const numericOptions = Array.from({ length: 15 }, (_, i) => String(i + 1));
+
+  const handleCellChange = (section, rowIndex, field, newValue) => {
+    if (section === "hotel") {
+      setHotelRows((prev) => {
+        const next = [...prev];
+        next[rowIndex] = { ...next[rowIndex], [field]: newValue };
+        return next;
+      });
+    } else if (section === "transport") {
+      setTransportRows((prev) => {
+        const next = [...prev];
+        next[rowIndex] = { ...next[rowIndex], [field]: newValue };
+        return next;
+      });
+    }
+    setEditingCell(null);
+  };
+
+  const renderEditable = ({ section, rowIndex, field, value, options }) => {
+    const isEditing =
+      editingCell &&
+      editingCell.section === section &&
+      editingCell.rowIndex === rowIndex &&
+      editingCell.field === field;
+
+    if (!options || options.length === 0) {
+      options = [String(value || "-")];
+    }
+
+    return isEditing ? (
+      <select
+        className="w-full border border-gray-300 p-1"
+        autoFocus
+        value={String(value || "")}
+        onChange={(e) => handleCellChange(section, rowIndex, field, e.target.value)}
+        onBlur={() => setEditingCell(null)}
+      >
+        {options.map((opt) => (
+          <option key={opt} value={opt}>
+            {opt}
+          </option>
+        ))}
+      </select>
+    ) : (
+      <div
+        className="cursor-pointer"
+        onClick={() => setEditingCell({ section, rowIndex, field })}
+      >
+        {String(value || "-")}
+      </div>
+    );
+  };
+
+  const renderDateEditable = ({ section, rowIndex, field, value, fallbackValue }) => {
+    const isEditing =
+      editingCell &&
+      editingCell.section === section &&
+      editingCell.rowIndex === rowIndex &&
+      editingCell.field === field;
+
+    const displayValue = value ? moment(value).format("DD MMMM") : fallbackValue;
+
+    return isEditing ? (
+      <input
+        type="date"
+        className="w-full border border-gray-300 p-1"
+        autoFocus
+        value={value ? moment(value).format("YYYY-MM-DD") : ""}
+        onChange={(e) => handleCellChange(section, rowIndex, field, e.target.value)}
+        onBlur={() => setEditingCell(null)}
+      />
+    ) : (
+      <div
+        className="cursor-pointer"
+        onClick={() => setEditingCell({ section, rowIndex, field })}
+      >
+        {displayValue}
+      </div>
+    );
+  };
 
   const handleExportPDF = async () => {
     if (!contentRef.current) return;
@@ -112,8 +219,8 @@ function EnchantingKerala() {
       JSON.stringify({
         confirmationNumber,
         passengerList,
-        selectedStartDate,
-        selectedEndDate,
+        selectedStartDate: localStartDate,
+        selectedEndDate: localEndDate,
       })
     );
     formData.append("flights", JSON.stringify(flights));
@@ -159,10 +266,10 @@ function EnchantingKerala() {
             <Row>Confirmation number</Row>
             <Row>{confirmationNumber}</Row>
             <Row>&nbsp;</Row>
-            {selectedStartDate ? (
+            {localStartDate ? (
               <Row>
-                {moment(selectedStartDate).format("DD MMMM YY")} -{" "}
-                {moment(selectedEndDate).format("DD MMMM YY")}
+                {moment(localStartDate).format("DD MMMM YY")} -{" "}
+                {moment(localEndDate).format("DD MMMM YY")}
               </Row>
             ) : null}
           </Column>
@@ -193,21 +300,72 @@ function EnchantingKerala() {
               <Row>Status</Row>
             </Column>
             {/* Data Rows */}
-            {updatedHotelItinerary?.map((hotel, index) => (
-              <Column>
-                <Row>{hotel?.hotelName}</Row>
-                <Row>{hotel?.roomType}</Row>
+            {hotelRows?.map((hotel, index) => (
+              <Column key={`hotel-row-${index}`}>
                 <Row>
-                  {generateCheckInDates(
-                    currentDate,
-                    updatedHotelItinerary,
-                    index
-                  )}
+                  {renderEditable({
+                    section: "hotel",
+                    rowIndex: index,
+                    field: "hotelName",
+                    value: hotel?.hotelName,
+                    options: [hotel?.hotelName || "-"],
+                  })}
                 </Row>
-                <Row>{hotel?.duration} Nights</Row>
-                <Row>{hotel?.rooms}</Row>
-                <Row>{hotel?.mealPlan}</Row>
-                <Row>{hotel?.status}</Row>
+                <Row>
+                  {renderEditable({
+                    section: "hotel",
+                    rowIndex: index,
+                    field: "roomType",
+                    value: hotel?.roomType,
+                    options: [hotel?.roomType || "Deluxe", "Standard", "Suite"],
+                  })}
+                </Row>
+                <Row>
+                  {renderDateEditable({
+                    section: "hotel",
+                    rowIndex: index,
+                    field: "checkInDate",
+                    value: hotel?.checkInDate,
+                    fallbackValue: generateCheckInDates(currentDate, hotelRows, index)
+                  })}
+                </Row>
+                <Row>
+                  {renderEditable({
+                    section: "hotel",
+                    rowIndex: index,
+                    field: "duration",
+                    value: String(hotel?.duration || ""),
+                    options: numericOptions,
+                  })}
+                  {" "}Nights
+                </Row>
+                <Row>
+                  {renderEditable({
+                    section: "hotel",
+                    rowIndex: index,
+                    field: "rooms",
+                    value: String(hotel?.rooms || ""),
+                    options: numericOptions,
+                  })}
+                </Row>
+                <Row>
+                  {renderEditable({
+                    section: "hotel",
+                    rowIndex: index,
+                    field: "mealPlan",
+                    value: hotel?.mealPlan,
+                    options: mealPlanOptions,
+                  })}
+                </Row>
+                <Row>
+                  {renderEditable({
+                    section: "hotel",
+                    rowIndex: index,
+                    field: "status",
+                    value: hotel?.status,
+                    options: statusOptions,
+                  })}
+                </Row>
               </Column>
             ))}
             <Column>
@@ -245,7 +403,30 @@ function EnchantingKerala() {
           <Column>
             <Row>&nbsp;</Row>
             <Row>{flights?.arrivalFlightNumber}</Row>
-            <Row>{moment(selectedStartDate).format("DD MMMM")}</Row>
+            {/* Arrival Date Picker */}
+            <Row
+              style={{ cursor: "pointer" }}
+              onClick={() => setEditingCell({ section: "flight-arrival", field: "date" })}
+            >
+              {editingCell &&
+              editingCell.section === "flight-arrival" &&
+              editingCell.field === "date" ? (
+                <input
+                  type="date"
+                  className="border rounded px-2 py-1"
+                  value={moment(localStartDate).format("YYYY-MM-DD")}
+                  onChange={e => {
+                    setLocalStartDate(e.target.value);
+                    setEditingCell(null);
+                  }}
+                  onBlur={() => setEditingCell(null)}
+                  autoFocus
+                  style={{ minWidth: 120 }}
+                />
+              ) : (
+                moment(localStartDate).format("DD MMMM")
+              )}
+            </Row>
             <Row>{flights?.arrivalTime}</Row>
             <Row>&nbsp;</Row>
             <Row>&nbsp;</Row>
@@ -258,18 +439,44 @@ function EnchantingKerala() {
             <Row>Status</Row>
           </Column>
 
-          {transportation.map((transport, index) => (
-            <Column>
-              <Row>{transport?.transfers}</Row>
-              <Row>{transport?.service}</Row>
+          {transportRows.map((transport, index) => (
+            <Column key={`transport-row-${index}`}>
               <Row>
-                {generateCheckInDates(
-                  currentDate,
-                  updatedHotelItinerary,
-                  index
-                )}
+                {renderEditable({
+                  section: "transport",
+                  rowIndex: index,
+                  field: "transfers",
+                  value: transport?.transfers,
+                  options: [transport?.transfers || "-"],
+                })}
               </Row>
-              <Row>{transport?.status}</Row>
+              <Row>
+                {renderEditable({
+                  section: "transport",
+                  rowIndex: index,
+                  field: "service",
+                  value: transport?.service,
+                  options: [transport?.service || "-"],
+                })}
+              </Row>
+              <Row>
+                {renderDateEditable({
+                  section: "transport",
+                  rowIndex: index,
+                  field: "date",
+                  value: transport?.date,
+                  fallbackValue: generateCheckInDates(currentDate, hotelRows, index)
+                })}
+              </Row>
+              <Row>
+                {renderEditable({
+                  section: "transport",
+                  rowIndex: index,
+                  field: "status",
+                  value: transport?.status,
+                  options: statusOptions,
+                })}
+              </Row>
             </Column>
           ))}
           <Column>
@@ -306,7 +513,30 @@ function EnchantingKerala() {
           <Column>
             <Row style="text-start">Departure {flights.departureCity}</Row>
             <Row>{flights.departureFlightNumber}</Row>
-            <Row>{moment(selectedEndDate).format("DD MMMM")}</Row>
+            {/* Departure Date Picker */}
+            <Row
+              style={{ cursor: "pointer" }}
+              onClick={() => setEditingCell({ section: "flight-departure", field: "date" })}
+            >
+              {editingCell &&
+              editingCell.section === "flight-departure" &&
+              editingCell.field === "date" ? (
+                <input
+                  type="date"
+                  className="border rounded px-2 py-1"
+                  value={moment(localEndDate).format("YYYY-MM-DD")}
+                  onChange={e => {
+                    setLocalEndDate(e.target.value);
+                    setEditingCell(null);
+                  }}
+                  onBlur={() => setEditingCell(null)}
+                  autoFocus
+                  style={{ minWidth: 120 }}
+                />
+              ) : (
+                moment(localEndDate).format("DD MMMM")
+              )}
+            </Row>
             <Row>{flights.departureTime}</Row>
             <Row>&nbsp;</Row>
             <Row>&nbsp;</Row>
@@ -316,7 +546,7 @@ function EnchantingKerala() {
           <div className="text-center border border-gray-300 p-4">
             <h1 className="text-xl font-bold">Ground Itinerary Summary</h1>
           </div>
-          {generateDateArray(selectedStartDate, main.numberOfDays + 1)?.map(
+          {generateDateArray(localStartDate, main.numberOfDays + 1)?.map(
             ({ day, date }) => {
               return groundItinerary[day - 1]?.dailyTasks?.map(
                 (dayObj, index) => (
