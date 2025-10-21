@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, Table, TableRow, TableCell, WidthType, BorderStyle, ImageRun } from "docx";
 import Row from "../components/Row";
 import Column from "../components/Column";
 import moment from "moment";
@@ -95,6 +96,477 @@ function EnchantingKerala() {
     content.style.overflow = originalOverflow;
 
     pdf.save("exported.pdf");
+
+    checkIfExists(pdfs, confirmationNumber, (exists) => {
+      if (!exists) {
+        onSavePressed();
+      }
+    });
+  };
+
+  const handleExportWord = async () => {
+    const doc = new Document({
+      sections: [{
+        properties: {},
+        children: [
+          // Header Section
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: "Service Voucher",
+                bold: true,
+                size: 32,
+              }),
+            ],
+            alignment: AlignmentType.CENTER,
+            spacing: { after: 400 },
+          }),
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: main.title,
+                bold: true,
+                size: 32,
+              }),
+            ],
+            alignment: AlignmentType.CENTER,
+            spacing: { after: 400 },
+          }),
+
+          // Confirmation Details
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: `Confirmation number: ${confirmationNumber}`,
+                bold: true,
+              }),
+            ],
+            spacing: { after: 200 },
+          }),
+
+          // Date Range
+          selectedStartDate && new Paragraph({
+            children: [
+              new TextRun({
+                text: `${moment(selectedStartDate).format("DD MMMM YY")} - ${moment(selectedEndDate).format("DD MMMM YY")}`,
+              }),
+            ],
+            spacing: { after: 200 },
+          }),
+
+          // Passenger Names
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: "Passenger Names:",
+                bold: true,
+              }),
+            ],
+            spacing: { after: 200 },
+          }),
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: passengerList.join(", "),
+              }),
+            ],
+            spacing: { after: 400 },
+          }),
+
+          // Hotel Details
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: "Hotel Details",
+                bold: true,
+                size: 24,
+              }),
+            ],
+            spacing: { before: 400, after: 200 },
+          }),
+
+          // Hotel Information
+          ...updatedHotelItinerary?.map((hotel, index) => [
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: `Hotel: ${hotel?.hotelName || ""}`,
+                  bold: true,
+                }),
+              ],
+            }),
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: `Room Type: ${hotel?.roomType || ""}`,
+                }),
+              ],
+            }),
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: `Check-in: ${generateCheckInDates(currentDate, updatedHotelItinerary, index)}`,
+                }),
+              ],
+            }),
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: `Duration: ${hotel?.duration || ""} Nights`,
+                }),
+              ],
+            }),
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: `Rooms: ${hotel?.rooms || ""}`,
+                }),
+              ],
+            }),
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: `Meal Plan: ${hotel?.mealPlan || ""}`,
+                }),
+              ],
+            }),
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: `Status: ${hotel?.status || ""}`,
+                }),
+              ],
+            }),
+            new Paragraph({
+              children: [new TextRun({ text: "" })],
+              spacing: { after: 200 },
+            }),
+          ]).flat(),
+
+          // Emergency Contact
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: `Emergency Contact: ${main.emergencyContact || ""} - ${main.emergencyNumber || ""}`,
+                bold: true,
+              }),
+            ],
+            spacing: { before: 200, after: 400 },
+          }),
+
+          // Transportation Document
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: "TRANSPORTATION DOCUMENT",
+                bold: true,
+                size: 24,
+              }),
+            ],
+            alignment: AlignmentType.CENTER,
+            spacing: { before: 400, after: 200 },
+          }),
+
+          // Flight Details
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: `Arrival ${flights?.arrivalCity || ""}`,
+                bold: true,
+              }),
+            ],
+          }),
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: `Flight No: ${flights?.arrivalFlightNumber || ""}`,
+              }),
+            ],
+          }),
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: `Date: ${moment(selectedStartDate).format("DD MMMM")}`,
+              }),
+            ],
+          }),
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: `Time: ${flights?.arrivalTime || ""}`,
+              }),
+            ],
+          }),
+
+          // Transfers
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: "Transfers:",
+                bold: true,
+              }),
+            ],
+            spacing: { before: 200 },
+          }),
+
+          ...transportation.map((transport, index) => [
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: `Service: ${transport?.service || ""}`,
+                }),
+              ],
+            }),
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: `Date: ${generateCheckInDates(currentDate, updatedHotelItinerary, index)}`,
+                }),
+              ],
+            }),
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: `Status: ${transport?.status || ""}`,
+                }),
+              ],
+            }),
+          ]).flat(),
+
+          // Emergency Contact UK
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: `Emergency Contact UK: ${emergencyNumberUK || ""}`,
+              }),
+            ],
+            spacing: { before: 200 },
+          }),
+
+          // Departure Details
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: `Departure ${flights?.departureCity || ""}`,
+                bold: true,
+              }),
+            ],
+            spacing: { before: 200 },
+          }),
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: `Flight no: ${flights?.departureFlightNumber || ""}`,
+              }),
+            ],
+          }),
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: `Date: ${moment(selectedEndDate).format("DD MMMM")}`,
+              }),
+            ],
+          }),
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: `Time: ${flights?.departureTime || ""}`,
+              }),
+            ],
+          }),
+
+          // Ground Itinerary
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: "Ground Itinerary Summary",
+                bold: true,
+                size: 24,
+              }),
+            ],
+            alignment: AlignmentType.CENTER,
+            spacing: { before: 400, after: 200 },
+          }),
+
+          // Ground Itinerary Details - Simplified approach
+          ...generateDateArray(selectedStartDate, main.numberOfDays + 1)?.map(({ day, date }) => {
+            return groundItinerary[day - 1]?.dailyTasks?.map((dayObj, index) => {
+              const paragraphs = [];
+              
+              if (index === 0) {
+                paragraphs.push(
+                  new Paragraph({
+                    children: [
+                      new TextRun({
+                        text: `${date} - Day ${day}`,
+                        bold: true,
+                      }),
+                    ],
+                    spacing: { before: 200 },
+                  })
+                );
+              }
+              
+              if (dayObj?.bulletPoints && dayObj.bulletPoints !== EMPTY_BULLETS) {
+                paragraphs.push(
+                  new Paragraph({
+                    children: [
+                      new TextRun({
+                        text: `${dayObj.time || ""} - ${dayObj.task || ""}`,
+                        bold: true,
+                      }),
+                    ],
+                  })
+                );
+                // Convert HTML bullet points to plain text
+                const bulletText = dayObj.bulletPoints.replace(/<[^>]*>/g, '').replace(/\n/g, ' ').trim();
+                if (bulletText) {
+                  paragraphs.push(
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          text: bulletText,
+                        }),
+                      ],
+                      indent: { left: 400 },
+                    })
+                  );
+                }
+              } else if (dayObj.task) {
+                paragraphs.push(
+                  new Paragraph({
+                    children: [
+                      new TextRun({
+                        text: `${dayObj.time || ""} - ${dayObj.task}`,
+                      }),
+                    ],
+                  })
+                );
+                if (dayObj.description) {
+                  paragraphs.push(
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          text: dayObj.description,
+                        }),
+                      ],
+                      indent: { left: 400 },
+                    })
+                  );
+                }
+              }
+              
+              return paragraphs;
+            }).flat() || [];
+          }).flat() || [],
+
+          // Important Points
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: "Important Points",
+                bold: true,
+                size: 24,
+              }),
+            ],
+            spacing: { before: 400, after: 200 },
+          }),
+
+          // Convert HTML important points to plain text
+          importantPoints && importantPoints !== EMPTY_BULLETS && new Paragraph({
+            children: [
+              new TextRun({
+                text: importantPoints.replace(/<[^>]*>/g, '').replace(/\n/g, ' ').trim(),
+              }),
+            ],
+            indent: { left: 400 },
+          }),
+
+          // Travel Tips
+          travelTips && travelTips !== EMPTY_BULLETS && new Paragraph({
+            children: [
+              new TextRun({
+                text: "Few Travel Tips",
+                bold: true,
+                size: 24,
+              }),
+            ],
+            spacing: { before: 400, after: 200 },
+          }),
+
+          travelTips && travelTips !== EMPTY_BULLETS && new Paragraph({
+            children: [
+              new TextRun({
+                text: travelTips.replace(/<[^>]*>/g, '').replace(/\n/g, ' ').trim(),
+              }),
+            ],
+            indent: { left: 400 },
+          }),
+
+          // Custom Bullet Point
+          customBulletPoint.title && new Paragraph({
+            children: [
+              new TextRun({
+                text: customBulletPoint.title,
+                bold: true,
+                size: 24,
+              }),
+            ],
+            spacing: { before: 400, after: 200 },
+          }),
+
+          customBulletPoint.title && customBulletPoint.bulletPoints && new Paragraph({
+            children: [
+              new TextRun({
+                text: customBulletPoint.bulletPoints.replace(/<[^>]*>/g, '').replace(/\n/g, ' ').trim(),
+              }),
+            ],
+            indent: { left: 400 },
+          }),
+
+          // Transfer from Marari
+          transferFromMarariToAirport && new Paragraph({
+            children: [
+              new TextRun({
+                text: "Transfer from Marari Beach to Kochi Airport",
+                bold: true,
+                size: 24,
+              }),
+            ],
+            spacing: { before: 400, after: 200 },
+          }),
+
+          transferFromMarariToAirport && travelTips && travelTips !== EMPTY_BULLETS && new Paragraph({
+            children: [
+              new TextRun({
+                text: travelTips.replace(/<[^>]*>/g, '').replace(/\n/g, ' ').trim(),
+              }),
+            ],
+            indent: { left: 400 },
+          }),
+
+          // Closing Message
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: "Wishing you all happy and safe holiday!",
+                bold: true,
+              }),
+            ],
+            alignment: AlignmentType.CENTER,
+            spacing: { before: 400 },
+          }),
+        ],
+      }],
+    });
+
+    const blob = await Packer.toBlob(doc);
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "service-voucher.docx";
+    link.click();
+    window.URL.revokeObjectURL(url);
 
     checkIfExists(pdfs, confirmationNumber, (exists) => {
       if (!exists) {
@@ -376,12 +848,18 @@ function EnchantingKerala() {
         ) : null}
         <div className="font-bold">Wishing you all happy and safe holiday!</div>
       </div>
-      <div className="flex">
+      <div className="flex gap-4 justify-center">
         <button
           onClick={handleExportPDF}
-          className="bg-blue-500 text-white px-4 py-2 mx-auto  my-2 rounded active:opacity-50"
+          className="bg-blue-500 text-white px-4 py-2 my-2 rounded active:opacity-50"
         >
           Export to PDF
+        </button>
+        <button
+          onClick={handleExportWord}
+          className="bg-green-500 text-white px-4 py-2 my-2 rounded active:opacity-50"
+        >
+          Export to Word
         </button>
       </div>
     </div>
