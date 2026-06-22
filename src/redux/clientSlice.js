@@ -28,7 +28,7 @@ export const getPdfs = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response?.data ?? { message: "Network error. Please try again." });
     }
   }
 );
@@ -40,7 +40,7 @@ export const deletePdf = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response?.data ?? { message: "Network error. Please try again." });
     }
   }
 );
@@ -58,7 +58,7 @@ export const createBase64 = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response?.data ?? { message: "Network error. Please try again." });
     }
   }
 );
@@ -95,7 +95,7 @@ const clientSlice = createSlice({
       state.loading = false;
       state.deleteSuccess = true;
 
-      alert(action.payload.message);
+      alert(action.payload?.message ?? "Something went wrong.");
     });
 
     builder.addCase(createBase64.fulfilled, (state, action) => {

@@ -111,7 +111,7 @@ export const savePdf = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response?.data ?? { error: "Network error. Please try again." });
     }
   }
 );
@@ -127,7 +127,7 @@ export const editPdf = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response?.data ?? { error: "Network error. Please try again." });
     }
   }
 );
@@ -277,8 +277,8 @@ const createPdfSlice = createSlice({
       console.log("isARejectedAction", action.payload);
       state.loading = false;
       state.success = false;
-      state.error = action.payload.error;
-      alert(action.payload.error);
+      state.error = action.payload?.error ?? "Something went wrong.";
+      alert(action.payload?.error ?? "Something went wrong.");
     });
   },
 });

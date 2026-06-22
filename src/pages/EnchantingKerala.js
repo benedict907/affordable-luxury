@@ -1,7 +1,8 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import { downloadVoucherDocx } from "../utils/buildVoucherDocx";
 import Row from "../components/Row";
 import Column from "../components/Column";
 import moment from "moment";
@@ -12,7 +13,7 @@ import {
   generateDateArray,
 } from "../helper";
 import { useLocation } from "react-router-dom";
-import { EMPTY_BULLETS, IMAGE_PATH } from "../constants/constants";
+import { EMPTY_BULLETS } from "../constants/constants";
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import { savePdf } from "../redux/createPdfSlice";
 import { createBase64 } from "../redux/clientSlice";
@@ -28,12 +29,13 @@ function EnchantingKerala() {
     confirmationNumber,
   } = location.state || {};
 
-  let currentDate = selectedStartDate;
+  const currentDate = selectedStartDate;
   const { pdfs, base64Img } = useAppSelector((state) => state.client);
   const dispatch = useAppDispatch();
   const rooms = useAppSelector((state) => state.createPdf.rooms);
 
   const contentRef = useRef(null);
+  const [isExportingDOCX, setIsExportingDOCX] = useState(false);
   const {
     imageName,
     main,
@@ -48,7 +50,7 @@ function EnchantingKerala() {
     customBulletPoint,
   } = selectedForm;
 
-  const { emergencyNumberUK } = emergencyContacts || "";
+  const { emergencyNumberUK } = emergencyContacts || {};
 
   const updatedHotelItinerary = hotelItinerary.map((item) => ({
     ...item,
@@ -73,7 +75,6 @@ function EnchantingKerala() {
 
     // Get pixel dimensions
     const imgWidthPx = canvas.width;
-    const imgHeightPx = canvas.height;
 
     // Set DPI to 96 (browser default), and convert to mm
     const pxToMm = (px) => px * 0.264583;
@@ -103,6 +104,40 @@ function EnchantingKerala() {
     });
   };
 
+  const handleExportDOCX = async () => {
+    setIsExportingDOCX(true);
+
+    try {
+      // Build a native, editable Word document from the voucher data
+      // (real tables with borders), not an image of the rendered page.
+      await downloadVoucherDocx(
+        {
+          base64Img,
+          main,
+          confirmationNumber,
+          passengerList,
+          selectedStartDate,
+          selectedEndDate,
+          flights,
+          hotelItinerary: updatedHotelItinerary,
+          transportation,
+          groundItinerary,
+          importantPoints,
+          travelTips,
+          customBulletPoint,
+          transferFromMarariToAirport,
+          emergencyContacts,
+        },
+        "voucher.docx"
+      );
+    } catch (error) {
+      console.error("Export error:", error);
+      alert("Failed to export voucher. Please try again.");
+    } finally {
+      setIsExportingDOCX(false);
+    }
+  };
+
   const onSavePressed = async () => {
     const formData = new FormData();
 
@@ -117,9 +152,18 @@ function EnchantingKerala() {
       })
     );
     formData.append("flights", JSON.stringify(flights));
-    formData.append("importantPoints", JSON.stringify(importantPoints));
-    formData.append("travelTips", JSON.stringify(travelTips));
-    formData.append("customBulletPoint", JSON.stringify(customBulletPoint));
+    const toStringBullet = (v) =>
+      !v || Array.isArray(v) ? "" : v;
+
+    formData.append("importantPoints", JSON.stringify(toStringBullet(importantPoints)));
+    formData.append("travelTips", JSON.stringify(toStringBullet(travelTips)));
+    formData.append(
+      "customBulletPoint",
+      JSON.stringify({
+        ...customBulletPoint,
+        bulletPoints: toStringBullet(customBulletPoint?.bulletPoints),
+      })
+    );
 
     formData.append("image", imageName);
 
@@ -127,9 +171,19 @@ function EnchantingKerala() {
     updatedHotelItinerary.forEach((hotelItinerary, index) =>
       formData.append(`hotelItinerary`, JSON.stringify(hotelItinerary))
     );
-    groundItinerary.forEach((groundItinerary, index) =>
-      formData.append(`groundItinerary`, JSON.stringify(groundItinerary))
-    );
+    groundItinerary.forEach((day) => {
+      const sanitized = {
+        ...day,
+        dailyTasks: (day.dailyTasks || []).map((task) => ({
+          ...task,
+          bulletPoints:
+            !task.bulletPoints || Array.isArray(task.bulletPoints)
+              ? ""
+              : task.bulletPoints,
+        })),
+      };
+      formData.append(`groundItinerary`, JSON.stringify(sanitized));
+    });
     transportation.forEach((transportation, index) =>
       formData.append(`transportation`, JSON.stringify(transportation))
     );
@@ -140,14 +194,18 @@ function EnchantingKerala() {
   useEffect(() => {
     if (!imageName) return;
     dispatch(createBase64(imageName));
-  }, [imageName]);
+  }, [imageName, dispatch]);
 
   return (
     <div>
       <div ref={contentRef} className="overflow-auto m-5">
         {/* Header Section */}
         {base64Img ? (
-          <img className="m-10 w-44 h-44 cursor-pointer" src={base64Img} />
+          <img
+            className="m-10 w-44 h-44 cursor-pointer"
+            src={base64Img}
+            alt="Logo"
+          />
         ) : null}
         <div className="mb-6 text-center border border-gray-300 p-4">
           <h1 className="text-3xl font-bold underline">Service Voucher</h1>
@@ -194,7 +252,7 @@ function EnchantingKerala() {
             </Column>
             {/* Data Rows */}
             {updatedHotelItinerary?.map((hotel, index) => (
-              <Column>
+              <Column key={index}>
                 <Row>{hotel?.hotelName}</Row>
                 <Row>{hotel?.roomType}</Row>
                 <Row>
@@ -259,7 +317,7 @@ function EnchantingKerala() {
           </Column>
 
           {transportation.map((transport, index) => (
-            <Column>
+            <Column key={index}>
               <Row>{transport?.transfers}</Row>
               <Row>{transport?.service}</Row>
               <Row>
@@ -274,7 +332,7 @@ function EnchantingKerala() {
           ))}
           <Column>
             <Row style="text-start">{`Emergency Contact UK: ${
-              emergencyNumberUK ? emergencyNumberUK : ""
+              emergencyNumberUK || ""
             }`}</Row>
             <Row>&nbsp;</Row>
             <Row>&nbsp;</Row>
@@ -376,12 +434,23 @@ function EnchantingKerala() {
         ) : null}
         <div className="font-bold">Wishing you all happy and safe holiday!</div>
       </div>
-      <div className="flex">
+      <div className="flex gap-4 justify-center">
         <button
           onClick={handleExportPDF}
-          className="bg-blue-500 text-white px-4 py-2 mx-auto  my-2 rounded active:opacity-50"
+          className="bg-blue-500 text-white px-4 py-2 my-2 rounded active:opacity-50"
         >
           Export to PDF
+        </button>
+        <button
+          onClick={handleExportDOCX}
+          disabled={isExportingDOCX}
+          className={`px-4 py-2 my-2 rounded active:opacity-50 ${
+            isExportingDOCX
+              ? "bg-gray-400 cursor-not-allowed text-white"
+              : "bg-blue-600 hover:bg-blue-700 text-white"
+          }`}
+        >
+          {isExportingDOCX ? "Exporting..." : "Download DOCX"}
         </button>
       </div>
     </div>

@@ -29,7 +29,7 @@ export const login = createAsyncThunk(
       const response = await axiosInstance.post("/user/v1/login", loginData);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response?.data ?? { message: "Network error. Please try again." });
     }
   }
 );
@@ -72,7 +72,7 @@ const authSlice = createSlice({
       console.log("login.isARejectedAction", action);
       state.loading = false;
       state.isLoggedIn = false;
-      state.error = action.payload.message;
+      state.error = action.payload?.message ?? "Something went wrong.";
     });
   },
 });

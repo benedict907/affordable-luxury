@@ -166,6 +166,14 @@ function HomePage() {
         >
           View Saved Pdfs
         </button>
+        <button
+          onClick={() => {
+            navigate("/contact-us");
+          }}
+          className="bg-blue-500 text-white p-2 rounded-lg mt-4"
+        >
+          Contact Us
+        </button>
       </div>
       <button
         onClick={() => {

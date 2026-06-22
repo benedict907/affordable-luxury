@@ -7,6 +7,7 @@ const EnchantingKerala = lazy(() => import("../pages/EnchantingKerala"));
 const Login = lazy(() => import("../pages/Login"));
 const AddDetails = lazy(() => import("../pages/AddDetails"));
 const CreatePdf = lazy(() => import("../pages/CreatePdf"));
+const ContactUs = lazy(() => import("../pages/ContactUs"));
 const routes = [
   {
     name: "Login",
@@ -43,6 +44,11 @@ const routes = [
     name: "ChangePassword",
     path: "/change-password",
     element: <ChangePassword />,
+  },
+  {
+    name: "ContactUs",
+    path: "/contact-us",
+    element: <ContactUs />,
   },
 ];
 
