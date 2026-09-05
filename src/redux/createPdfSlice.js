@@ -252,19 +252,18 @@ const createPdfSlice = createSlice({
       const { key, error } = action.payload;
       setValueByKeyPath(state.errors, key, error);
     },
+    clearErrors: (state) => {
+      state.errors = initialState.errors;
+    },
   },
   extraReducers: (builder) => {
-    builder.addCase(savePdf.fulfilled, (state, action) => {
+    builder.addCase(savePdf.fulfilled, (state) => {
       state.loading = false;
       state.success = true;
-      state.pdfs = action.payload.data;
     });
-    builder.addCase(editPdf.fulfilled, (state, action) => {
-      console.log("editPdf.fulfilled", action);
+    builder.addCase(editPdf.fulfilled, (state) => {
       state.loading = false;
       state.success = true;
-      state.pdfs = action.payload.data;
-      alert(action.payload.message);
     });
 
     builder.addMatcher(isAPendingAction, (state) => {
@@ -274,11 +273,9 @@ const createPdfSlice = createSlice({
     });
 
     builder.addMatcher(isARejectedAction, (state, action) => {
-      console.log("isARejectedAction", action.payload);
       state.loading = false;
       state.success = false;
       state.error = action.payload?.error ?? "Something went wrong.";
-      alert(action.payload?.error ?? "Something went wrong.");
     });
   },
 });
@@ -294,6 +291,7 @@ export const {
   setTravelTips,
   setCustomBulletPoints,
   setErrors,
+  clearErrors,
   setEditData,
   deleteHotel,
   deleteTask,

@@ -5,19 +5,21 @@ const PageNotFound = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white flex flex-col items-center justify-center rounded-lg shadow-lg w-full sm:w-3/4 max-w-6xl  min-h-[500px]">
-        <h2 className="text-2xl font-semibold text-gray-700 mb-2">
-          404 Page not found
-        </h2>
-        <div className="w-[150px]">
-          <button
-            onClick={() => navigate(-1)}
-            className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 mt-5"
-          >
-            Go Back
-          </button>
-        </div>
+    <div className="app-page flex items-center justify-center">
+      <div className="card flex w-full max-w-md flex-col items-center p-10 text-center">
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
+          Error 404
+        </p>
+        <h2 className="page-title mt-2 text-2xl">Page not found</h2>
+        <p className="page-subtitle mt-1">
+          The page you're looking for doesn't exist or has moved.
+        </p>
+        <button
+          onClick={() => navigate("/")}
+          className="btn btn-primary mt-8 w-full"
+        >
+          ← Back to home
+        </button>
       </div>
     </div>
   );

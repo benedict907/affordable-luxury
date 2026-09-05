@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { formatDateToDDMMYYYY } from "../helper";
@@ -19,6 +19,7 @@ function AddDetails() {
 
   const location = useLocation();
   const { selectedForm } = location.state || {};
+  const numberOfDays = Number(selectedForm?.main?.numberOfDays) || 0;
   const {
     arrivalCity,
     arrivalFlightNumber,
@@ -29,25 +30,15 @@ function AddDetails() {
   } = flightDetails || {};
   const navigate = useNavigate();
 
-  const handleAddDays = (date) => {
-    const updatedDate = new Date(date);
-    updatedDate.setDate(updatedDate.getDate() + selectedForm.main.numberOfDays);
-    setSelectedEndDate(updatedDate);
-  };
-  //adding this to clear the flight details when the component mounts so that user can see empty text input
-  //not clearing the DB because deploying the backend is complicated.
-  // useEffect(() => {
-  //   dispatch(
-  //     setFlightDetails({
-  //       arrivalCity: "",
-  //       arrivalFlightNumber: "",
-  //       arrivalTime: "",
-  //       departureCity: "",
-  //       departureFlightNumber: "",
-  //       departureTime: "",
-  //     })
-  //   );
-  // }, []);
+  const handleAddDays = useCallback(
+    (date) => {
+      const updatedDate = new Date(date);
+      updatedDate.setDate(updatedDate.getDate() + numberOfDays);
+      setSelectedEndDate(updatedDate);
+    },
+    [numberOfDays]
+  );
+
   const onSavePressed = () => {
     if (confirmationNumber.trim() === "") {
       alert("Please enter confirmation number");
@@ -70,16 +61,25 @@ function AddDetails() {
   };
 
   useEffect(() => {
-    if (selectedForm !== null) {
+    if (selectedForm) {
       handleAddDays(selectedStartDate);
     }
-  }, [selectedStartDate, selectedForm]);
+  }, [selectedStartDate, selectedForm, handleAddDays]);
+
+  // Opened directly (e.g. page refresh) there is no draft to work on.
+  useEffect(() => {
+    if (!selectedForm) {
+      navigate("/", { replace: true });
+    }
+  }, [selectedForm, navigate]);
+
+  if (!selectedForm) return null;
 
   return (
-    <div className="flex justify-center items-center h-full">
-      <div className="flex flex-col p-5 border border-[#ccc] rounded-lg text-center shadow-lg mt-10 overflow-hidden">
-        <h2 className="text-center text-2xl text-black-2 font-bold">
-          {selectedForm.title}
+    <div className="app-page flex justify-center items-start">
+      <div className="card flex flex-col p-8 text-center overflow-hidden">
+        <h2 className="page-title text-center text-2xl">
+          {selectedForm.main?.title}
         </h2>
         <div className="mt-10 flex flex-col">
           <label className="text-left">Confirmation Number</label>
@@ -106,13 +106,13 @@ function AddDetails() {
                 handleAddDays(date);
               }}
               dateFormat="dd/MM/yyyy"
-              className="border border-gray-300 p-2 w-96 rounded-lg"
+              className="text-input w-96"
             />
           </div>
         </div>
         <div className="mt-10 flex flex-col justify-start ">
           <h1 className="text-left">
-            End Date ({selectedForm.main.numberOfDays} days after start date)
+            End Date ({numberOfDays} days after start date)
           </h1>
           <input
             value={formatDateToDDMMYYYY(selectedEndDate)}
@@ -124,11 +124,11 @@ function AddDetails() {
         <div className="my-4">
           <h1 className="mb-2 text-start">Rooms</h1>
           <input
-            id={`rooms}`}
-            name={`rooms}`}
+            id="rooms"
+            name="rooms"
             value={rooms}
             onChange={(e) => dispatch(setRooms(e.target.value))}
-            className="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+            className="text-input"
           />
         </div>
         <div className="">
@@ -259,10 +259,7 @@ function AddDetails() {
             <div className="text-red-500 mt-2">{error.departureTime}</div>
           </div>
         </div>
-        <button
-          onClick={onSavePressed}
-          className="bg-blue-500 text-white px-4 py-2 rounded-lg mt-10"
-        >
+        <button onClick={onSavePressed} className="btn btn-primary mt-10">
           Proceed
         </button>
         <button
@@ -271,9 +268,9 @@ function AddDetails() {
             handleAddDays(new Date());
             navigate("/");
           }}
-          className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 mt-5"
+          className="btn btn-secondary mt-3"
         >
-          Go Back
+          ← Go Back
         </button>
       </div>
     </div>

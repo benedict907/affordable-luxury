@@ -67,9 +67,9 @@ const AddHotel = forwardRef((props, ref) => {
             onChange={(e) =>
               handleInputChange(index, "hotelName", e.target.value)
             }
-            className="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+            className="text-input"
           />
-          <div className="text-red-500 mb-5">{error[index]?.hotelName}</div>
+          <div className="field-error mb-5">{error[index]?.hotelName}</div>
         </div>
         <div className="mb-4">
           <label
@@ -87,9 +87,9 @@ const AddHotel = forwardRef((props, ref) => {
             onChange={(e) =>
               handleInputChange(index, "roomType", e.target.value)
             }
-            className="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+            className="text-input"
           />
-          <div className="text-red-500 mb-5">{error[index]?.roomType}</div>
+          <div className="field-error mb-5">{error[index]?.roomType}</div>
         </div>
 
         <div className="mb-4">
@@ -107,9 +107,9 @@ const AddHotel = forwardRef((props, ref) => {
             onChange={(e) =>
               handleInputChange(index, "duration", e.target.value)
             }
-            className="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+            className="text-input"
           />
-          <div className="text-red-500 mb-5">{error[index]?.duration}</div>
+          <div className="field-error mb-5">{error[index]?.duration}</div>
         </div>
         <div className="mb-4">
           <label
@@ -124,9 +124,9 @@ const AddHotel = forwardRef((props, ref) => {
             name={`rooms-${index}`}
             value={hotel.rooms}
             onChange={(e) => handleInputChange(index, "rooms", e.target.value)}
-            className="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+            className="text-input"
           />
-          <div className="text-red-500 mb-5">{error[index]?.rooms}</div>
+          <div className="field-error mb-5">{error[index]?.rooms}</div>
         </div>
         <div className="mb-4">
           <label
@@ -144,9 +144,9 @@ const AddHotel = forwardRef((props, ref) => {
             onChange={(e) =>
               handleInputChange(index, "mealPlan", e.target.value)
             }
-            className="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+            className="text-input"
           />
-          <div className="text-red-500 mb-5">{error[index]?.mealPlan}</div>
+          <div className="field-error mb-5">{error[index]?.mealPlan}</div>
         </div>
         <div className="mb-4">
           <label
@@ -162,23 +162,23 @@ const AddHotel = forwardRef((props, ref) => {
             name={`status-${index}`}
             value={hotel.status}
             onChange={(e) => handleInputChange(index, "status", e.target.value)}
-            className="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+            className="text-input"
           />
-          <div className="text-red-500 mb-5">{error[index]?.status}</div>
+          <div className="field-error mb-5">{error[index]?.status}</div>
         </div>
       </div>
     ));
   };
 
   return (
-    <div className="w-full max-w-4xl bg-white p-6 rounded-lg shadow-lg mb-10">
+    <div className="card w-full max-w-4xl p-6 sm:p-8 mb-10">
       <h1 className="text-2xl font-bold mb-6">Enter Hotel Details</h1>
       <form>
         {renderHotelFields()}
         <button
           type="button"
           onClick={handleAddHotel}
-          className="w-full bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 focus:outline-none focus:ring focus:ring-green-300 mb-4"
+          className="btn btn-secondary w-full mb-4"
         >
           Add Another Hotel
         </button>

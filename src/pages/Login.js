@@ -20,18 +20,21 @@ const Login = () => {
     if (isLoggedIn) {
       navigate("/");
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn, navigate]);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
-        <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
+    <div className="app-page flex items-center justify-center">
+      <div className="card w-full max-w-sm p-8">
+        <div className="mb-7 text-center">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
+            Affordable Luxury
+          </p>
+          <h2 className="page-title mt-2 text-2xl">Welcome back</h2>
+          <p className="page-subtitle mt-1">Sign in to manage your vouchers</p>
+        </div>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="username"
-            >
+            <label className="field-label" htmlFor="username">
               Username
             </label>
             <input
@@ -39,15 +42,12 @@ const Login = () => {
               id="username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="text-input"
               required
             />
           </div>
           <div className="mb-2">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="password"
-            >
+            <label className="field-label" htmlFor="password">
               Password
             </label>
             <input
@@ -55,26 +55,22 @@ const Login = () => {
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="text-input"
               required
             />
           </div>
-          <div className="text-red mb-3">{error}</div>
-          <div className="flex items-center justify-between">
-            <button
-              type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            >
-              Sign In
-            </button>
-          </div>
+          {error && <div className="field-error mb-3 mt-1">{error}</div>}
+          <button type="submit" className="btn btn-primary mt-4 w-full">
+            Sign In
+          </button>
         </form>
-        <div
+        <button
+          type="button"
           onClick={() => navigate("/change-password")}
-          className="underline text-blue-600 text-end cursor-pointer active:opacity-50"
+          className="link mt-5 ml-auto block text-end text-sm"
         >
           Change Password
-        </div>
+        </button>
       </div>
     </div>
   );

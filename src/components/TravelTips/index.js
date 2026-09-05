@@ -8,7 +8,7 @@ export default function TravelTips() {
   const { travelTips } = useAppSelector((state) => state.createPdf);
 
   return (
-    <div className="w-full max-w-4xl bg-white p-6 rounded-lg shadow-lg mb-10">
+    <div className="card w-full max-w-4xl p-6 sm:p-8 mb-10">
       <h1 className="text-2xl font-bold mb-6">Travel Tips</h1>
       <form>
         <RichTextEditor

@@ -6,6 +6,7 @@ import createPdfReducer from "./createPdfSlice";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { useDispatch, useSelector } from "react-redux";
+import { injectStore } from "../utils/axiosInstance";
 
 // Define the root reducer by combining slices
 const rootReducer = combineReducers({
@@ -13,7 +14,6 @@ const rootReducer = combineReducers({
   client: clientReducer,
   createPdf: createPdfReducer,
 });
-// Define RootState as the return type of rootReducer
 
 // Persist configuration
 const persistConfig = {
@@ -34,12 +34,12 @@ export const store = configureStore({
     }),
 });
 
+// Give the axios instance access to auth state without an import cycle
+injectStore(store);
+
 // Set up persistor
 export const persistor = persistStore(store);
 
-// Define RootState and AppDispatch types based on the store itself
-// export type RootState = ReturnType<typeof store.getState>;
-
-// Custom hooks for useDispatch and useSelector with types
+// Typed-style hooks used across the app
 export const useAppDispatch = () => useDispatch();
 export const useAppSelector = useSelector;

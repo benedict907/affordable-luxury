@@ -38,25 +38,6 @@ export const formatDateToDDMMYYYY = (date) => {
   return `${day}/${month}/${year}`;
 };
 
-export const getDailyTasks = (itinerary) => {
-  const days = Object.keys(itinerary);
-  const mappedTasks = {};
-
-  days.forEach((day) => {
-    mappedTasks[day] = itinerary[day].map((task, index) => {
-      const { time, task: taskDescription, bulletPoints } = task;
-      return {
-        index: index + 1,
-        time: time || "",
-        description: taskDescription,
-        details: bulletPoints || [],
-      };
-    });
-  });
-
-  return mappedTasks;
-};
-
 export const setValueByKeyPath = (obj, keyPath, value) => {
   // Split by dot, but keep array indices intact (e.g., "hotelItinerary[0]" remains together)
   const keys = keyPath.match(/[^.[\]]+/g); // Regex to extract keys and indices
@@ -80,12 +61,8 @@ export const setValueByKeyPath = (obj, keyPath, value) => {
   });
 };
 
-export const checkIfExists = (pdfs, confirmationNumber, callback) => {
-  const isExist =
-    pdfs?.filter(
-      (item) =>
-        item?.confirmationDetails?.confirmationNumber === confirmationNumber
-    ).length > 0;
-
-  callback(isExist);
-};
+export const checkIfExists = (pdfs, confirmationNumber) =>
+  pdfs?.some(
+    (item) =>
+      item?.confirmationDetails?.confirmationNumber === confirmationNumber
+  ) ?? false;

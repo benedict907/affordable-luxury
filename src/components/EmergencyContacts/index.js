@@ -12,7 +12,7 @@ export default function EmergencyContacts() {
   const { emergencyContactKerala, emergencyNumberUK } = emergencyContacts || {};
 
   return (
-    <div className="w-full max-w-4xl bg-white p-6 rounded-lg shadow-lg">
+    <div className="card w-full max-w-4xl p-6 sm:p-8">
       <h1 className="mb-2">Emergency Contact in Kerala</h1>
       <input
         type="text"
@@ -27,7 +27,7 @@ export default function EmergencyContacts() {
             })
           )
         }
-        className="w-full px-3 py-2 mb-5 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+        className="text-input mb-5"
       />
 
       <h1 className="mb-2">Emergency Contact in UK</h1>
@@ -44,7 +44,7 @@ export default function EmergencyContacts() {
             })
           )
         }
-        className="w-full px-3 py-2 mb-10 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+        className="text-input mb-10"
       />
     </div>
   );

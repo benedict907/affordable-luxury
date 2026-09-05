@@ -10,8 +10,14 @@ function App() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <BrowserRouter basename="">
-          <Suspense>
+        <BrowserRouter>
+          <Suspense
+            fallback={
+              <div className="flex min-h-screen items-center justify-center text-sm text-ink-faint">
+                Loading…
+              </div>
+            }
+          >
             <Routes>
               {routes.map((item) => (
                 <Route

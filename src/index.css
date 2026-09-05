@@ -1,16 +1,255 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..700&family=Plus+Jakarta+Sans:ital,wght@0,400..700;1,400..600&family=Roboto&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ==========================================================================
+   Affordable Luxury — design system
+   Clean, modern SaaS aesthetic: cool neutrals, one confident teal accent,
+   generous whitespace, soft elevation, rounded surfaces.
+   ========================================================================== */
 
+:root {
+  /* Surfaces & neutrals */
+  --canvas: #f4f6f8;
+  --surface: #ffffff;
+  --surface-muted: #f8fafc;
+  --border: #e6eaef;
+  --border-strong: #d4dae1;
+
+  /* Text */
+  --ink: #0f1b2d;
+  --ink-soft: #475569;
+  --ink-faint: #94a3b8;
+
+  /* Accent — ocean teal */
+  --accent: #0f766e;
+  --accent-hover: #0c5d57;
+  --accent-press: #094c47;
+  --accent-soft: #e3f4f1;
+  --accent-ring: rgba(15, 118, 110, 0.22);
+
+  /* Danger */
+  --danger: #e11d48;
+  --danger-hover: #be123c;
+  --danger-soft: #ffe9ee;
+
+  /* Elevation */
+  --shadow-sm: 0 1px 2px rgba(15, 27, 45, 0.06);
+  --shadow-md: 0 6px 20px -8px rgba(15, 27, 45, 0.18);
+  --shadow-lg: 0 24px 48px -20px rgba(15, 27, 45, 0.28);
+
+  /* Radii */
+  --r-sm: 10px;
+  --r-md: 14px;
+  --r-lg: 20px;
+}
+
+@layer base {
+  html {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    min-height: 100vh;
+    background-color: var(--canvas);
+  }
+
+  /* Subtle atmospheric tint so pages don't read as flat gray. Rendered on a
+     fixed pseudo-element instead of background-attachment: fixed, which
+     forces expensive repaints on scroll (and breaks some screen captures). */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+      radial-gradient(60rem 60rem at 8% -10%, rgba(15, 118, 110, 0.07), transparent 60%),
+      radial-gradient(50rem 50rem at 105% 0%, rgba(56, 132, 214, 0.06), transparent 55%);
+  }
+
+  h1, h2, h3, h4 {
+    font-family: 'Bricolage Grotesque', 'Plus Jakarta Sans', sans-serif;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+  }
+}
 
 @layer components {
-   .button {
-    @apply bg-blue-500 rounded-lg p-5 text-white cursor-pointer active:opacity-50 my-1 ms-2
-   }
-    .text-input {
-     @apply w-96 border h-10 rounded-lg ps-2
-   }
+  /* Page scaffolding -------------------------------------------------- */
+  .app-page {
+    @apply min-h-screen w-full px-4 py-10 sm:px-8;
+  }
+
+  .page-title {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    @apply text-3xl font-bold tracking-tight;
+    color: var(--ink);
+  }
+
+  .page-subtitle {
+    color: var(--ink-soft);
+    @apply text-sm;
+  }
+
+  /* Surfaces ----------------------------------------------------------- */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-md);
+  }
+
+  /* a clickable list/selection tile */
+  .tile {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    box-shadow: var(--shadow-sm);
+    transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease, background-color .18s ease;
+    @apply cursor-pointer;
+  }
+  .tile:hover {
+    border-color: var(--accent);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+  }
+  .tile:active {
+    transform: translateY(0);
+    background: var(--surface-muted);
+  }
+
+  /* Buttons ------------------------------------------------------------ */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 text-sm font-semibold;
+    border-radius: var(--r-sm);
+    padding: 0.625rem 1.15rem;
+    transition: background-color .16s ease, color .16s ease, box-shadow .16s ease, transform .12s ease, border-color .16s ease;
+    cursor: pointer;
+    line-height: 1.2;
+  }
+  .btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--accent-ring);
+  }
+  .btn:active { transform: translateY(1px); }
+  .btn:disabled { opacity: .55; cursor: not-allowed; }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: var(--shadow-sm);
+  }
+  .btn-primary:hover { background: var(--accent-hover); }
+  .btn-primary:active { background: var(--accent-press); }
+
+  .btn-secondary {
+    background: var(--surface);
+    color: var(--ink);
+    border: 1px solid var(--border-strong);
+  }
+  .btn-secondary:hover { background: var(--surface-muted); border-color: var(--ink-faint); }
+
+  .btn-danger {
+    background: var(--danger);
+    color: #fff;
+  }
+  .btn-danger:hover { background: var(--danger-hover); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--ink-soft);
+  }
+  .btn-ghost:hover { background: var(--surface-muted); color: var(--ink); }
+
+  /* compact square icon button */
+  .btn-icon {
+    @apply inline-flex items-center justify-center;
+    height: 2.5rem;
+    width: 2.5rem;
+    border-radius: var(--r-sm);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--ink-soft);
+    box-shadow: var(--shadow-sm);
+    transition: background-color .16s ease, color .16s ease, border-color .16s ease, transform .12s ease;
+    cursor: pointer;
+  }
+  .btn-icon:hover { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
+  .btn-icon:active { transform: translateY(1px); }
+  .btn-icon.is-danger:hover { background: var(--danger-soft); color: var(--danger); border-color: var(--danger); }
+
+  /* legacy alias kept for components that still use .button */
+  .button {
+    @apply inline-flex items-center justify-center gap-2 text-sm font-semibold text-white my-1 ms-2 cursor-pointer;
+    background: var(--accent);
+    border-radius: var(--r-sm);
+    padding: 0.7rem 1.2rem;
+    transition: background-color .16s ease, transform .12s ease;
+  }
+  .button:hover { background: var(--accent-hover); }
+  .button:active { transform: translateY(1px); }
+
+  /* Forms -------------------------------------------------------------- */
+  .field-label {
+    @apply block text-sm font-semibold mb-1.5;
+    color: var(--ink-soft);
+  }
+
+  /* .text-input is consumed by many form components across the app */
+  .input,
+  .text-input {
+    @apply w-full text-sm;
+    background: var(--surface);
+    color: var(--ink);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--r-sm);
+    padding: 0.6rem 0.85rem;
+    height: 2.75rem;
+    transition: border-color .16s ease, box-shadow .16s ease, background-color .16s ease;
+  }
+  .input::placeholder,
+  .text-input::placeholder { color: var(--ink-faint); }
+  .input:focus,
+  .text-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-ring);
+  }
+
+  /* Misc --------------------------------------------------------------- */
+  .link {
+    color: var(--accent);
+    @apply font-medium cursor-pointer;
+    transition: color .14s ease;
+  }
+  .link:hover { color: var(--accent-hover); text-decoration: underline; }
+
+  .field-error {
+    color: var(--danger);
+    @apply text-sm;
+  }
+
+  /* modal scrim + dialog */
+  .modal-scrim {
+    @apply fixed inset-0 flex justify-center items-center p-4 z-50;
+    background: rgba(15, 27, 45, 0.45);
+    backdrop-filter: blur(2px);
+  }
+  .modal-card {
+    background: var(--surface);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-lg);
+    @apply max-w-sm w-full p-6 text-center;
+    animation: modal-pop .22s ease-out;
+  }
+  @keyframes modal-pop {
+    0% { opacity: 0; transform: translateY(8px) scale(.97); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
 }

@@ -15,7 +15,7 @@ const FlightDetails = forwardRef((props, ref) => {
     departureTime,
   } = flightDetails || {};
   return (
-    <div className="w-full max-w-4xl bg-white p-6 rounded-lg shadow-lg mb-10 flex-col">
+    <div className="card w-full max-w-4xl p-6 sm:p-8 mb-10 flex-col">
       <h1 className="text-2xl font-bold mb-6">Flight Details</h1>
       <div className="flex">
         <div className="flex-col mr-4">
@@ -34,9 +34,9 @@ const FlightDetails = forwardRef((props, ref) => {
                 })
               )
             }
-            className="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+            className="text-input"
           />
-          <div className="text-red-500 mb-5">{error.arrivalCity}</div>
+          <div className="field-error mb-5">{error.arrivalCity}</div>
         </div>
 
         <div className="flex-col mr-4">
@@ -55,9 +55,9 @@ const FlightDetails = forwardRef((props, ref) => {
                 })
               )
             }
-            className="w-full px-3 py-2  border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+            className="text-input"
           />
-          <div className="text-red-500 mb-5">{error.arrivalFlightNumber}</div>
+          <div className="field-error mb-5">{error.arrivalFlightNumber}</div>
         </div>
 
         <div className="flex-col">
@@ -76,9 +76,9 @@ const FlightDetails = forwardRef((props, ref) => {
                 })
               )
             }
-            className="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+            className="text-input"
           />
-          <div className="text-red-500 mb-5">{error.arrivalTime}</div>
+          <div className="field-error mb-5">{error.arrivalTime}</div>
         </div>
       </div>
       <div className="flex">
@@ -98,9 +98,9 @@ const FlightDetails = forwardRef((props, ref) => {
                 })
               )
             }
-            className="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+            className="text-input"
           />
-          <div className="text-red-500 mb-5 mt-2">{error.departureCity}</div>
+          <div className="field-error mb-5 mt-2">{error.departureCity}</div>
         </div>
 
         <div className="flex-col mr-4">
@@ -119,9 +119,9 @@ const FlightDetails = forwardRef((props, ref) => {
                 })
               )
             }
-            className="w-full px-3 py-2  border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+            className="text-input"
           />
-          <div className="text-red-500 mt-2">{error.departureFlightNumber}</div>
+          <div className="field-error mt-2">{error.departureFlightNumber}</div>
         </div>
 
         <div className="flex-col">
@@ -140,9 +140,9 @@ const FlightDetails = forwardRef((props, ref) => {
                 })
               )
             }
-            className="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+            className="text-input"
           />
-          <div className="text-red-500 mt-2">{error.departureTime}</div>
+          <div className="field-error mt-2">{error.departureTime}</div>
         </div>
       </div>
     </div>
