@@ -11,7 +11,7 @@ const PackageDetails = forwardRef((props, ref) => {
     packageData || {};
 
   return (
-    <div className="w-full max-w-4xl bg-white p-6 rounded-lg shadow-lg my-10">
+    <div className="card w-full max-w-4xl p-6 sm:p-8 my-10">
       <h1 className="text-2xl font-bold mb-6">Package Details</h1>
       <h1 className="mb-2">Enter PDF Heading *</h1>
       <input
@@ -24,9 +24,9 @@ const PackageDetails = forwardRef((props, ref) => {
         onChange={(e) =>
           dispatch(setPackageData({ ...packageData, title: e.target.value }))
         }
-        className="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+        className="text-input"
       />
-      <div className="text-red-500 mt-2">{error.title}</div>
+      <div className="field-error mt-2">{error.title}</div>
       <h1 className="mb-2 mt-5">Number of days *</h1>
       <input
         ref={ref["main.numberOfDays"]}
@@ -42,9 +42,9 @@ const PackageDetails = forwardRef((props, ref) => {
           );
           // handleAddDays(selectedStartDate, e.target.value);
         }}
-        className="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none  focus:ring-blue-300"
+        className="text-input"
       />
-      <div className="text-red-500 mt-2">{error.numberOfDays}</div>
+      <div className="field-error mt-2">{error.numberOfDays}</div>
       <h1 className="mb-2 my-5">Emergency Contact Name</h1>
       <input
         type="text"
@@ -56,7 +56,7 @@ const PackageDetails = forwardRef((props, ref) => {
             setPackageData({ ...packageData, emergencyContact: e.target.value })
           )
         }
-        className="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+        className="text-input"
       />
       <h1 className="mb-2 my-5">Emergency Contact Number</h1>
       <input
@@ -70,15 +70,8 @@ const PackageDetails = forwardRef((props, ref) => {
             setPackageData({ ...packageData, emergencyNumber: e.target.value })
           );
         }}
-        className="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+        className="text-input"
       />
-      {/* <button
-        type="button"
-        onClick={() => saveMain(packageData)}
-        className="w-full bg-blue-500 mt-5 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
-      >
-        Save Package Details
-      </button> */}
     </div>
   );
 });

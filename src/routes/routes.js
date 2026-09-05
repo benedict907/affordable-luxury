@@ -1,13 +1,15 @@
-import { lazy } from "react";
-import ChangePassword from "../pages/ChangePassword";
-import SavedPdfs from "../pages/SavedPdfs";
-// Unprotected routes
+import React, { lazy } from "react";
+import RequireAuth from "./RequireAuth";
+
 const Home = lazy(() => import("../pages/HomePage"));
 const EnchantingKerala = lazy(() => import("../pages/EnchantingKerala"));
 const Login = lazy(() => import("../pages/Login"));
 const AddDetails = lazy(() => import("../pages/AddDetails"));
 const CreatePdf = lazy(() => import("../pages/CreatePdf"));
 const ContactUs = lazy(() => import("../pages/ContactUs"));
+const SavedPdfs = lazy(() => import("../pages/SavedPdfs"));
+const ChangePassword = lazy(() => import("../pages/ChangePassword"));
+
 const routes = [
   {
     name: "Login",
@@ -17,28 +19,47 @@ const routes = [
   {
     name: "Home",
     path: "/",
-    element: <Home />,
+    element: (
+      <RequireAuth>
+        <Home />
+      </RequireAuth>
+    ),
   },
   {
     name: "AddDetails",
     path: "/add-details",
-    element: <AddDetails />,
+    element: (
+      <RequireAuth>
+        <AddDetails />
+      </RequireAuth>
+    ),
   },
   {
     name: "SavedPdfs",
     path: "/view-saved",
-    element: <SavedPdfs />,
+    element: (
+      <RequireAuth>
+        <SavedPdfs />
+      </RequireAuth>
+    ),
   },
-
   {
     name: "PDFView",
     path: "/pdf-view",
-    element: <EnchantingKerala />,
+    element: (
+      <RequireAuth>
+        <EnchantingKerala />
+      </RequireAuth>
+    ),
   },
   {
     name: "CreatePDF",
     path: "/create-pdf",
-    element: <CreatePdf />,
+    element: (
+      <RequireAuth>
+        <CreatePdf />
+      </RequireAuth>
+    ),
   },
   {
     name: "ChangePassword",

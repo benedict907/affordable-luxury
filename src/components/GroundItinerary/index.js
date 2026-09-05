@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { deleteDay, deleteTask, setDays } from "../../redux/createPdfSlice";
 import RichTextEditor from "../RichTextEditor";
@@ -85,7 +85,7 @@ const GroundItinerary = () => {
             onChange={(e) =>
               handleInputChange(dayIndex, taskIndex, "time", e.target.value)
             }
-            className="w-full px-2 py-1 border rounded focus:outline-none focus:ring focus:ring-blue-300"
+            className="text-input"
           />
         </div>
         <div className="mb-2">
@@ -103,7 +103,7 @@ const GroundItinerary = () => {
             onChange={(e) =>
               handleInputChange(dayIndex, taskIndex, "task", e.target.value)
             }
-            className="w-full px-2 py-1 border rounded focus:outline-none focus:ring focus:ring-blue-300"
+            className="text-input"
           />
         </div>
         <div className="mb-2">
@@ -126,7 +126,7 @@ const GroundItinerary = () => {
                 e.target.value
               )
             }
-            className="w-full px-2 py-1 border rounded focus:outline-none focus:ring focus:ring-blue-300"
+            className="text-input"
           />
         </div>
         <div className="mb-2">
@@ -150,7 +150,7 @@ const GroundItinerary = () => {
             onChange={(e) =>
               handleInputChange(dayIndex, taskIndex, "bullet", e.target.value)
             }
-            className="w-full px-2 py-1 border rounded focus:outline-none focus:ring focus:ring-blue-300"
+            className="text-input"
           /> */}
         </div>
       </div>
@@ -175,7 +175,7 @@ const GroundItinerary = () => {
         <button
           type="button"
           onClick={() => handleAddTask(dayIndex)}
-          className="w-full bg-green-500 text-white py-1 px-4 rounded hover:bg-green-600 focus:outline-none focus:ring focus:ring-green-300 mb-4"
+          className="btn btn-secondary w-full mb-4"
         >
           Add Task
         </button>
@@ -184,14 +184,14 @@ const GroundItinerary = () => {
   };
 
   return (
-    <div className="w-full max-w-4xl bg-white p-6 rounded-lg shadow-lg my-10">
+    <div className="card w-full max-w-4xl p-6 sm:p-8 my-10">
       <h1 className="text-2xl font-bold mb-6">Ground Itinerary</h1>
       <form>
         {renderDays()}
         <button
           type="button"
           onClick={handleAddDay}
-          className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
+          className="btn btn-secondary w-full"
         >
           Add New Day
         </button>

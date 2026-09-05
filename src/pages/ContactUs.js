@@ -1,35 +1,69 @@
 import { useNavigate } from "react-router-dom";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { CONTACT_EMAIL, CONTACT_PHONE } from "../constants/constants";
 
 const ContactUs = () => {
   const navigate = useNavigate();
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    if (!copied) return;
+    const timer = setTimeout(() => setCopied(false), 2000);
+    return () => clearTimeout(timer);
+  }, [copied]);
+
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(CONTACT_EMAIL);
+      setCopied(true);
+    } catch {
+      // Clipboard unavailable (e.g. non-secure context) — the mailto link
+      // below still works as a fallback.
+    }
+  };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white flex flex-col items-center justify-center rounded-lg shadow-lg w-full sm:w-3/4 max-w-6xl min-h-[500px] p-8">
-        <h2 className="text-2xl font-semibold text-gray-700 mb-6">Contact Us</h2>
+    <div className="app-page flex items-center justify-center">
+      <div className="card w-full max-w-md p-8 text-center">
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
+          Get in touch
+        </p>
+        <h2 className="page-title mt-2 text-2xl">Contact Us</h2>
+        <p className="page-subtitle mt-1">We're happy to help with your bookings</p>
 
-        <div className="text-center text-gray-600 space-y-3">
-          <p>
-            <span className="font-medium text-gray-800">Email: </span>
-            <a
-              href="mailto:info@travelbugvoucher.com"
-              className="text-blue-600 hover:underline"
+        <div className="mt-7 space-y-3 text-left">
+          <div className="flex items-center justify-between gap-3 rounded-[14px] border border-stroke bg-gray-2 px-4 py-3">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-ink-faint">
+                Email
+              </p>
+              <a href={`mailto:${CONTACT_EMAIL}`} className="link text-sm">
+                {CONTACT_EMAIL}
+              </a>
+            </div>
+            <button
+              type="button"
+              onClick={copyEmail}
+              className="btn btn-secondary shrink-0 px-3 py-1.5 text-xs"
             >
-              info@travelbugvoucher.com
-            </a>
-          </p>
-          <p>
-            <span className="font-medium text-gray-800">Phone: </span>
-            +44 0000 000000
-          </p>
+              {copied ? "Copied!" : "Copy"}
+            </button>
+          </div>
+          {CONTACT_PHONE ? (
+            <div className="rounded-[14px] border border-stroke bg-gray-2 px-4 py-3">
+              <p className="text-xs font-semibold uppercase tracking-wide text-ink-faint">
+                Phone
+              </p>
+              <p className="text-sm text-ink">{CONTACT_PHONE}</p>
+            </div>
+          ) : null}
         </div>
 
         <button
           onClick={() => navigate(-1)}
-          className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 mt-8"
+          className="btn btn-secondary mt-8 w-full"
         >
-          Go Back
+          ← Go Back
         </button>
       </div>
     </div>

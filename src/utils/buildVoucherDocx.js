@@ -415,7 +415,7 @@ export const buildVoucherDocx = (data) => {
     CONTENT_WIDTH - Math.round(CONTENT_WIDTH * 0.15) * 2,
   ];
   const groundRows = [];
-  generateDateArray(selectedStartDate, (main.numberOfDays || 0) + 1)?.forEach(
+  generateDateArray(selectedStartDate, (Number(main.numberOfDays) || 0) + 1)?.forEach(
     ({ day, date }) => {
       groundItinerary[day - 1]?.dailyTasks?.forEach((dayObj, index) => {
         let taskCellContent;

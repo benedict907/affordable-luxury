@@ -12,7 +12,7 @@ import {
   generateCheckInDates,
   generateDateArray,
 } from "../helper";
-import { useLocation } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { EMPTY_BULLETS } from "../constants/constants";
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import { savePdf } from "../redux/createPdfSlice";
@@ -36,6 +36,17 @@ function EnchantingKerala() {
 
   const contentRef = useRef(null);
   const [isExportingDOCX, setIsExportingDOCX] = useState(false);
+
+  useEffect(() => {
+    if (!selectedForm?.imageName) return;
+    dispatch(createBase64(selectedForm.imageName));
+  }, [selectedForm?.imageName, dispatch]);
+
+  // Opened directly (e.g. page refresh) there is no voucher data to render.
+  if (!selectedForm) {
+    return <Navigate to="/" replace />;
+  }
+
   const {
     imageName,
     main,
@@ -97,11 +108,9 @@ function EnchantingKerala() {
 
     pdf.save("exported.pdf");
 
-    checkIfExists(pdfs, confirmationNumber, (exists) => {
-      if (!exists) {
-        onSavePressed();
-      }
-    });
+    if (!checkIfExists(pdfs, confirmationNumber)) {
+      onSavePressed();
+    }
   };
 
   const handleExportDOCX = async () => {
@@ -190,11 +199,6 @@ function EnchantingKerala() {
 
     dispatch(savePdf(formData));
   };
-
-  useEffect(() => {
-    if (!imageName) return;
-    dispatch(createBase64(imageName));
-  }, [imageName, dispatch]);
 
   return (
     <div>
@@ -331,7 +335,7 @@ function EnchantingKerala() {
             </Column>
           ))}
           <Column>
-            <Row style="text-start">{`Emergency Contact UK: ${
+            <Row className="text-start">{`Emergency Contact UK: ${
               emergencyNumberUK || ""
             }`}</Row>
             <Row>&nbsp;</Row>
@@ -339,14 +343,14 @@ function EnchantingKerala() {
             <Row>&nbsp;</Row>
           </Column>
           <Column>
-            <Row style="text-start">
+            <Row className="text-start">
               ** Timings for Pickups and Drops, From and To the Airports will be
               according to the timings
             </Row>
             <Row>&nbsp;</Row>
           </Column>
           <Column>
-            <Row style="text-start">Provided on the enclosed Air tickets.</Row>
+            <Row className="text-start">Provided on the enclosed Air tickets.</Row>
             <Row>&nbsp;</Row>
             <Row>&nbsp;</Row>
             <Row>&nbsp;</Row>
@@ -362,7 +366,7 @@ function EnchantingKerala() {
             <Row>&nbsp;</Row>
           </Column>
           <Column>
-            <Row style="text-start">Departure {flights.departureCity}</Row>
+            <Row className="text-start">Departure {flights.departureCity}</Row>
             <Row>{flights.departureFlightNumber}</Row>
             <Row>{moment(selectedEndDate).format("DD MMMM")}</Row>
             <Row>{flights.departureTime}</Row>
@@ -374,19 +378,15 @@ function EnchantingKerala() {
           <div className="text-center border border-gray-300 p-4">
             <h1 className="text-xl font-bold">Ground Itinerary Summary</h1>
           </div>
-          {generateDateArray(selectedStartDate, main.numberOfDays + 1)?.map(
+          {generateDateArray(selectedStartDate, Number(main.numberOfDays) + 1)?.map(
             ({ day, date }) => {
               return groundItinerary[day - 1]?.dailyTasks?.map(
                 (dayObj, index) => (
                   <Column key={index}>
-                    <Row
-                      style={"flex justify-center items-center"}
-                      isDate={true}
-                      showBorder={index === 0}
-                    >
+                    <Row className="flex justify-center items-center">
                       {index === 0 ? date : ""}
                     </Row>
-                    <Row style={"flex justify-center items-center"}>
+                    <Row className="flex justify-center items-center">
                       {index === 0 ? `Day ${day}` : dayObj.time}
                     </Row>
                     {dayObj?.bulletPoints !== EMPTY_BULLETS ? (
@@ -395,7 +395,7 @@ function EnchantingKerala() {
                         bulletPoints={dayObj.bulletPoints}
                       />
                     ) : dayObj.task ? (
-                      <Row description={dayObj?.description} style="text-start">
+                      <Row description={dayObj?.description} className="text-start">
                         {dayObj.task}
                       </Row>
                     ) : null}
@@ -434,23 +434,16 @@ function EnchantingKerala() {
         ) : null}
         <div className="font-bold">Wishing you all happy and safe holiday!</div>
       </div>
-      <div className="flex gap-4 justify-center">
-        <button
-          onClick={handleExportPDF}
-          className="bg-blue-500 text-white px-4 py-2 my-2 rounded active:opacity-50"
-        >
+      <div className="flex gap-4 justify-center py-4">
+        <button onClick={handleExportPDF} className="btn btn-primary">
           Export to PDF
         </button>
         <button
           onClick={handleExportDOCX}
           disabled={isExportingDOCX}
-          className={`px-4 py-2 my-2 rounded active:opacity-50 ${
-            isExportingDOCX
-              ? "bg-gray-400 cursor-not-allowed text-white"
-              : "bg-blue-600 hover:bg-blue-700 text-white"
-          }`}
+          className="btn btn-secondary"
         >
-          {isExportingDOCX ? "Exporting..." : "Download DOCX"}
+          {isExportingDOCX ? "Exporting…" : "Download DOCX"}
         </button>
       </div>
     </div>

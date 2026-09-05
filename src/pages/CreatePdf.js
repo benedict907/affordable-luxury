@@ -1,28 +1,27 @@
 import React, { useEffect, useRef, useState } from "react";
 import AddHotel from "../components/AddHotel";
 import AddTransport from "../components/AddTransport";
-import FlightDetails from "../components/FlightDetails";
 import EmergencyContacts from "../components/EmergencyContacts";
 import PackageDetails from "../components/PackageDetails";
 import GroundItinerary from "../components/GroundItinerary";
 import ImportantPoints from "../components/ImportantPoints";
-import TravelTips from "../components/Travel Tips";
+import TravelTips from "../components/TravelTips";
 import { useAppDispatch, useAppSelector } from "../redux/store";
 
 import * as Yup from "yup";
 import {
+  clearErrors,
   editPdf,
   resetPage,
   savePdf,
   setEditData,
   setErrors,
-  setFlightDetails,
 } from "../redux/createPdfSlice";
 import CustomBulletPoint from "../components/CustomBulletPoint";
 import { useLocation, useNavigate } from "react-router-dom";
 import ImageUploader from "../components/ImageUploader";
 
-const App = () => {
+const CreatePdf = () => {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -51,6 +50,7 @@ const App = () => {
       groundItinerary,
       importantPoints,
       travelTips,
+      customBulletPoint,
       _id,
     } = location.state || {};
 
@@ -68,11 +68,14 @@ const App = () => {
           groundItinerary,
           importantPoints,
           travelTips,
-          customBulletPoint,
+          customBulletPoint: customBulletPoint ?? {
+            title: "",
+            bulletPoints: "",
+          },
         })
       );
     }
-  }, [location]);
+  }, [location, dispatch]);
 
   const {
     imageName,
@@ -101,9 +104,10 @@ const App = () => {
     return () => {
       dispatch(resetPage());
     };
-  }, [success]);
+  }, [success, dispatch, navigate]);
 
   const onSavePressed = async () => {
+    dispatch(clearErrors());
     let response = {
       main,
       flights,
@@ -140,11 +144,13 @@ const App = () => {
 
     try {
       await validationSchema.validate(response, { abortEarly: false });
-      if (isEdit) {
-        dispatch(editPdf({ formData, pdfId }));
-      } else {
-        dispatch(savePdf(formData));
-      }
+      const action = isEdit ? editPdf({ formData, pdfId }) : savePdf(formData);
+      dispatch(action)
+        .unwrap()
+        .then((res) => {
+          if (isEdit && res?.message) alert(res.message);
+        })
+        .catch((apiErr) => alert(apiErr?.error ?? "Something went wrong."));
     } catch (err) {
       if (err.inner && err.inner.length > 0) {
         for (let i = 0; i < err.inner.length; i++) {
@@ -156,7 +162,7 @@ const App = () => {
               error: err.inner[i].message,
             })
           );
-          if (i == 0) {
+          if (i === 0) {
             const firstErrorRef = refs[firstErrorField];
             if (firstErrorRef && firstErrorRef.current) {
               firstErrorRef.current.scrollIntoView({
@@ -167,8 +173,6 @@ const App = () => {
             }
           }
         }
-
-        // errors[firstErrorField];
       }
     }
   };
@@ -205,38 +209,23 @@ const App = () => {
       })
     ),
   });
-  //adding this to add the flight details when the component mounts so that validation does not fail in the backend
-  //not clearing the DB because deploying the backend is complicated.
-  // useEffect(() => {
-  //   dispatch(
-  //     setFlightDetails({
-  //       arrivalCity: "_",
-  //       arrivalFlightNumber: "a",
-  //       arrivalTime: "a",
-  //       departureCity: "a",
-  //       departureFlightNumber: "a",
-  //       departureTime: "a",
-  //     })
-  //   );
-  // }, []);
-
+  // Note: flight details are captured on the AddDetails page, not here.
   return (
-    <div className="min-h-screen flex-col bg-gray-100 flex justify-center items-center">
+    <div className="app-page flex-col flex justify-center items-center">
       <ImageUploader />
       <PackageDetails ref={refs} />
       <AddHotel ref={refs} />
-      {/* <FlightDetails ref={refs} /> */}
       <AddTransport ref={refs} />
-      <EmergencyContacts ref={refs} />
-      <GroundItinerary ref={refs} />
-      <ImportantPoints ref={refs} />
-      <TravelTips ref={refs} />
+      <EmergencyContacts />
+      <GroundItinerary />
+      <ImportantPoints />
+      <TravelTips />
       <CustomBulletPoint />
 
       <button
         type="button"
         onClick={onSavePressed}
-        className="bg-orange-400 w-1/2 text-white py-2 px-4 rounded-lg hover:bg-orange-600 focus:outline-none focus:ring focus:ring-blue-300 mb-10"
+        className="btn btn-primary w-1/2 mb-10"
       >
         {isEdit ? "Update PDF" : "Save PDF"}
       </button>
@@ -244,4 +233,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default CreatePdf;

@@ -1,10 +1,11 @@
 import React from "react";
+import DOMPurify from "dompurify";
 import Row from "../Row";
 import { EMPTY_BULLETS } from "../../constants/constants";
 
 export default function BulletPoint({ title, bulletPoints }) {
   return (
-    <Row style={"text-start"}>
+    <Row className="text-start">
       <div className="p-4">
         {title !== "" ? (
           <h2 className="text-xl font-bold mb-4">{title}</h2>
@@ -13,7 +14,9 @@ export default function BulletPoint({ title, bulletPoints }) {
           <div
             className="bullet list-disc marker:text-black-2"
             dangerouslySetInnerHTML={{
-              __html: bulletPoints?.replace(/<ul>/g, '<ul class="list-disc">'),
+              __html: DOMPurify.sanitize(
+                bulletPoints?.replace(/<ul>/g, '<ul class="list-disc">') ?? ""
+              ),
             }}
           />
         ) : null}
